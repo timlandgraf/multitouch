@@ -12,6 +12,7 @@
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
     <!-- Add any additional non-server libs (such as JUnit) -->
     <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
+	<fileset dir="${gwt.sdk}" includes="gwt-incubator-20100204-r1747.jar"/>
   </path>
 
   <target name="libs" description="Copy libs to WEB-INF/lib">

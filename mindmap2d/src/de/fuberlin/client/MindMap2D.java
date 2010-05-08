@@ -17,6 +17,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+import com.google.gwt.widgetideas.graphics.client.Color;
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -51,7 +54,13 @@ public class MindMap2D implements EntryPoint {
     RootPanel.get("nameFieldContainer").add(nameField);
     RootPanel.get("sendButtonContainer").add(sendButton);
     RootPanel.get("errorLabelContainer").add(errorLabel);
-
+	
+	GWTCanvas canvas = new GWTCanvas(500,500);
+	//canvas.setLineWidth(1);
+	canvas.setFillStyle(Color.BLUE);
+	canvas.fillRect(10,10, 100, 130); 
+	RootPanel.get().add(canvas);
+	
     // Focus the cursor on the name field when the app loads
     nameField.setFocus(true);
     nameField.selectAll();
@@ -81,6 +90,7 @@ public class MindMap2D implements EntryPoint {
         dialogBox.hide();
         sendButton.setEnabled(true);
         sendButton.setFocus(true);
+		GWT.log("blub");
       }
     });
 
