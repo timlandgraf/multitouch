@@ -23,6 +23,7 @@ public class Foam{
 	
 	public void addBubble(Bubble b){
 		bubbles.add(b);
+		b.foam = this;
 		needs_repaint = true;
 	}
 	
