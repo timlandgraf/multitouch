@@ -15,16 +15,21 @@ public class Foam{
 
 	public Vector<Bubble> bubbles;
 	public boolean needs_repaint;
+	private Painter painter;
 	
-	public Foam(){
+	public Foam(Painter painter){
+		this.painter = painter;
 		bubbles = new Vector<Bubble>();
-		needs_repaint = true;
 	}
 	
 	public void addBubble(Bubble b){
 		bubbles.add(b);
 		b.foam = this;
-		needs_repaint = true;
+		repaint();
+	}
+	
+	public void repaint(){
+		painter.repaint(this);	
 	}
 	
 }

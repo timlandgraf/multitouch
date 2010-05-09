@@ -16,9 +16,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Timer;
 
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
@@ -32,30 +30,41 @@ public class MindMap2D implements EntryPoint {
    * This is the entry point method.
    */
   public void onModuleLoad() {
-  	//GWTCanvas canvas = new GWTCanvas(800, 400);
+  	
 	MyCanvas canvas = new MyCanvas(800, 400);
 	RootPanel.get().add(canvas);
 	canvas.setStyleName("canvas");
-	Foam foam = new Foam();
+	Painter p = new Painter(canvas);
+	//Painter p = new PollingPainter(canvas);
+	
+	Foam foam = new Foam(p);
+	
+	UserInputHandler uih = new UserInputHandler(foam);
+	canvas.addMouseListener(uih);
 	
 	//adding some nodes for testing
 	foam.addBubble(new Bubble(10,50, "some bubble"));
 	foam.addBubble(new Bubble(200,180, "Hallo :-)"));
 	foam.addBubble(new Bubble(600,190, "yet another one"));
 	
-	canvas.addMouseListener(new MouseListener(){
-			
-			public void onMouseDown(Widget sender, int x, int y){}
-			public void onMouseEnter(Widget sender){}
-			public void onMouseLeave(Widget sender){}
-            public void onMouseMove(Widget sender, int x, int y){GWT.log("Mouse moves");}
-			public void onMouseUp(Widget sender, int x, int y){} 
-			
-	});
+	/*
+	Timer t1 = new Timer(){
+		public void run(){
+			b.setPosition(b.x+5, b.y);
+		}
+	};
 	
-	Painter p = new Painter(canvas, foam);
-	p.scheduleRepeating(500); 
+	t1.scheduleRepeating(100);
 	
+	Timer t2 = new Timer(){
+		public void run(){
+			canvas.removeMouseListener(uih);
+			canvas.addMouseListener(uih);
+		}
+	};
+	
+	t2.scheduleRepeating(100);
+	*/
   }
   
 	
