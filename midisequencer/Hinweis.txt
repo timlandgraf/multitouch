@@ -1,0 +1,7 @@
+Hallo,
+
+ich habe einen branch namens sequencer erstellt. Ich würde vorschlagen, dass wir
+auf diesem branch arbeiten. Ein Vorteil ist wenn man sich die logs durchguckt, 
+erkennt man welche commits zu diesem unterprojekt gehören. 
+
+Gruß, Bao
