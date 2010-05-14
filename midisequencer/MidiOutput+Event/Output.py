@@ -30,7 +30,9 @@ class Output():
 	
 		instrument = CHURCH_ORGAN
 		#instrument = GRAND_PIANO
-		instrument = 80
+		instrument = 32
+		instrument = 124
+		instrument = 100
 		start_note = 53  # F3 (white key note), start_note != 0
 	
 	
@@ -50,7 +52,7 @@ class Output():
 		self.midi_out = pygame.midi.Output(port, 0)
 		self.midi_out.set_instrument(instrument)	
 
-		self.on_notes = set()
+		self.__on_notes = set()
 		
 	def __del__(self):
 		del self.midi_out
@@ -66,21 +68,36 @@ class Output():
 		# constants for MIDI Status
 		ON = 1		# note on
 		OFF = 0		# note off
-		NOT = -1 	# nothing
+		NOT = -1 	# nothing	
 		
+		switch___on_notes = set()
+		switch_off_notes = set()
 		
-		note = playdata['notes'][0]
-		velocity = playdata['velocity'][0]
-		status = playdata['status'][0]
+		# look which note to switch on or off
+		for mididata in playdata:
+			note = mididata[0]
+			velocity = mididata[1]
+			status = mididata[2]
 		
-		if note not in self.on_notes:
-			self.midi_out.note_on(note, velocity)
-			print 'note on: ' + str(note)
-			self.on_notes.add(note)
-		else:
-			self.midi_out.note_off(note)
-			print '   note off: ' + str(note)
-			self.on_notes.remove(note)
+			if note in self.__on_notes and status == OFF:
+					switch_off_notes.add(note)
+			elif note not in self.__on_notes and status == ON:
+					switch___on_notes.add((note,velocity))
+		
+		# switch not played notes of
+		for old_note in switch_off_notes:
+			self.midi_out.note_off(old_note)
+			self.__log('\t< note off\t' + str(old_note)) # LOG
+			self.__on_notes.remove(old_note)			
+		
+		# switch new played notes on
+		for new_note, velocity in switch___on_notes:
+			self.midi_out.note_on(new_note, velocity)
+			self.__log('\tnote on>\t' + str(new_note)) #LOG
+			self.__on_notes.add(new_note)
+
+		self.__log('played notes: ' + str(self.__on_notes)) # LOG
+
 
 			
 	def print_device_info():
