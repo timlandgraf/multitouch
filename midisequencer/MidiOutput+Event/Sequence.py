@@ -34,6 +34,15 @@ class Sequence():
 								[	[41, 100, ON] , [100, 80, OFF] , [31, 80, ON] , [60,110,ON]	],
 								[	[41, 100, OFF] , [100, 80, ON] , [31, 80, ON] , [60,110,OFF]]
 							  ]
+		elif self.id == 'seq2':
+			self.__playdata = [	
+								[	[61, 100, ON] , [80, 80, OFF] , [31, 80, ON] , [70,80,ON]	], 
+								[	[61, 100, OFF] , [80, 80, ON] , [31, 80, ON] , [70,80,ON]	],
+								[	[61, 100, ON] , [80, 80, ON] , [31, 80, ON] , [70,80,OFF]	],
+								[	[61, 100, OFF] , [80, 80, OFF] , [31, 80, ON] , [70,80,OFF]],
+								[	[61, 100, ON] , [80, 80, OFF] , [31, 80, ON] , [70,80,ON]	],
+								[	[61, 100, OFF] , [80, 80, ON] , [31, 80, ON] , [70,80,OFF]]
+							  ]		
 		else:
 			first = int(random.randrange(61, 127, 1))
 			second = int(random.randrange(80, 99, 1))
@@ -78,6 +87,8 @@ if __name__ == '__main__':
 	print '=================== START =================================='
 	print '============================================================'
 	
+	amount_sequences = 10
+	
 	manager=EventManager.EventManager()
 	manager.start()
 	
@@ -92,7 +103,7 @@ if __name__ == '__main__':
 	#seq2.id='seq2'
 	#manager.register(seq2, seq2.getMidiData)
 	
-	for i in range(2, 2):
+	for i in range(2, amount_sequences+1):
 		seq=Sequence(id='seq'+str(i))
 		#seq.id='seq'+str(i)
 		manager.register(seq, seq.getMidiData)
