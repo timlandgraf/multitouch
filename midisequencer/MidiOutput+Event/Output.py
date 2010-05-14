@@ -63,12 +63,12 @@ class Output():
 	''' tunnel for log messages '''
 	def __log(self, msg):
 		print 'Output:\t\t' + msg
+		a=1
 	
 	def play(self, playdata):
 		# constants for MIDI Status
 		ON = 1		# note on
 		OFF = 0		# note off
-		NOT = -1 	# nothing	
 		
 		switch___on_notes = set()
 		switch_off_notes = set()

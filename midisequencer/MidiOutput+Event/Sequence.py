@@ -1,6 +1,7 @@
 import EventManager
 
 import time
+import random
 
 '''
 - Class: Sequence
@@ -9,6 +10,7 @@ This class is a sequence displayed as an object on the GUI.
 '''
 
 # cmd /K "cd C:\Users\Bao\Desktop\Studium\6. Sem SoSe 10\Multitouch Sequencer\repository\tim\midisequencer\MidiOutput+Event && python Sequence.py"
+# http://www.pygame.org/docs/ref/midi.html#Output.note_on
 
 class Sequence():
 
@@ -20,7 +22,6 @@ class Sequence():
 		# constants for MIDI Status
 		ON = 1		# note on
 		OFF = 0		# note off
-		NOT = -1 	# nothing
 		
 		# each line is a tick
 		# each column is a tone
@@ -34,17 +35,28 @@ class Sequence():
 								[	[41, 100, OFF] , [100, 80, ON] , [31, 80, ON] , [60,110,OFF]]
 							  ]
 		else:
+			first = int(random.randrange(61, 127, 1))
+			second = int(random.randrange(80, 99, 1))
+			third = int(random.randrange(20, 31, 1))
+			fourth = int(random.randrange(50, 60, 1))
+
 			self.__playdata = [	
-								[	[61, 100, ON] , [80, 80, OFF] , [31, 80, ON] , [70,80,ON]	], 
-								[	[61, 100, OFF] , [80, 80, ON] , [31, 80, ON] , [70,80,ON]	],
-								[	[61, 100, ON] , [80, 80, ON] , [31, 80, ON] , [70,80,OFF]	],
-								[	[61, 100, OFF] , [80, 80, OFF] , [31, 80, ON] , [70,80,OFF]],
-								[	[61, 100, ON] , [80, 80, OFF] , [31, 80, ON] , [70,80,ON]	],
-								[	[61, 100, OFF] , [80, 80, ON] , [31, 80, ON] , [70,80,OFF]]
+								[	[first, 100, self.getRndOnOff()] , [second, 80, self.getRndOnOff()] , [third, 80,self.getRndOnOff()] , [fourth,80,self.getRndOnOff()]	], 
+								[	[first, 100, self.getRndOnOff()] , [second, 80, self.getRndOnOff()] , [third, 80,self.getRndOnOff()] , [fourth,80,self.getRndOnOff()]	],
+								[	[first, 100, self.getRndOnOff()] , [second, 80, self.getRndOnOff()] , [third, 80, self.getRndOnOff()] , [fourth,80,self.getRndOnOff()]	],
+								[	[first, 100, self.getRndOnOff()] , [second, 80, self.getRndOnOff()] , [third, 80, self.getRndOnOff()] , [fourth,80,self.getRndOnOff()]],
+								[	[first, 100, self.getRndOnOff()] , [second, 80, self.getRndOnOff()] , [third, 80, self.getRndOnOff()] , [fourth,80,self.getRndOnOff()]	],
+								[	[first, 100, self.getRndOnOff()] , [second, 80, self.getRndOnOff()] , [third, 80, self.getRndOnOff()] , [fourth,80,self.getRndOnOff()]]
 							  ]
 						  
 		# for internal clock
 		self.__internalTick=0
+		
+	def getRndOnOff(self):
+		#return int(random.randrange(0, 2, 1))
+		a=random.randint(0, 1)
+		#print '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ' + str(a)
+		return a
 
 	''' dummy for later actions '''
 	def getMidiData(self,tick):
@@ -76,16 +88,15 @@ if __name__ == '__main__':
 	#seq1.id='seq1'
 	manager.register(seq1, seq1.getMidiData)
 		
-	seq2=Sequence(id='seq2')
+	#seq2=Sequence(id='seq2')
 	#seq2.id='seq2'
-	manager.register(seq2, seq2.getMidiData)
+	#manager.register(seq2, seq2.getMidiData)
 	
+	for i in range(2, 2):
+		seq=Sequence(id='seq'+str(i))
+		#seq.id='seq'+str(i)
+		manager.register(seq, seq.getMidiData)
+		
 	# if this terminates, program will terminate
 	while 1:
 		a=1	
-	
-#	for i in range(3, 6):
-#		seq=Sequence()
-#		seq.id='seq'+str(i)
-#		manager.register(seq, seq.callback)
-		
