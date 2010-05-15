@@ -1,0 +1,44 @@
+#include "nsISupports.idl"
+#include "nsIBaseWindow.idl"
+
+// Component that registers an firefox window as touchable.
+//
+// structure of an touch message: [type, id, x, y, time]
+// structure of an gesture message: [type]
+//
+// General component properties:
+//
+// CONTRACTID "@firemind.mozdev.org/touchSupport;1"
+// CLASSNAME "TouchSupport"
+// CID {0x8641dce1, 0x2ec6, 0x4eed, { 0x9d, 0x72, 0xe4, 0x74, 0x3d, 0x6f, 0x13, 0xe6 }}
+//
+[scriptable, uuid(8641DCE1-2EC6-4EED-9D72-E4743D6F13E6)]
+interface ITouchSupport : nsISupports
+{
+	// Checks the capabilities of a user's computer:
+	//
+	// 0x00000000 | 0   | The input digitizer does not have touch capabilities.
+	// 0x00000001 | 1   | An integrated touch digitizer is used for input.
+	// 0x00000002 | 2   | An external touch digitizer is used for input.
+	// 0x00000004 | 4   | An integrated pen digitizer is used for input.
+	// 0x00000008 | 8   | An external pen digitizer is used for input.
+	// 0x00000040 | 64  | An input digitizer with support for multiple inputs is used for input.
+	// 0x00000080 | 128 | The input digitizer is ready for input. If this value is unset, 
+	// it may mean that the tablet service is stopped, the digitizer is not supported, or 
+	// digitizer drivers have not been installed.
+	long checkTouchCapabilities();
+
+	// Register an window as touchable.
+	//
+	// @param nsIBaseWindow window 
+	// @param long type (0 = touch, 1 = gesture)
+	// @param long port
+	//
+	boolean registerWindow(in nsIBaseWindow window, in long type, in long port);
+
+	// Unregister an window as touchable.
+	//
+	// @param nsIBaseWindow window 
+	//
+	boolean unregisterWindow(in nsIBaseWindow window);
+};
