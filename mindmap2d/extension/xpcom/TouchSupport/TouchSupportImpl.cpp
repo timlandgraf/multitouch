@@ -1,17 +1,24 @@
 #include "TouchSupportImpl.h"
 
 //-------------------------------------------------------------------
-// hwnd getter (top-level and content)
-// source: http://mdn.beonex.com/en/Code_snippets/Finding_Window_Handles#Finding_the_content_window_handle
+// hwnd getter (top-level and child)
 //-------------------------------------------------------------------
 
-
-HWND getParentWindowHWND(nsIBaseWindow *window) 
+HWND getWindowHWND(nsIBaseWindow *window) 
 {
-	nativeWindow hwnd;
-	nsresult rv = window->GetParentNativeWindow(&hwnd);
-	if (NS_FAILED(rv)) return NULL;
-	return (HWND)hwnd;
+	nativeWindow nWindow;
+	nsresult rv = window->GetParentNativeWindow(&nWindow);
+	if (NS_FAILED(rv)){ 
+		return NULL;
+	}
+	
+	// top level hWnd
+	HWND phWnd = (HWND)nWindow;
+
+	// child hWnd
+	HWND hWnd = FindWindowEx(phWnd, NULL, NULL, NULL);
+
+	return hWnd;
 }
 
 //-------------------------------------------------------------------
@@ -45,8 +52,7 @@ NS_IMETHODIMP TouchSupport::CheckTouchCapabilities(PRInt32 *_retval)
 NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, IJSCallback *observer, PRBool *_retval)
 {
 	try {
-		HWND phWnd = getParentWindowHWND(window);
-		HWND hWnd = FindWindowEx(phWnd, NULL, NULL, NULL);
+		HWND hWnd = ::getWindowHWND(window);
 
 		if (hWnd != NULL){
 
@@ -83,8 +89,7 @@ NS_IMETHODIMP TouchSupport::UnregisterWindow(nsIBaseWindow *window, PRBool *_ret
 {
 	try {
 		if(this->type == 0){ // touch
-			HWND phWnd = getParentWindowHWND(window);
-			HWND hWnd = FindWindowEx(phWnd, NULL, NULL, NULL);
+			HWND hWnd = ::getWindowHWND(window);
 
 			if (hWnd != NULL){
 				*_retval = UnregisterTouchWindow(hWnd);
