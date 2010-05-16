@@ -16,10 +16,8 @@ Firemind.touchAPI.TouchSupport = {
 	
 	//private:
 	_nid : -1,
-	_port : -1,
 	_touchSupport : null,
 	_baseWindow : null,
-	_serverSocket : null,
 
 	_getBaseWindow : function(_window){
 		return _window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
