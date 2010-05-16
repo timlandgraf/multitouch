@@ -2,7 +2,6 @@
 #define __TouchSupport_H__
 
 #include "TouchSupport.h"
-#include "TouchConnect.h"
 
 #include "nsCOMPtr.h"
 #include "nsIBaseWindow.h"
@@ -10,6 +9,20 @@
 
 #include <windows.h>
 #include <Winuser.h>
+
+#define TOUCHSUPPORT_REF_PROP "TOUCHSUPPORT_REF_PROP"
+
+class JSCallback : public IJSCallback
+{
+public:
+  NS_DECL_ISUPPORTS
+  NS_DECL_IJSCALLBACK
+
+  JSCallback();
+
+private:
+  ~JSCallback();
+};
 
 #define TOUCHSUPPORT_CONTRACTID "@firemind.mozdev.org/touchSupport;1"
 #define TOUCHSUPPORT_CLASSNAME "TouchSupport"
@@ -22,11 +35,13 @@ public:
   NS_DECL_ITOUCHSUPPORT
 
   PRInt32 type;
+  IJSCallback *observer;
+  WNDPROC oldProc;
 
   TouchSupport();
 
   static LRESULT OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam);
-  static LRESULT OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+  //static LRESULT OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:

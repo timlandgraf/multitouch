@@ -1,10 +1,13 @@
 #include "nsISupports.idl"
 #include "nsIBaseWindow.idl"
 
+[scriptable, uuid(9FFA0BDB-1780-4E39-90B9-4CC7B2DEB7D7)]
+interface IJSCallback : nsISupports
+{
+	void acceptTouch(in long id_, in long x_, in long y_, in long time_, in long type_);
+};
+
 // Component that registers an firefox window as touchable.
-//
-// structure of an touch message: [type, id, x, y, time]
-// structure of an gesture message: [type]
 //
 // General component properties:
 //
@@ -34,7 +37,7 @@ interface ITouchSupport : nsISupports
 	// @param long type (0 = touch, 1 = gesture)
 	// @param long port
 	//
-	boolean registerWindow(in nsIBaseWindow window, in long type, in long port);
+	boolean registerWindow(in nsIBaseWindow window, in long type, in IJSCallback observer);
 
 	// Unregister an window as touchable.
 	//
