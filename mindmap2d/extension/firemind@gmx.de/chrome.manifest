@@ -1,0 +1,4 @@
+content firemind chrome/content/ 
+
+overlay chrome://browser/content/browser.xul chrome://firemind/content/firemindOverlay.xul
+

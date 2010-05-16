@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<overlay id="firemind-overlay"
+		 xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="firemindGlobals.js" />
+	<script src="firemindOverlay.js" />
+	
+	<menupopup id="menu_ToolsPopup">
+		<menuitem label="Firemind" oncommand="Firemind.overlay.openWindow();" />
+	</menupopup>
+		 
+</overlay>

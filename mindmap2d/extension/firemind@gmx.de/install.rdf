@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>3.0b3</em:minVersion>
+        <em:maxVersion>3.6.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+	
+	<em:id>firemind@gmx.de</em:id>
+	<em:type>2</em:type>
+	<em:name>Firemind</em:name>
+    <em:version>0.01</em:version>
+	<em:description>Multi touch supported mind map</em:description>
+    <em:creator>Maik Gollnick, Florian Freudenberg, Ole Schütt, Daniel Spaude</em:creator>
+	<em:contributor>Maik Gollnick</em:contributor>
+	<em:homepageURL>http://firemind.mozdev.org/</em:homepageURL>
+	<!--<em:iconURL>chrome://firemind/skin/firemind.png</em:iconURL>-->
+	
+  </Description>
+</RDF>
