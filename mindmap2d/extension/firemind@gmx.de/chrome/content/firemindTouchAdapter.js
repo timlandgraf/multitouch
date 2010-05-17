@@ -2,18 +2,12 @@ Firemind.namespace("touchAPI");
 
 Firemind.touchAPI.TouchAdapter = {
 	
-	EVENT_TOUCHDOWN :	0,
-	EVENT_TOUCHUP :		1,
-	EVENT_TOUCHMOVE :	2,
-	
-	pointToScreen : function(touch){
-		touch.screenX = parseInt(touch.x / 100);
-		touch.screenY = parseInt(touch.y / 100);
-	},
+	EVENT_TOUCHDOWN : 0,
+	EVENT_TOUCHUP : 1,
+	EVENT_TOUCHMOVE : 2,
 	
 	EVENTS : {
 		onTouchDown: function(touch){
-			Firemind.touchAPI.TouchAdapter.pointToScreen(touch);
 			//alert("touchDown, x = " + touch.x + ", y = " + touch.y);
 		},
 		onTouchMove: function(touch){
@@ -21,8 +15,7 @@ Firemind.touchAPI.TouchAdapter = {
 		},
 		onTouchUp: function(touch){
 			//alert("touchUp, x = " + touch.x + ", y = " + touch.y);
-		},
-		onGesture: function(gesture){}
+		}
 	},
 	
 	acceptTouch : function(id_, x_, y_, time_, type_){
@@ -42,12 +35,8 @@ Firemind.touchAPI.TouchAdapter = {
 					{id: id_, x: x_, y: y_, time: time_}
 				);
 				return;
-			default: throw "ERROR: Undefined event of type: " + type;
+			default: throw "ERROR: Undefined event of type: " + type_;
 		}
-	},
-	
-	acceptGesture : function(){
-	
 	}
 	
 };
