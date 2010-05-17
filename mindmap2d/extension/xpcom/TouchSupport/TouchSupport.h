@@ -34,21 +34,27 @@ class NS_NO_VTABLE NS_SCRIPTABLE IJSCallback : public nsISupports {
   /* void acceptTouch (in long id_, in long x_, in long y_, in long time_, in long type_); */
   NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_) = 0;
 
+  /* void acceptGesture (in long id_, in long state_, in long x_, in long y_, in long hi_, in long lo_); */
+  NS_SCRIPTABLE NS_IMETHOD AcceptGesture(PRInt32 id_, PRInt32 state_, PRInt32 x_, PRInt32 y_, PRInt32 hi_, PRInt32 lo_) = 0;
+
 };
 
   NS_DEFINE_STATIC_IID_ACCESSOR(IJSCallback, IJSCALLBACK_IID)
 
 /* Use this macro when declaring classes that implement this interface. */
 #define NS_DECL_IJSCALLBACK \
-  NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_); 
+  NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_); \
+  NS_SCRIPTABLE NS_IMETHOD AcceptGesture(PRInt32 id_, PRInt32 state_, PRInt32 x_, PRInt32 y_, PRInt32 hi_, PRInt32 lo_); 
 
 /* Use this macro to declare functions that forward the behavior of this interface to another object. */
 #define NS_FORWARD_IJSCALLBACK(_to) \
-  NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_) { return _to AcceptTouch(id_, x_, y_, time_, type_); } 
+  NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_) { return _to AcceptTouch(id_, x_, y_, time_, type_); } \
+  NS_SCRIPTABLE NS_IMETHOD AcceptGesture(PRInt32 id_, PRInt32 state_, PRInt32 x_, PRInt32 y_, PRInt32 hi_, PRInt32 lo_) { return _to AcceptGesture(id_, state_, x_, y_, hi_, lo_); } 
 
 /* Use this macro to declare functions that forward the behavior of this interface to another object in a safe way. */
 #define NS_FORWARD_SAFE_IJSCALLBACK(_to) \
-  NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_) { return !_to ? NS_ERROR_NULL_POINTER : _to->AcceptTouch(id_, x_, y_, time_, type_); } 
+  NS_SCRIPTABLE NS_IMETHOD AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_) { return !_to ? NS_ERROR_NULL_POINTER : _to->AcceptTouch(id_, x_, y_, time_, type_); } \
+  NS_SCRIPTABLE NS_IMETHOD AcceptGesture(PRInt32 id_, PRInt32 state_, PRInt32 x_, PRInt32 y_, PRInt32 hi_, PRInt32 lo_) { return !_to ? NS_ERROR_NULL_POINTER : _to->AcceptGesture(id_, state_, x_, y_, hi_, lo_); } 
 
 #if 0
 /* Use the code below as a template for the implementation class for this interface. */
@@ -84,6 +90,12 @@ _MYCLASS_::~_MYCLASS_()
 
 /* void acceptTouch (in long id_, in long x_, in long y_, in long time_, in long type_); */
 NS_IMETHODIMP _MYCLASS_::AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* void acceptGesture (in long id_, in long state_, in long x_, in long y_, in long hi_, in long lo_); */
+NS_IMETHODIMP _MYCLASS_::AcceptGesture(PRInt32 id_, PRInt32 state_, PRInt32 x_, PRInt32 y_, PRInt32 hi_, PRInt32 lo_)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
