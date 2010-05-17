@@ -4,7 +4,26 @@
 [scriptable, uuid(9FFA0BDB-1780-4E39-90B9-4CC7B2DEB7D7)]
 interface IJSCallback : nsISupports
 {
+	// Callback function to accept touch messages.
+	//
+	// @param id_ unique identifier
+	// @param x_ screen x-coordinate
+	// @param y_ screen y-coordinate
+	// @param time_ timestamp
+	// @param type_ 0 = touchup, 1 = touchup, 2 = touchmove
+	//
 	void acceptTouch(in long id_, in long x_, in long y_, in long time_, in long type_);
+
+	// Callback function to accept gesture messages.
+	//
+	// @param id_ gesture identifier
+	// @param state_ current gesture state (begin, inertia, end)
+	// @param x_ screen x-coordinate
+	// @param y_ screen y-coordinate
+	// @param hi_ gesture arguments, upper 32bit of the 64bit ullArguments
+	// @param lo_ gesture arguments, lower 32bit of the 64bit ullArguments
+	//
+	void acceptGesture(in long id_, in long state_, in long x_, in long y_, in long hi_, in long lo_);
 };
 
 // Component that registers an firefox window as touchable.
@@ -29,6 +48,7 @@ interface ITouchSupport : nsISupports
 	// 0x00000080 | 128 | The input digitizer is ready for input. If this value is unset, 
 	// it may mean that the tablet service is stopped, the digitizer is not supported, or 
 	// digitizer drivers have not been installed.
+	//
 	long checkTouchCapabilities();
 
 	// Register an window as touchable.
