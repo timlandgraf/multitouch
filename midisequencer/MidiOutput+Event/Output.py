@@ -33,6 +33,8 @@ class Output():
 		instrument = 32
 		instrument = 124
 		instrument = 100
+		instrument = 0
+		instrument=1
 		start_note = 53  # F3 (white key note), start_note != 0
 	
 	
@@ -62,10 +64,14 @@ class Output():
 
 	''' tunnel for log messages '''
 	def __log(self, msg):
-		print 'Output:\t\t' + msg
+		#print 'Output:\t\t' + msg
 		a=1
 	
 	def play(self, playdata):
+		if(playdata==[]):
+			return
+
+	
 		# constants for MIDI Status
 		ON = 1		# note on
 		OFF = 0		# note off
@@ -78,28 +84,34 @@ class Output():
 			note = mididata[0]
 			velocity = mididata[1]
 			status = mididata[2]
-		
-			if note in self.__on_notes and status == OFF:
-					switch_off_notes.add(note)
-			elif note not in self.__on_notes and status == ON:
-					switch___on_notes.add((note,velocity))
+
+			if status == ON:
+				self.midi_out.note_on(note, velocity, channel = 0)				
+				self.__log('\tnote on>\t' + str(note)) #LOG
+			elif status == OFF:
+				self.midi_out.note_off(note, channel = 0)
+				self.__log('\t< note off\t' + str(note)) # LOG
+			
+			
+#			if note in self.__on_notes and status == OFF:
+#					switch_off_notes.add(note)
+#			elif note not in self.__on_notes and status == ON:
+#					switch___on_notes.add((note,velocity))
 		
 		# switch not played notes of
-		for old_note in switch_off_notes:
-			self.midi_out.note_off(old_note)
-			self.__log('\t< note off\t' + str(old_note)) # LOG
-			self.__on_notes.remove(old_note)			
+#		for old_note in switch_off_notes:
+#			self.midi_out.note_off(old_note)
+#			self.__log('\t< note off\t' + str(old_note)) # LOG
+#			self.__on_notes.remove(old_note)			
 		
 		# switch new played notes on
-		for new_note, velocity in switch___on_notes:
-			self.midi_out.note_on(new_note, velocity)
-			self.__log('\tnote on>\t' + str(new_note)) #LOG
-			self.__on_notes.add(new_note)
+#		for new_note, velocity in switch___on_notes:
+#			self.midi_out.note_on(new_note, velocity)
+#			self.__log('\tnote on>\t' + str(new_note)) #LOG
+#			self.__on_notes.add(new_note)
 
 		self.__log('played notes: ' + str(self.__on_notes)) # LOG
 
-
-			
 	def print_device_info():
 		pygame.midi.init()
 		_print_device_info()
