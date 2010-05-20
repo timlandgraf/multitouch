@@ -8,6 +8,7 @@
   <!-- any one of the following lines.                            -->
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
   <inherits name='com.google.gwt.widgetideas.GWTCanvas'/>
+  <inherits name='org.vaadin.gwtgraphics.GWTGraphics'/>
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 

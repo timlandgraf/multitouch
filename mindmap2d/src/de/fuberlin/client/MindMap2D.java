@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.Timer;
 
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+import org.vaadin.gwtgraphics.client.DrawingArea;
+import org.vaadin.gwtgraphics.client.shape.Circle;
 
 
 /**
@@ -30,7 +32,24 @@ public class MindMap2D implements EntryPoint {
    * This is the entry point method.
    */
   public void onModuleLoad() {
-  	
+	  final DrawingArea canvas = new DrawingArea(400, 400);
+	  RootPanel.get().add(canvas);
+	  final Circle circle = new Circle(100, 100, 50);
+	  circle.setFillColor("red");
+	  canvas.add(circle);
+	  
+	  Timer t1 = new Timer(){
+		public void run(){
+			circle.setX(circle.getX()+5);
+			if(circle.getX() > 300)
+				canvas.remove(circle);
+		}
+	};
+	
+	t1.scheduleRepeating(100);
+	
+	  
+/*  	
 	MyCanvas canvas = new MyCanvas(800, 400);
 	RootPanel.get().add(canvas);
 	canvas.setStyleName("canvas");
@@ -46,7 +65,7 @@ public class MindMap2D implements EntryPoint {
 	foam.addBubble(new Bubble(10,50, "some bubble"));
 	foam.addBubble(new Bubble(200,180, "Hallo :-)"));
 	foam.addBubble(new Bubble(600,190, "yet another one"));
-	
+	*/
 	/*
 	Timer t1 = new Timer(){
 		public void run(){
