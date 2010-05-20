@@ -142,10 +142,18 @@ LRESULT TouchSupport::OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam )
 				}
 
 				if(type != -1){
+
+					tagPOINT point;
+
+					point.x = ti.x;
+					point.y = ti.y;
+
+					ScreenToClient(hWnd, &point);
+
 					self->observer->AcceptTouch(
 						ti.dwID, 
-						ti.x / 100, // convert to screenX
-						ti.y / 100, // convert to screenY
+						point.x, // convert to screenX
+						point.y, // convert to screenY
 						ti.dwTime, 
 						type
 					);
@@ -166,7 +174,7 @@ LRESULT TouchSupport::OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam )
 	}
 		
 	// if you didn't handle the message, let DefWindowProc handle it
-	return DefWindowProc(hWnd, WM_TOUCH, wParam, lParam);
+	return ::DefWindowProc(hWnd, WM_TOUCH, wParam, lParam);
 }
 
 // handle gesture messages
@@ -187,6 +195,14 @@ LRESULT TouchSupport::OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	if (bResult){
 
 		POINTS p = gi.ptsLocation;
+
+		tagPOINT point;
+
+		point.x = p.x;
+		point.y = p.y;
+
+		ScreenToClient(hWnd, &point);
+
 		PRInt32 hi = (gi.ullArguments >> 32) & 0xffffffff;
 		PRInt32 lo = gi.ullArguments & 0xffffffff;
 
@@ -197,7 +213,7 @@ LRESULT TouchSupport::OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 			case GID_ROTATE:
 			case GID_TWOFINGERTAP:
 			case GID_PRESSANDTAP:
-				self->observer->AcceptGesture(gi.dwID, gi.dwFlags, p.x, p.y, hi, lo);  
+				self->observer->AcceptGesture(gi.dwID, gi.dwFlags, point.x, point.y, hi, lo);  
 				bHandled = TRUE;
 				break;
 			default:
