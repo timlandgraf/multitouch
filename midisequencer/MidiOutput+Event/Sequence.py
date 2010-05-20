@@ -74,36 +74,3 @@ class Sequence():
 	def __log(self, msg):
 		if(self.__logging):
 			print 'Sequence <'+self.id+'>:\t' + msg
-
-
-# OLD!!!! DEPRECATED!!!
-''' main program for test purposes '''
-if __name__ == '__main__':
-	print '============================================================'
-	print '=================== START =================================='
-	print '============================================================'
-	
-	amount_sequences = 1
-	
-	manager=EventManager.EventManager()
-	manager.start()
-	
-	manager.setTicktime(0.125)
-	manager.setTicktime(0.2)
-	
-	seq1=Sequence(id='seq1')
-	#seq1.id='seq1'
-	manager.register(seq1, seq1.getMidiData)
-		
-	#seq2=Sequence(id='seq2')
-	#seq2.id='seq2'
-	#manager.register(seq2, seq2.getMidiData)
-	
-	for i in range(2, amount_sequences+1):
-		seq=Sequence(id='seq'+str(i))
-		#seq.id='seq'+str(i)
-		manager.register(seq, seq.getMidiData)
-		
-	# if this terminates, program will terminate
-	while 1:
-		a=1	

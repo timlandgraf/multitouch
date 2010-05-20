@@ -1,6 +1,7 @@
 import Sequence
 import EventManager
 
+# cmd /K "cd C:\Users\Bao\Desktop\Studium\6. Sem SoSe 10\Multitouch Sequencer\repository\tim\midisequencer\MidiOutput+Event && python Main.py"
 
 ''' main program for test purposes '''
 if __name__ == '__main__':
@@ -15,7 +16,7 @@ if __name__ == '__main__':
 	
 	# Logging On/Off
 	logging_sequences=0
-	logging_eventSystem=1
+	logging_eventSystem=0
 	
 	######################################################################
 	

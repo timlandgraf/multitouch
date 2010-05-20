@@ -11,6 +11,7 @@ python midi.py --input
 import sys
 import os
 import time
+import threading 
 
 import pygame
 import pygame.midi
@@ -19,11 +20,28 @@ from pygame.locals import *
 
 ################################################################################
 
-class Output():
+class Output(threading.Thread): # Output runs in its own Thread
 
 	def __init__(self, **kwargs):
+		# logging on/off
+		kwargs.setdefault('logging', True)
+		self.__logging = kwargs.get('logging')
+		
 		self.__log('initializing Output')
 		
+		# mandatory for threading
+		threading.Thread.__init__(self)
+		
+		# ticktime
+		kwargs.setdefault('ticktime', 0.125)
+		self.__ticktime = kwargs.get('ticktime')
+		
+		# get reference to manager. if no -> exception
+		self.manager=kwargs.get('manager')
+		if self.manager==None:
+			raise Exception('Output must be instantiated with an associated EventManager!')
+		
+		#######################################
 		device_id = None
 		GRAND_PIANO = 0
 		CHURCH_ORGAN = 19
@@ -60,12 +78,28 @@ class Output():
 		del self.midi_out
 		pygame.midi.quit()
 
-	
+	''' sets ticktime (in seconds) -> speed '''
+	def setTickTime(self, time):
+		self.__ticktime=time	
 
 	''' tunnel for log messages '''
 	def __log(self, msg):
-		#print 'Output:\t\t' + msg
-		a=1
+		if(self.__logging):
+			print 'Output:\t\t' + msg
+		
+	def run(self):
+		oldtime=pygame.time.get_ticks()
+		
+		while 1:	# BAO DEVELOP: i<5 gemacht, damit nicht so oft durchgelaufen wird
+			queue=self.manager.playDataQueue
+			
+			playdata = queue.get()
+			self.__log('got music data to play')
+			if(playdata!=None):
+				self.play(playdata)
+			queue.task_done()
+			
+			time.sleep(self.__ticktime)	
 	
 	def play(self, playdata):
 		if(playdata==[]):
