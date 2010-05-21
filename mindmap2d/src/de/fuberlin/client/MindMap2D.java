@@ -32,9 +32,9 @@ public class MindMap2D implements EntryPoint{
 	  DrawingArea canvas = new DrawingArea(800, 400);
 	  canvas.setStyleName("canvas");
 	  RootPanel.get().add(canvas);
-	  Bubble b1 = new Bubble(10,10,"hallo 1 :-)");
+	  Bubble b1 = new Bubble(100,100,"hallo 1 :-)");
 	  b1.addToCanvas(canvas);
-	  Bubble b2 = new Bubble(200,10,"hallo 2 :-)");
+/*	  Bubble b2 = new Bubble(200,10,"hallo 2 :-)");
 	  b2.addToCanvas(canvas);
 	  Bubble b3 = new Bubble(10,200,"hallo 3 :-)");
 	  b3.addToCanvas(canvas);
@@ -46,6 +46,7 @@ public class MindMap2D implements EntryPoint{
 	  b6.addToCanvas(canvas);
 	  Bubble b7 = new Bubble(200,400,"hallo 7 :-)");
 	  b7.addToCanvas(canvas);
+	  */
   }
   
   
