@@ -34,6 +34,13 @@ public class MindMap2D implements EntryPoint{
 	  RootPanel.get().add(canvas);
 	  Bubble b1 = new Bubble(100,100,"hallo 1 :-)");
 	  b1.addToCanvas(canvas);
+	  
+	  Bubble b2 = new Bubble(200,200,"hallo 2 :-)");
+	  b2.addToCanvas(canvas);
+	  
+	  Edge edge = new Edge(b1,b2);
+	  edge.addToCanvas(canvas);
+	  
 /*	  Bubble b2 = new Bubble(200,10,"hallo 2 :-)");
 	  b2.addToCanvas(canvas);
 	  Bubble b3 = new Bubble(10,200,"hallo 3 :-)");

@@ -141,11 +141,12 @@ Test targets suppressed because -junit argument was not specified when running w
 
   
   <target name="publish" depends="build" description="Build and upload to my websever">
-  	 <exec executable="scp">
-    	<arg value="-r"/>
-		<arg value="war"/>
-		<arg value="schuett.name:/var/www/schuett.name/ole/mindmap2d"/>
-	  </exec>
+  	 <exec executable="rsync">
+    	<arg value="-axv"/>
+		<arg value="--delete"/>
+		<arg value="war/"/>
+		<arg value="schuett.name:/var/www/schuett.name/ole/mindmap2d/"/>
+	 </exec>
    </target>
 	
 </project>

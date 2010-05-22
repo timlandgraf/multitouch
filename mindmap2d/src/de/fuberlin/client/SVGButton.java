@@ -5,7 +5,7 @@ import org.vaadin.gwtgraphics.client.shape.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.core.client.GWT;
 
-public class SVGButton extends UIThing {
+public abstract class SVGButton extends UIThing {
 
 	
 	private Circle circle;
@@ -14,7 +14,6 @@ public class SVGButton extends UIThing {
 	private int x, y;
 	
 	public SVGButton(int x, int y, String text){
-		super(false); // not moveable
 		this.text_str = text;
 		this.x = x;
 		this.y = y;
@@ -31,9 +30,19 @@ public class SVGButton extends UIThing {
 		group.add(text);
 	}
 	
-	
+	abstract public void onClick();
 	
 	void setPosition(int x, int y){ } // should never change
-	void setState(State s){} // no animations so far
+	void setState(State s){
+		this.state = s;
+		switch (s) {
+			case NORMAL: circle.setFillColor("gray"); break;
+			case HIGHLIGHTED: circle.setFillColor("green"); break;
+			case MOUSEDOWN_1: 
+			case MOUSEDOWN_2:
+			case MOVING:
+			case ACTIVATED: onClick(); setState(State.HIGHLIGHTED); break; 
+		}
+	}
 	
 }

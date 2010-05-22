@@ -7,15 +7,11 @@ import com.google.gwt.core.client.GWT;
 
 public abstract class UIThing implements MouseDownHandler, MouseUpHandler, MouseMoveHandler, MouseOverHandler, MouseOutHandler {
 	enum State {NORMAL, HIGHLIGHTED, MOUSEDOWN_1, MOUSEDOWN_2, MOVING, ACTIVATED};
-	private Group group;
-	private boolean moveable;
+	Group group;
 	DrawingArea canvas;
 	State state;
 	
 	//==========================================================================
-	public UIThing(boolean moveable){
-		this.moveable = moveable;
-	}
 	
 	abstract void addToGroup(Group group);
 	abstract void setPosition(int x, int y);
@@ -30,13 +26,10 @@ public abstract class UIThing implements MouseDownHandler, MouseUpHandler, Mouse
 		setState(State.NORMAL);
 		canvas.add(group);
 		
-		
-		if(moveable){
-			//TODO: evtl nur bei group registrieren
-			canvas.addMouseMoveHandler(this);
-			canvas.addMouseUpHandler(this);
-		    group.addMouseDownHandler(this);
-		}
+		//TODO: evtl nur bei group registrieren
+		canvas.addMouseMoveHandler(this);
+		canvas.addMouseUpHandler(this);
+		group.addMouseDownHandler(this);
 		
 		//needed for highlightning
 		group.addMouseOverHandler(this);
