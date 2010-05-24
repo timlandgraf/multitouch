@@ -4,10 +4,17 @@
 		 xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 	<script src="firemindGlobals.js" />
-	<script src="firemindOverlay.js" />
 	
-	<menupopup id="menu_ToolsPopup">
-		<menuitem label="Firemind" oncommand="Firemind.overlay.openWindow();" />
-	</menupopup>
-		 
+	<script src="firemindTouch.js" />
+	<script src="firemindGesture.js" />
+	
+	<script src="firemindEventDispatcher.js" />
+	
+	<script src="firemindTouchAdapter.js" />
+	<script src="firemindGestureAdapter.js" />
+	<script src="firemindMouseAdapter.js" />
+	
+	<script src="firemindTouchSupport.js" />
+	<script src="firemindOverlay.js" />
+	 
 </overlay>

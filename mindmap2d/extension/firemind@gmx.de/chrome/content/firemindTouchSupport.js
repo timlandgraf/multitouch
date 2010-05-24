@@ -7,12 +7,9 @@ Firemind.touchAPI.TouchSupport = {
 	NID_INTEGRATED_TOUCH :	0x00000001,
 	NID_EXTERNAL_TOUCH :	0x00000002,
 	NID_INTEGRATED_PEN :	0x00000004,
-	NID_EXTERNAL_PEN :	0x00000008,
-	NID_MULTI_INPUT :	0x00000040,
-	NID_READY :	0x00000080,
-	
-	REGISTER_TYPE_TOUCH :	0,
-	REGISTER_TYPE_GESTURE :	1,
+	NID_EXTERNAL_PEN :		0x00000008,
+	NID_MULTI_INPUT :		0x00000040,
+	NID_READY :				0x00000080,
 	
 	//private:
 	_nid : -1,
@@ -20,14 +17,14 @@ Firemind.touchAPI.TouchSupport = {
 	_baseWindow : null,
 
 	_getBaseWindow : function(_window){
-		return _window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-				.getInterface(Components.interfaces.nsIWebNavigation)
-				.QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+		return _window.QueryInterface(Ci.nsIInterfaceRequestor)
+				.getInterface(Ci.nsIWebNavigation)
+				.QueryInterface(Ci.nsIDocShellTreeItem)
 				.treeOwner
-				.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-				.getInterface(Components.interfaces.nsIXULWindow)
+				.QueryInterface(Ci.nsIInterfaceRequestor)
+				.getInterface(Ci.nsIXULWindow)
 				.docShell
-				.QueryInterface(Components.interfaces.nsIBaseWindow);
+				.QueryInterface(Ci.nsIBaseWindow);
 	},
 	
 	_checkBit : function(pos){
@@ -36,6 +33,17 @@ Firemind.touchAPI.TouchSupport = {
 	},
 	
 	decodeNID : function(){
+		try {
+			if(this._touchSupport == null){
+				var instance = Cc["@firemind.mozdev.org/touchSupport;1"].createInstance();
+				this._touchSupport = instance.QueryInterface(Ci.ITouchSupport);
+			}
+			
+			this._nid = this._touchSupport.checkTouchCapabilities();
+		} catch(e){
+			this._nid = 0;
+		}
+		
 		var retVal = {};
 		retVal[this.TABLET_CONFIG_NONE] = this._nid == 0;
 		retVal[this.NID_INTEGRATED_TOUCH] = this._checkBit(1);
@@ -49,29 +57,64 @@ Firemind.touchAPI.TouchSupport = {
 	
 	register : function(_window, _callback){
 		try {
-			var instance = Components.classes["@firemind.mozdev.org/touchSupport;1"].createInstance();
-			this._touchSupport = instance.QueryInterface(Components.interfaces.ITouchSupport);
-	
-			// top level nsIBaseWindow
-			this._baseWindow = this._getBaseWindow(_window);
-			
-			this._nid = this._touchSupport.checkTouchCapabilities();
-			
-			var rv = this._touchSupport.registerWindow(
-				Firemind.touchAPI.TouchSupport._baseWindow,
-				Firemind.touchAPI.TouchSupport.REGISTER_TYPE_TOUCH,
-				_callback
-			);
+			if(!_window)
+				throw "ERROR: Undefined parameter: _window!";
 		
-			if(!rv){
-				alert("ERROR: Can't register current base window!");
-			}
+			if(!_callback)
+				throw "ERROR: Undefined parameter: _callback!";
+				
+			// mouse simulator
+			if(_callback == Firemind.touchAPI.MouseAdapter){
+		
+				var body = _window.document.body;
+				
+				body.addEventListener(
+					"mousedown",
+					_callback.EVENTS.onMouseDown,
+					false
+				);
+				
+				body.addEventListener(
+					"mouseup",
+					_callback.EVENTS.onMouseUp,
+					false
+				);
+				
+				body.addEventListener(
+					"mousemove",
+					_callback.EVENTS.onMouseMove,
+					false
+				);
+				
+				return true;
 			
+			}else { // real adapter -> touch or gesture
+				
+				var type = (_callback == Firemind.touchAPI.TouchAdapter) ? 0 : (_callback == Firemind.touchAPI.GestureAdapter) ? 1 : -1;
+				
+				if(type == -1)
+					throw "ERROR: Unknown adapter, exspected touch or gesture!";
+				
+				var instance = Cc["@firemind.mozdev.org/touchSupport;1"].createInstance();
+				this._touchSupport = instance.QueryInterface(Ci.ITouchSupport);
+		
+				// top level nsIBaseWindow
+				this._baseWindow = this._getBaseWindow(_window);
+				
+				var rv = this._touchSupport.registerWindow(
+					Firemind.touchAPI.TouchSupport._baseWindow, type, _callback
+				);
+				
+				return rv;
+				
+			}
 		} catch(e){
 			Firemind.reportError(e);
 		}
+		
+		return false;
 	},
-	
+
 	unregister : function(){
 		try {
 			var rv = false;
@@ -87,8 +130,12 @@ Firemind.touchAPI.TouchSupport = {
 			}
 			
 			this.touchSupport = null;
+			
+			return rv;
 		} catch(e){
 			Firemind.reportError(e);
 		}
+		
+		return false;
 	}
 };

@@ -40,6 +40,11 @@ Firemind.reportError = function(error, msg){
 	}
 };
 
+Firemind.log = function(msg){
+	var console = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
+	console.logStringMessage(msg);
+};
+
 Firemind.include = function(name){
 	var HEADER = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader);
 	try {
@@ -47,4 +52,8 @@ Firemind.include = function(name){
 	} catch(e){
 		Firemind.reportError(e, "ERROR: Can't import " + name + " file (Firemind.include)!");
 	}
+};
+
+Firemind.prefs = function(){
+	return Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
 };
