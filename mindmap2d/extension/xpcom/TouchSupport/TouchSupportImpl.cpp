@@ -50,7 +50,7 @@ TouchSupport::~TouchSupport(){}
 /* long checkTouchCapabilities (); */
 NS_IMETHODIMP TouchSupport::CheckTouchCapabilities(PRInt32 *_retval)
 {
-	*_retval = ::GetSystemMetrics(SM_DIGITIZER);
+	*_retval = GetSystemMetrics(SM_DIGITIZER);
     return NS_OK;
 }
 
@@ -58,7 +58,7 @@ NS_IMETHODIMP TouchSupport::CheckTouchCapabilities(PRInt32 *_retval)
 NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, IJSCallback *observer, PRBool *_retval)
 {
 	try {
-		HWND hWnd = ::getWindowHWND(window);
+		HWND hWnd = getWindowHWND(window);
 
 		if (hWnd != NULL){
 
@@ -78,7 +78,7 @@ NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, 
 			);
 
 			if(type == 0) // touch
-				*_retval = ::RegisterTouchWindow(hWnd, 0); // WIN32 -> 0
+				*_retval = RegisterTouchWindow(hWnd, 0); // WIN32 -> 0
 			else // gesture
 				*_retval = true;
 		}else {
@@ -95,10 +95,10 @@ NS_IMETHODIMP TouchSupport::UnregisterWindow(nsIBaseWindow *window, PRBool *_ret
 {
 	try {
 		if(this->type == 0){ // touch
-			HWND hWnd = ::getWindowHWND(window);
+			HWND hWnd = getWindowHWND(window);
 
 			if (hWnd != NULL){
-				*_retval = ::UnregisterTouchWindow(hWnd);
+				*_retval = UnregisterTouchWindow(hWnd);
 			}
 		}else { // gesture
 			*_retval = true;
@@ -142,19 +142,18 @@ LRESULT TouchSupport::OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam )
 				}
 
 				if(type != -1){
+					 tagPOINT point;
 
-					tagPOINT point;
+					point.x = ti.x / 100;
+					point.y = ti.y / 100;
 
-					point.x = ti.x;
-					point.y = ti.y;
-
-					ScreenToClient(hWnd, &point);
+					BOOL b = ScreenToClient(hWnd, &point);
 
 					self->observer->AcceptTouch(
-						ti.dwID, 
+						ti.dwID,
 						point.x, // convert to screenX
 						point.y, // convert to screenY
-						ti.dwTime, 
+						ti.dwTime,
 						type
 					);
 				}
@@ -169,13 +168,18 @@ LRESULT TouchSupport::OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam )
 	}
 	if (bHandled){
 		// if you handled the message, close the touch input handle and return
-		::CloseTouchInputHandle((HTOUCHINPUT)lParam);
+		CloseTouchInputHandle((HTOUCHINPUT)lParam);
 		return 0;
 	}
 		
 	// if you didn't handle the message, let DefWindowProc handle it
-	return ::DefWindowProc(hWnd, WM_TOUCH, wParam, lParam);
+	return DefWindowProc(hWnd, WM_TOUCH, wParam, lParam);
 }
+
+tagPOINT _ptFirst;
+tagPOINT _ptSecond;
+tagPOINT _ptZoomCenter;
+UINT _dwArguments;
 
 // handle gesture messages
 LRESULT TouchSupport::OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -187,34 +191,107 @@ LRESULT TouchSupport::OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     
 	gi.cbSize = sizeof(GESTUREINFO);
 
-	BOOL bResult  = ::GetGestureInfo((HGESTUREINFO)lParam, &gi);
+	BOOL bResult  = GetGestureInfo((HGESTUREINFO)lParam, &gi);
 	BOOL bHandled = FALSE;
 
 	TouchSupport * self = (TouchSupport*)::GetProp(hWnd, TOUCHSUPPORT_REF_PROP);
 
 	if (bResult){
 
-		POINTS p = gi.ptsLocation;
-
-		tagPOINT point;
-
-		point.x = p.x;
-		point.y = p.y;
-
-		ScreenToClient(hWnd, &point);
-
-		PRInt32 hi = (gi.ullArguments >> 32) & 0xffffffff;
-		PRInt32 lo = gi.ullArguments & 0xffffffff;
-
 		// now interpret the gesture
 		switch (gi.dwID){
 			case GID_ZOOM:
+				
+				switch(gi.dwFlags){
+					case GF_BEGIN:
+
+						_dwArguments = (gi.ullArguments >> 32) & 0xffffffff;
+
+						_ptFirst.x = gi.ptsLocation.x / 100;
+						_ptFirst.y = gi.ptsLocation.y / 100;
+						ScreenToClient(hWnd, &_ptFirst);
+						break;
+					default:
+						_ptSecond.x = gi.ptsLocation.x / 100;
+						_ptSecond.y = gi.ptsLocation.y / 100;
+						ScreenToClient(hWnd, &_ptSecond);
+
+						_ptZoomCenter.x = (_ptFirst.x + _ptSecond.x) / 2;
+						_ptZoomCenter.y = (_ptFirst.y + _ptSecond.y) / 2;
+
+						double k = ((gi.ullArguments >> 32) & 0xffffffff) / (double)_dwArguments;
+
+						//call k, _ptZoomCenter.x, _ptZoomCenter.y
+						
+						//InvalidateRect(hWnd, NULL, TRUE);
+
+						_ptFirst = _ptSecond;
+						_dwArguments = (gi.ullArguments >> 32) & 0xffffffff;
+
+						break;
+				}
+
+				break;
 			case GID_PAN:
+				
+				switch(gi.dwFlags){
+					case GF_BEGIN:
+						_ptFirst.x = gi.ptsLocation.x / 100;
+						_ptFirst.y = gi.ptsLocation.y / 100;
+						ScreenToClient(hWnd, &_ptFirst);
+						break;
+					default:
+						_ptSecond.x = gi.ptsLocation.x / 100;
+						_ptSecond.y = gi.ptsLocation.y / 100;
+						ScreenToClient(hWnd, &_ptSecond);
+
+						//call _ptSecond.x-_ptFirst.x, _ptSecond.y-_ptFirst.y
+						
+						//InvalidateRect(hWnd, NULL, TRUE);
+
+						_ptFirst = _ptSecond;
+						break;
+				}
+
+				break;
 			case GID_ROTATE:
+				
+				switch(gi.dwFlags){
+					case GF_BEGIN:
+
+						_dwArguments = 0;
+
+						break;
+					default:
+						_ptFirst.x = gi.ptsLocation.x / 100;
+						_ptFirst.y = gi.ptsLocation.y / 100;
+						ScreenToClient(hWnd, &_ptSecond);
+
+						//call
+						//GID_ROTATE_ANGLE_FROM_ARGUMENT((gi.ullArguments >> 32) & 0xffffffff) - GID_ROTATE_ANGLE_FROM_ARGUMENT(_dwArguments),
+						//_ptFirst.x, _ptFirst.y
+						
+						//InvalidateRect(hWnd, NULL, TRUE);
+
+						_dwArguments = (gi.ullArguments >> 32) & 0xffffffff;
+
+						break;
+				}
+
+				break;
 			case GID_TWOFINGERTAP:
+				
+				_ptFirst.x = gi.ptsLocation.x / 100;
+				_ptFirst.y = gi.ptsLocation.y / 100;
+				ScreenToClient(hWnd, &_ptSecond);
+
+				break;
 			case GID_PRESSANDTAP:
-				self->observer->AcceptGesture(gi.dwID, gi.dwFlags, point.x, point.y, hi, lo);  
-				bHandled = TRUE;
+				
+				_ptFirst.x = gi.ptsLocation.x / 100;
+				_ptFirst.y = gi.ptsLocation.y / 100;
+				ScreenToClient(hWnd, &_ptSecond);
+
 				break;
 			default:
 				// A gesture was not recognized
@@ -231,7 +308,7 @@ LRESULT TouchSupport::OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 		return 0;
 	}
 		
-	return ::DefWindowProc(hWnd, message, wParam, lParam);
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 
@@ -248,5 +325,5 @@ LRESULT CALLBACK TouchSupport::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 		default: break;
 	}
 
-	return ::CallWindowProc(self->oldProc, hWnd, message, wParam, lParam);
+	return CallWindowProc(self->oldProc, hWnd, message, wParam, lParam);
 }
