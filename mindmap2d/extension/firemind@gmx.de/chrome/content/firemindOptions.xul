@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<prefwindow id="firemind-configure-window"
+			xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+			title="Firemind Options"
+			width="300" height="320">
+
+	<prefpane id="firemind-device" label="Configuration" selected="true">
+		
+		<preferences>
+			<preference id="pref_contactx" name="firemind.touch.contactx" type="int" />
+			<preference id="pref_contacty" name="firemind.touch.contacty" type="int" />
+		</preferences>
+		
+		<vbox flex="1">
+			<groupbox orient="horizontal" flex="1">
+				<caption>
+					<label value="Device" />
+				</caption>
+				<grid flex="1">
+					<columns flex="1">
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label value="TABLET CONFIG NONE:" />
+							<label id="TABLET_CONFIG_NONE" />
+						</row>
+						<row align="center">
+							<label value="NID INTEGRATED TOUCH:" />
+							<label id="NID_INTEGRATED_TOUCH" />
+						</row>
+						<row align="center">
+							<label value="NID EXTERNAL TOUCH:" />
+							<label id="NID_EXTERNAL_TOUCH" />
+						</row>
+						<row align="center">
+							<label value="NID INTEGRATED PEN:" />
+							<label id="NID_INTEGRATED_PEN" />
+						</row>
+						<row align="center">
+							<label value="NID EXTERNAL PEN:" />
+							<label id="NID_EXTERNAL_PEN" />
+						</row>
+						<row align="center">
+							<label value="NID MULTI INPUT:" />
+							<label id="NID_MULTI_INPUT" />
+						</row>
+						<row align="center">
+							<label value="NID READY:" />
+							<label id="NID_READY" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			
+			<groupbox orient="horizontal" flex="1">
+				<caption>
+					<label value="Touch" />
+				</caption>
+				<grid flex="1">
+					<columns flex="1">
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<textbox type="number" width="40px" min="10" max="100" increment="1" wraparound="false" hidespinbuttons="false" preference="pref_contactx" />
+							<label value="ContactX : width of the contact area" />
+						</row>
+						<row align="center">
+							<textbox type="number" width="40px" min="10" max="100" increment="1" wraparound="false" hidespinbuttons="false" preference="pref_contacty" />
+							<label value="ContactY : height of the contact area" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</vbox>
+	</prefpane>
+
+	<script src="firemindGlobals.js" />
+	
+	<script src="firemindTouch.js" />
+	<script src="firemindGesture.js" />
+	
+	<script src="firemindEventDispatcher.js" />
+	
+	<script src="firemindTouchAdapter.js" />
+	<script src="firemindGestureAdapter.js" />
+	<script src="firemindMouseAdapter.js" />
+	
+	<script src="firemindTouchSupport.js" />
+
+	<script><![CDATA[
+	
+		window.addEventListener("load", function (){
+			var ts = Firemind.touchAPI.TouchSupport;
+			var decodedNID = ts.decodeNID();
+			document.getElementById("TABLET_CONFIG_NONE").value = decodedNID[ts.TABLET_CONFIG_NONE];
+			document.getElementById("NID_INTEGRATED_TOUCH").value = decodedNID[ts.NID_INTEGRATED_TOUCH];
+			document.getElementById("NID_EXTERNAL_TOUCH").value = decodedNID[ts.NID_EXTERNAL_TOUCH];
+			document.getElementById("NID_INTEGRATED_PEN").value = decodedNID[ts.NID_INTEGRATED_PEN];
+			document.getElementById("NID_EXTERNAL_PEN").value = decodedNID[ts.NID_EXTERNAL_PEN];
+			document.getElementById("NID_MULTI_INPUT").value = decodedNID[ts.NID_MULTI_INPUT];
+			document.getElementById("NID_READY").value = decodedNID[ts.NID_READY];
+		}, false);
+		
+	]]></script>	
+	
+</prefwindow>
