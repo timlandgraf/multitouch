@@ -10,8 +10,6 @@ import random
 This class is a sequence displayed as an object on the GUI.
 '''
 
-# cmd /K "cd C:\Users\Bao\Desktop\Studium\6. Sem SoSe 10\Multitouch Sequencer\repository\tim\midisequencer\MidiOutput+Event && python Sequence.py"
-# http://www.pygame.org/docs/ref/midi.html#Output.note_on
 
 class Sequence():
 

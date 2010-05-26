@@ -11,12 +11,12 @@ if __name__ == '__main__':
 
 	# Options:
 	amount_sequences = 1
-	ticktime=0.125
-	#ticktime=0.2
+	bpm=128
+	#bpm=200
 
 	# Logging On/Off
-	logging_sequences=0
-	logging_eventSystem=0
+	logging_sequences=1
+	logging_eventSystem=1
 
 	######################################################################
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	# start manager
 	manager=EventManager.EventManager(logging=logging_eventSystem)
 	manager.start()
-	manager.setTicktime(ticktime)
+	manager.setBPM(bpm)
 
 	# create sequences and register at manager
 	seq1=Sequence.Sequence(id='seq1', logging=logging_sequences)

@@ -23,30 +23,20 @@ class Output(threading.Thread): # Output runs in its own Thread
 		# mandatory for threading
 		threading.Thread.__init__(self)
 
-		# ticktime
-		kwargs.setdefault('ticktime', 0.125)
-		self.__ticktime = kwargs.get('ticktime')
+		# speed in bpm = beats per minute
+		kwargs.setdefault('bpm', 128)
+		self.__ticktime = self.setBPM(kwargs.get('bpm'))
 
 		# get reference to manager. if no -> exception
 		self.manager=kwargs.get('manager')
 		if self.manager==None:
 			raise Exception('Output must be instantiated with an associated EventManager!')
 
+		self.__timestamp=0
+		self.__lastInstrument=-1
+
 		#######################################
 		device_id = None
-		GRAND_PIANO = 0
-		CHURCH_ORGAN = 19
-
-		instrument = CHURCH_ORGAN
-		#instrument = GRAND_PIANO
-		instrument = 32
-		instrument = 124
-		instrument = 100
-		instrument = 0
-		instrument=1
-		start_note = 53  # F3 (white key note), start_note != 0
-
-
 
 		pygame.init()
 		pygame.midi.init()
@@ -60,18 +50,22 @@ class Output(threading.Thread): # Output runs in its own Thread
 
 		print ("using output_id :%s:" % port)
 
-		self.midi_out = pygame.midi.Output(port, 0)
-		self.midi_out.set_instrument(instrument)
+		# no latency no scheduling of midi events with timestamp
+		self.midi_out = pygame.midi.Output(port, latency = 1)
 
-		self.__on_notes = set()
+
 
 	def __del__(self):
 		del self.midi_out
 		pygame.midi.quit()
 
-	''' sets ticktime (in seconds) -> speed '''
+	''' sets ticktime (in miliseconds) -> speed '''
 	def setTickTime(self, time):
 		self.__ticktime=time
+
+	''' set speed in BPM = bits per minute '''
+	def setBPM(self,bpm):
+		self.__ticktime=16000/bpm	# 1/16 rhytm, 64 notes = 1 sequence length
 
 	''' tunnel for log messages '''
 	def __log(self, msg):
@@ -90,21 +84,30 @@ class Output(threading.Thread): # Output runs in its own Thread
 				self.play(playdata)
 			queue.task_done()
 
-			time.sleep(self.__ticktime)
+			# kein warten mehr noetig weil synch ueber timestamp geht
+			# time.sleep(self.__ticktime)
+
+			#print 'next one  ' + str(pygame.midi.time())
+
 
 	def play(self, playdata):
 		if(playdata==[]):
 			return
 
+		if(self.__timestamp==0):
+			# first start
+			self.__timestamp=pygame.midi.time()
+		else:
+			self.__timestamp=self.__timestamp+self.__ticktime
 
 		# constants for MIDI Status
 		ON = 1		# note on
 		OFF = 0		# note off
 
-		switch___on_notes = set()
-		switch_off_notes = set()
 
-		# look which note to switch on or off
+
+
+		# send midi data
 		for mididata in playdata:
 			instrument = mididata[0]
 			channel = mididata[1]
@@ -112,18 +115,22 @@ class Output(threading.Thread): # Output runs in its own Thread
 			velocity = mididata[3]
 			status = mididata[4]
 
-			# set instrument and output channel
-			self.midi_out.set_instrument(instrument, channel = channel)
-
+			# change instrument if necessary
+			if(self.__lastInstrument!=instrument):
+				status_change = 192+channel
+				self.midi_out.write([[[status_change,instrument],self.__timestamp]])
+				self.__lastInstrument=instrument
 
 			if status == ON:
-				self.midi_out.note_on(note, velocity, channel = 0)
+				status_on = 144+channel
+				self.midi_out.write([[[status_on,note,velocity],self.__timestamp]])
 				self.__log('\tnote on>\t' + str(note)) #LOG
 			elif status == OFF:
-				self.midi_out.note_off(note, channel = 0)
+				status_off = 128+channel
+				self.midi_out.write([[[status_off,note,velocity],self.__timestamp]])
 				self.__log('\t< note off\t' + str(note)) # LOG
 
-			self.__log('played notes: ' + str(self.__on_notes)) # LOG
+			#self.__log('played notes: ' + str(self.__on_notes)) # LOG
 
 
 	def print_device_info(self):
