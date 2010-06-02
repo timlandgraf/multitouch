@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Timer;
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
 
-
+import com.google.gwt.dom.client.*;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -32,6 +32,7 @@ public class MindMap2D implements EntryPoint{
 	  DrawingArea canvas = new DrawingArea(800, 400);
 	  canvas.setStyleName("canvas");
 	  RootPanel.get().add(canvas);
+	  
 	  Bubble b1 = new Bubble(100,100,"hallo 1 :-)");
 	  b1.addToCanvas(canvas);
 	  

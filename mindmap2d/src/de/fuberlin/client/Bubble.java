@@ -23,7 +23,7 @@ public class Bubble extends UIThing {
 		this.y = y;
 		this.text_str = text;
 		edge_list = new ArrayList();
-		
+		Repulsion.registerBubble(this);
 	}
 	
 	//==========================================================================
@@ -88,6 +88,7 @@ public class Bubble extends UIThing {
 		
 		for(Edge e: edge_list)
 			e.suicide();
+		Repulsion.unregisterBubble(this);
 		super.suicide();
 	}
 	
