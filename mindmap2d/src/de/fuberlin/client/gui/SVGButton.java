@@ -1,4 +1,4 @@
-package de.fuberlin.client;
+package de.fuberlin.client.gui;
 
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;

@@ -1,4 +1,4 @@
-package de.fuberlin.client;
+package de.fuberlin.client.gui;
 
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
@@ -104,7 +104,7 @@ public abstract class UIThing implements MouseDownHandler, MouseUpHandler, Mouse
 		if(state == State.MOVING){
 			int suspendID = suspendRedraw();
 			setPosition(event.getRelativeX(canvas.getElement()),event.getRelativeY(canvas.getElement()));
-			Repulsion.do_repulsion();
+			//Repulsion.do_repulsion();
 			unsuspendRedraw(suspendID);
 		}
 		event.stopPropagation(); //might Drag & Drop - I hope

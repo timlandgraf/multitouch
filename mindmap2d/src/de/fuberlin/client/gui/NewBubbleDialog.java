@@ -1,4 +1,4 @@
-package de.fuberlin.client;
+package de.fuberlin.client.gui;
 
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
@@ -7,7 +7,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*; 
 
 public class NewBubbleDialog extends DialogBox implements ClickHandler {
+	public void onClick(ClickEvent event){}
 	
+	/*
 	private Bubble parent_bubble;
 	private TextBox tb;
 	
@@ -38,4 +40,5 @@ public class NewBubbleDialog extends DialogBox implements ClickHandler {
 		parent_bubble.setState(UIThing.State.NORMAL);
 		hide();
 	}
+	*/
 }

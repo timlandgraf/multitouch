@@ -18,43 +18,49 @@ import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
 
 import com.google.gwt.dom.client.*;
+
+import de.fuberlin.client.*;
+import de.fuberlin.client.model.*;
+import de.fuberlin.client.gui.*;
+
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class MindMap2D implements EntryPoint{
 
-  /**
-   * This is the entry point method.
-   */
    
   
+   
+	private void myCallback()
+	{
+		GWT.log("myCallback called");
+	}
+  
+	private native void registerMT(Element svgroot) /*-{
+		//svgroot.onTouchDown = @de.fuberlin.client.MindMap2D::myCallback();
+		//$wnd.addListener("onTouchDown", svgroot);
+		//addListener("onTouchDown", svgroot);
+		alert($wnd);
+	}-*/;
+	
+
   public void onModuleLoad() {
 	  DrawingArea canvas = new DrawingArea(800, 400);
 	  canvas.setStyleName("canvas");
 	  RootPanel.get().add(canvas);
 	  
-	  Bubble b1 = new Bubble(100,100,"hallo 1 :-)");
-	  b1.addToCanvas(canvas);
+	  // muss noch mit Maik geklärt werden
+	  //Element svgroot = (Element)canvas.getElement().getFirstChild();
+	  //registerMT(svgroot);
 	  
-	  Bubble b2 = new Bubble(200,200,"hallo 2 :-)");
-	  b2.addToCanvas(canvas);
+	  GraphView view = new GraphView(canvas);
+	  Graph model = new Graph();
+	  view.setModel(model);
 	  
-	  Edge edge = new Edge(b1,b2);
-	  edge.addToCanvas(canvas);
-	  
-/*	  Bubble b2 = new Bubble(200,10,"hallo 2 :-)");
-	  b2.addToCanvas(canvas);
-	  Bubble b3 = new Bubble(10,200,"hallo 3 :-)");
-	  b3.addToCanvas(canvas);
-	  Bubble b4 = new Bubble(400,10,"hallo 4 :-)");
-	  b4.addToCanvas(canvas);
-	  Bubble b5 = new Bubble(10,400,"hallo 5 :-)");
-	  b5.addToCanvas(canvas);
-	  Bubble b6 = new Bubble(400,100,"hallo 6 :-)");
-	  b6.addToCanvas(canvas);
-	  Bubble b7 = new Bubble(200,400,"hallo 7 :-)");
-	  b7.addToCanvas(canvas);
-	  */
+	  Bubble b1 = model.createBubble("Test 1", 100, 200);
+	  Bubble b2 = model.createBubble("Test 2", 400, 100);
+	  model.createEdge(b1, b2);
   }
   
   

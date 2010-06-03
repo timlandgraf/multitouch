@@ -23,6 +23,12 @@ Firemind.overlay = {
 		script.innerHTML = scriptStr;
 		
 		body.appendChild(script);
+		
+		var test = content.document.createElement("div");
+		alert(document.location);
+		test.setAttribute("style", "width: 100px; height: 100px; background-color: red;");
+		body.appendChild(test);
+		
 	},
 		
 	tryRegisterEvents : function(event){

@@ -1,4 +1,4 @@
-package de.fuberlin.client;
+package de.fuberlin.client.gui;
 
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
@@ -7,7 +7,7 @@ import com.google.gwt.core.client.GWT;
 
 
 public class ContextMenu {
-
+/*
 	private Bubble parent_bubble;
 	
 	private SVGButton btn1, btn2, btn3, btn4;
@@ -62,5 +62,5 @@ public class ContextMenu {
 		btn4.suicide();
 		
 	}
-	
+	*/
 }
