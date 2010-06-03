@@ -1,4 +1,4 @@
-package de.fuberlin.client;
+package de.fuberlin.client.gui;
 
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
@@ -6,7 +6,7 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.core.client.GWT;
 import java.util.*;
 
-public class Bubble extends UIThing {
+public class BubbleView extends UIThing {
 
 	
 	public int x, y;
@@ -16,14 +16,14 @@ public class Bubble extends UIThing {
 	private Circle circle;
 	private Text text;
 	private ContextMenu menu;
-	private List<Edge> edge_list;
+	private List<EdgeView> edge_list;
 	//==========================================================================
-	public Bubble(int x, int y, String text){
+	public BubbleView(int x, int y, String text){
 		this.x = x;
 		this.y = y;
 		this.text_str = text;
-		edge_list = new ArrayList();
-		Repulsion.registerBubble(this);
+		edge_list = new ArrayList<EdgeView>();
+		//Repulsion.registerBubble(this);
 	}
 	
 	//==========================================================================
@@ -42,7 +42,7 @@ public class Bubble extends UIThing {
 	}
 	
 	//==========================================================================
-	public void addEdge(Edge e){
+	public void addEdge(EdgeView e){
 		edge_list.add(e);
 	}
 	
@@ -69,13 +69,13 @@ public class Bubble extends UIThing {
 		}
 		
 		if(s == State.ACTIVATED){
-			menu = new ContextMenu(this);
-			menu.addToCanvas(canvas);
+			//menu = new ContextMenu(this);
+			//menu.addToCanvas(canvas);
 		}
 		
 		if(!(s==State.MOUSEDOWN_2 || s==State.ACTIVATED) && menu!=null){
-			menu.suicide();
-			menu = null;
+			//menu.suicide();
+			//menu = null;
 		}	
 			
 		//text.setText(""+s);
@@ -83,12 +83,12 @@ public class Bubble extends UIThing {
 	
 	//==========================================================================
 	public void suicide(){
-		if(menu != null)
-			menu.suicide();
+		//if(menu != null)
+		//	menu.suicide();
 		
-		for(Edge e: edge_list)
+		for(EdgeView e: edge_list)
 			e.suicide();
-		Repulsion.unregisterBubble(this);
+		//Repulsion.unregisterBubble(this);
 		super.suicide();
 	}
 	
@@ -101,7 +101,7 @@ public class Bubble extends UIThing {
 		text.setX(x-30);
 		text.setY(y);
 		
-		for(Edge e: edge_list)
+		for(EdgeView e: edge_list)
 			e.update();
 	}
 	

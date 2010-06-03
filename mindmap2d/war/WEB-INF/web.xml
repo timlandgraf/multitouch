@@ -6,6 +6,7 @@
 <web-app>
   
   <!-- Servlets -->
+  <!--
   <servlet>
     <servlet-name>greetServlet</servlet-name>
     <servlet-class>de.fuberlin.server.GreetingServiceImpl</servlet-class>
@@ -15,6 +16,7 @@
     <servlet-name>greetServlet</servlet-name>
     <url-pattern>/mindmap2d/greet</url-pattern>
   </servlet-mapping>
+  -->
   
   <!-- Default page to serve -->
   <welcome-file-list>

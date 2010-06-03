@@ -1,17 +1,17 @@
-package de.fuberlin.client;
+package de.fuberlin.client.gui;
 
 import org.vaadin.gwtgraphics.client.*;
 import org.vaadin.gwtgraphics.client.shape.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.core.client.GWT;
 
-public class Edge {
+public class EdgeView {
 	
-	private Bubble bubble_a, bubble_b;
+	private BubbleView bubble_a, bubble_b;
 	private DrawingArea canvas;
 	private Line line;
 	
-	public Edge(Bubble bubble_a, Bubble bubble_b){
+	public EdgeView(BubbleView bubble_a, BubbleView bubble_b){
 		this.bubble_a = bubble_a;
 		this.bubble_b = bubble_b;
 		bubble_a.addEdge(this);
