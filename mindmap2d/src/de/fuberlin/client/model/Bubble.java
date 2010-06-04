@@ -9,7 +9,7 @@ public class Bubble{
 	private String text;
 	private Graph graph;
 	protected List<Edge> edge_list;
-	
+	private BubbleListener listener;
 	//==========================================================================
 	protected Bubble(Graph g, String text, int x, int y){
 		this.x = x;
@@ -23,10 +23,15 @@ public class Bubble{
 		return(text);
 	}
 	
+	public void setListener(BubbleListener l){
+		if(listener != null)
+			throw(new RuntimeException("allready a Listener registered");
+		listener = l;
+	}
+	
 	public void setText(String t){
 		text = t;
-		for(GraphChangeListener l: graph.listeners)
-			l.bubbleChanged(this);
+		listener.bubbleChanged(this);
 	}
 	
 	public int getX(){
@@ -40,11 +45,17 @@ public class Bubble{
 	public void setPosition(int x, int y){
 		this.x = x;
 		this.y = y;
-		for(GraphChangeListener l: graph.listeners)
-			l.bubbleChanged(this);
+		listener.bubbleChanged(this);
 	}
 	
 	public List<Edge> getEdges(){
 		return(edge_list);
 	}
+	
+	public void remove(){
+		listener.bubbleRemoved(this);
+		//TODO: alle Edges bei den "anderen" seite abmelden.
+		graph.unregisterBubble(this);
+	}
+	
 }

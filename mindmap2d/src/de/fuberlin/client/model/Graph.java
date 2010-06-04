@@ -10,7 +10,7 @@ public class Graph {
 	
 	private List<Bubble> bubble_list;
 	private List<Edge> edge_list;
-	protected List<GraphChangeListener> listeners;
+	private List<GraphChangeListener> listeners;
 	
 	/**
 	*	Construncs an empty Graph
@@ -54,14 +54,14 @@ public class Graph {
 	/**
 	*	Official way to remove a Bubble.
 	*/
-	public void removeBubble(Bubble b){
+	protected void unregisterBubble(Bubble b){
 		bubble_list.remove(b);
 		
 		for(Edge e: b.getEdges())
 			edge_list.remove(e);
 		
-		for(GraphChangeListener l: listeners)
-			l.bubbleRemoved(b);
+		//for(GraphChangeListener l: listeners)
+		//	l.bubbleRemoved(b);
 	}
 	
 	
