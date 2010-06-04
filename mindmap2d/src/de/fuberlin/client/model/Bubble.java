@@ -25,7 +25,7 @@ public class Bubble{
 	
 	public void setListener(BubbleListener l){
 		if(listener != null)
-			throw(new RuntimeException("allready a Listener registered");
+			throw(new RuntimeException("allready a Listener registered"));
 		listener = l;
 	}
 	
