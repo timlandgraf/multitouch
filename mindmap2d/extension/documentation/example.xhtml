@@ -45,14 +45,20 @@
 	<head>
 		<title></title>
 	</head>
+<<<<<<< HEAD
 	<body   style="padding: 0; margin: 0; border: 2px solid black;" 
 			class="touchEnable" 
+=======
+	<!-- <body   style="padding: 0; margin: 0; border: 2px solid black;" 
+			class="mouseEnable" 
+>>>>>>> 60640c56279e0afbf4f5f35507b57bbc7d5a9085
 			onTouchDown="onTD" 
 			onTouchMove="onTM"
 			onTouchUp="onTU"
-	>
+	> -->
+	<body   style="padding: 0; margin: 0; border: 2px solid black;">
 	<script>	
-
+			
 			var pressedButton = false;
 			var target = null;
 			
@@ -74,10 +80,16 @@
 			}
 		
 			window.addEventListener("load", function (){
+				
 				target = document.getElementById("test");
+<<<<<<< HEAD
 				target.addEventListener("onTouchDown", onTD, false);
 				target.addEventListener("onTouchMove", onTM, false);
 				target.addEventListener("onTouchUp", onTU, false);
+=======
+				/*target.onTouchDown = onTD;
+				addListener("onTouchDown", target);*/
+>>>>>>> 60640c56279e0afbf4f5f35507b57bbc7d5a9085
 			}, false);
 		
 	</script>
@@ -85,6 +97,7 @@
 	<svg:svg version="1.1" baseProfile="full" width="1280px" height="1024px">
 		<svg:circle id="test" 
 					cx="150px" 
+					onTouchDown="onTD"
 					cy="100px" 
 					r="50px" 
 					fill="#ff0000" 

@@ -4,15 +4,16 @@
   <property name="gwt.args" value="" />
 
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="/opt/gwt-2.0.3" />
-
+  
+  <property file="personal_props.xml"/>
+  
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
     <pathelement location="${gwt.sdk}/gwt-user.jar"/>
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
     <!-- Add any additional non-server libs (such as JUnit) -->
     <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
-	<fileset dir="${gwt.sdk}" includes="gwt-incubator-20100204-r1747.jar"/>
+	<fileset dir="libs" includes="gwt-graphics-0.9.6.jar"/>
   </path>
 
   <target name="libs" description="Copy libs to WEB-INF/lib">
@@ -138,4 +139,14 @@ Test targets suppressed because -junit argument was not specified when running w
     <delete dir="war/mindmap2d" failonerror="false" />
   </target>
 
+  
+  <target name="publish" depends="build" description="Build and upload to my websever">
+  	 <exec executable="rsync">
+    	<arg value="-axv"/>
+		<arg value="--delete"/>
+		<arg value="war/"/>
+		<arg value="schuett.name:/var/www/schuett.name/ole/mindmap2d/"/>
+	 </exec>
+   </target>
+	
 </project>

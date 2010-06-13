@@ -8,7 +8,7 @@
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&lt;runtimeClasspathEntry id=&quot;org.eclipse.jdt.launching.classpathentry.defaultClasspath&quot;&gt;&#10;&lt;memento project=&quot;MindMap2D&quot;/&gt;&#10;&lt;/runtimeClasspathEntry&gt;&#10;"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx256M"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-startupUrl MindMap2D.html&#10;de.fuberlin.MindMap2D"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-startupUrl MindMap2D.html&#10;de.fuberlin.mindmap2d.MindMap2D"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="MindMap2D"/>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 </launchConfiguration>
