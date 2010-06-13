@@ -56,7 +56,7 @@ Firemind.touchAPI.TouchSupport = {
 	},
 	
 	register : function(_window, _callback){
-		try {
+		try { 
 			if(!_window)
 				throw "ERROR: Undefined parameter: _window!";
 		
@@ -85,11 +85,12 @@ Firemind.touchAPI.TouchSupport = {
 					_callback.EVENTS.onMouseMove,
 					false
 				);
-				
+
 				return true;
 			
 			}else { // real adapter -> touch or gesture
 				
+				//TODO
 				var type = (_callback == Firemind.touchAPI.TouchAdapter) ? 0 : (_callback == Firemind.touchAPI.GestureAdapter) ? 1 : -1;
 				
 				if(type == -1)

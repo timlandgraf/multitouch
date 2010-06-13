@@ -57,3 +57,5 @@ Firemind.include = function(name){
 Firemind.prefs = function(){
 	return Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
 };
+
+Firemind.content = null;
