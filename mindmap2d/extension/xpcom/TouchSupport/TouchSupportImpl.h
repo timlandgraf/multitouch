@@ -41,7 +41,6 @@ public:
   TouchSupport();
 
   static LRESULT OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam);
-  static LRESULT OnGesture(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:

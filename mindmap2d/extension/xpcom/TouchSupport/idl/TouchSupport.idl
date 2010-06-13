@@ -13,17 +13,6 @@ interface IJSCallback : nsISupports
 	// @param type_ 0 = touchup, 1 = touchup, 2 = touchmove
 	//
 	void acceptTouch(in long id_, in long x_, in long y_, in long time_, in long type_);
-
-	// Callback function to accept gesture messages.
-	//
-	// @param id_ gesture identifier
-	// @param state_ current gesture state (begin, inertia, end)
-	// @param x_ screen x-coordinate
-	// @param y_ screen y-coordinate
-	// @param hi_ gesture arguments, upper 32bit of the 64bit ullArguments
-	// @param lo_ gesture arguments, lower 32bit of the 64bit ullArguments
-	//
-	void acceptGesture(in long id_, in long state_, in long x_, in long y_, in long hi_, in long lo_);
 };
 
 // Component that registers an firefox window as touchable.
