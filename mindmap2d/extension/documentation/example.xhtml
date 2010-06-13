@@ -46,7 +46,7 @@
 		<title></title>
 	</head>
 	<body   style="padding: 0; margin: 0; border: 2px solid black;" 
-			class="mouseEnable" 
+			class="touchEnable" 
 			onTouchDown="onTD" 
 			onTouchMove="onTM"
 			onTouchUp="onTU"
@@ -58,8 +58,6 @@
 			
 			function onTD(e){
 				target.setAttribute("fill", "#00ff00");
-				target.setAttribute("cx", e.x + 'px');
-				target.setAttribute("cy", e.y + 'px');
 				pressedButton = true;
 			}
 		
@@ -68,7 +66,7 @@
 				pressedButton = false;
 			}
 		
-			function onTM(e){ 
+			function onTM(e){
 				if(pressedButton){
 					target.setAttribute("cx", e.x + 'px');
 					target.setAttribute("cy", e.y + 'px');
@@ -77,6 +75,9 @@
 		
 			window.addEventListener("load", function (){
 				target = document.getElementById("test");
+				target.addEventListener("onTouchDown", onTD, false);
+				target.addEventListener("onTouchMove", onTM, false);
+				target.addEventListener("onTouchUp", onTU, false);
 			}, false);
 		
 	</script>
