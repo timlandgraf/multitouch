@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window windowtype="firemind-main-window"
+		title="Firemind"
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		width="800" height="600"
+>
+
+	<script src="firemindGlobals.js" />
+	
+	<script src="firemindTouch.js" />
+	<script src="firemindGesture.js" />
+	
+	<script src="firemindEventDispatcher.js" />
+	
+	<script src="gesture/firemindTapGesture.js" />
+	
+	<script src="firemindGestureAdapter.js" />
+	<script src="firemindTouchAdapter.js" />
+	<script src="firemindMouseAdapter.js" />
+	
+	<script src="firemindTouchSupport.js" />
+	<script src="firemindOverlay.js" />
+	
+	<preferences>
+		<preference id="pref_url" name="firemind.touch.url" type="string" />
+	</preferences>
+		
+	<groupbox>
+		<hbox>
+			<textbox id="myURLBar" flex="1" preference="pref_url" />
+			<button label="load" onclick="loadURL();" />
+		</hbox>
+	</groupbox>
+	<groupbox flex="1">
+		<browser id="myBrowser" type="content" flex="1" />
+	</groupbox>
+
+	<script>
+		
+		function loadURL(){
+			var url = document.getElementById("myURLBar").value;
+			var browser = document.getElementById("myBrowser");
+			
+			Firemind.content = browser.contentWindow;
+			
+			browser.addEventListener("load", Firemind.overlay.tryRegisterEvents, true);
+			
+			browser.loadURI(url);
+			
+			var inst = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+			inst.setCharPref("firemind.touch.url", url);
+		}
+		
+	</script>
+	
+</window>
