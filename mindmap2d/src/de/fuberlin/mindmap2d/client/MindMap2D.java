@@ -25,12 +25,18 @@ public class MindMap2D implements EntryPoint {
 	Rectangle background;
 
 	public void onModuleLoad() {
-		canvas = new DrawingArea(Window.getClientWidth(), Window
-				.getClientHeight() - 5);
+		//disableSOP();
+		
+		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight() - 5);
 		RootPanel.get().add(canvas);
 		
+		Graph model = new Graph();
+		
+		Suggestions.setGraphModel(model);
+		new Repulsion(model);
 		ui = new UserInterface(canvas);
-
+		ui.setGraphModel(model);
+		
 		Window.addResizeHandler(new ResizeHandler() {
 
 			@Override
@@ -41,9 +47,31 @@ public class MindMap2D implements EntryPoint {
 			}
 		});
 
+		
+		//TODO: remove - just inserts demo-data
+		Bubble b1 = model.createBubble("Start", 0, -100);
+		Bubble b2 = model.createBubble("Test 1", -100, 0);
+		Bubble b3 = model.createBubble("Test 2", +100, 00);
+		model.createEdge(b1, b2);
+		model.createEdge(b1, b3);
+		
 		// muss noch mit Maik geklärt werden
 		//registerMT(canvas.getElement());
 	}
+	
+	//disables the Same-Origin-Policy
+	//Da wir unsern kram nicht signieren muss beim firefox inner config 
+	//signed.applets.codebase_principal_support=true gesetzt sein.
+	private native void disableSOP() /*-{
+		if (navigator.userAgent.indexOf("Firefox") != -1) {
+			try {
+				netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+			} 
+			catch (e) {
+				alert("Permission UniversalBrowserRead denied -- not running Mozilla?");
+			}
+		}
+	}-*/;
 	
 	private void myCallback() {
 		Window.alert("callback");
@@ -57,4 +85,5 @@ public class MindMap2D implements EntryPoint {
 		alert(svgroot.onTouchDown);
 		alert(svgroot);
 	}-*/;
+	
 }

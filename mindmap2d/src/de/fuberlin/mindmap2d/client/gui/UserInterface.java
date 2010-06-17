@@ -58,9 +58,13 @@ public class UserInterface {
 		graph.addThisTo(canvas);
 		background.setGraphView(graph);
 		
-		graph.setModel(new Graph().testInit());
+	
 	}
 
+	public void setGraphModel(Graph g){
+		graph.setModel(g);
+	}
+	
 	public void updateUI() {
 		headline.setX(canvas.getWidth() / 2);
 		background.setWidth(canvas.getWidth());

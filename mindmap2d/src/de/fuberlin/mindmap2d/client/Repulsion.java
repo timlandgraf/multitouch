@@ -2,37 +2,67 @@ package de.fuberlin.mindmap2d.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gwt.core.client.GWT;
+import de.fuberlin.mindmap2d.client.model.*;
 
-import de.fuberlin.mindmap2d.client.model.Bubble;
-
-public class Repulsion{
-	private static List<Bubble> bubble_list = new ArrayList<Bubble>();
+public class Repulsion implements GraphChangeListener, BubbleListener{
+	private Graph model;
+	private static final int MIN_DIST = 110;
+	private static final int MIN_DIST_sqr = MIN_DIST*MIN_DIST;
 	
-	public static void registerBubble(Bubble b){
-		bubble_list.add(b);
-		do_repulsion();
+	public Repulsion(Graph model){
+		this.model = model;
+		model.addListerner(this);
+		for(Bubble b: model.getBubbles())
+			b.addListener(this);
+	}
+		
+	public void bubbleAdded(Bubble b){
+		b.addListener(this);
+		do_repulsion(b);
+	}
+	
+	public void bubbleRemoved(Bubble b){
+		b.removeListener(this);
+	}
+	
+	public void bubbleChanged(Bubble b){
+		do_repulsion(b);
 	}
 	
 	
-	public static void unregisterBubble(Bubble b){
-		bubble_list.remove(b);
-		do_repulsion();
-	}
-	
-	public static void do_repulsion(){
-		//TODO: more efficient/fancy algo
-		for(Bubble b1: bubble_list){
-			for(Bubble b2: bubble_list){
-				int dx = b1.getX() - b2.getX();
-				int dy = b1.getY() - b2.getY();
-				int l = dx*dx + dy*dy;
-				//GWT.log("l: "+l);
-				//GWT.log("change x:"+dx/10);
-				//GWT.log("change y:"+dy/10);
-				if(l < 10000){
-					b1.setPosition(b1.getX()+dx/10, b1.getY()+dy/10);
+	private void do_repulsion(Bubble b){
+		//GWT.log("Doing repulsion: "+b);
+		if(b.position_fixed)
+			return;
+		
+		b.position_fixed = true;
+		
+		for(Bubble b2: model.getBubbles()){
+			if(b2.position_fixed)
+				continue;
+			int dx = b.getX() - b2.getX();
+			int dy = b.getY() - b2.getY();
+			double l_sqr = dx*dx + dy*dy;
+			if(l_sqr < MIN_DIST_sqr){
+				if(l_sqr==0){ //Special-Case: Bubbles laying on top of each other
+					dy=10;
+					l_sqr = 100;
 				}
+				double l = Math.sqrt(l_sqr);
+				int rx = -(int)Math.round(MIN_DIST*dx/l);
+				int ry = -(int)Math.round(MIN_DIST*dy/l);
+				//GWT.log("l: "+l);
+				//GWT.log("change x:"+rx);
+				//GWT.log("change y:"+ry);
+				b2.setPosition(b.getX()+rx, b.getY()+ry);
 			}
 		}
+		b.position_fixed = false;
 	}
+	
+	
+	//not interessted in those events
+	public void edgeAdded(Edge edge){}
+	public void edgeRemoved(Edge edge){}
 }
