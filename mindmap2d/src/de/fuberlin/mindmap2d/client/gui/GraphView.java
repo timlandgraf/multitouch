@@ -11,6 +11,7 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.core.client.GWT;
 
 import de.fuberlin.mindmap2d.client.Repulsion;
 import de.fuberlin.mindmap2d.client.model.*;
@@ -21,6 +22,9 @@ import de.fuberlin.mindmap2d.client.svg.SVGDom;
 import de.fuberlin.mindmap2d.client.svg.VectorObject.TransfromValue;
 import de.fuberlin.mindmap2d.client.svg.shape.Circle;
 import de.fuberlin.mindmap2d.client.svg.shape.Text;
+
+import de.fuberlin.mindmap2d.client.Suggestions;
+import com.google.gwt.user.client.Random;
 
 public class GraphView implements GraphChangeListener {
 	private Graph model;
@@ -47,8 +51,11 @@ public class GraphView implements GraphChangeListener {
 	}
 	
 	public void addBubbleTo(BubbleView oldBubble,String text){
-		Bubble newBubble = model.createBubble(text, 0, 0);
-		
+		// new Bubble gets positioned randomly in the proximity of oldBubble
+		double angle = Random.nextDouble()*2*Math.PI;
+		int x = (int)Math.round( oldBubble.model.getX()+110*Math.sin(angle) );
+		int y = (int)Math.round( oldBubble.model.getY()+110*Math.cos(angle) );
+		Bubble newBubble = model.createBubble(text, x, y);
 		model.createEdge(oldBubble.model, newBubble);
 	}
 	
@@ -272,7 +279,6 @@ public class GraphView implements GraphChangeListener {
 				int x = event.getClientX() - (int) value.x;
 				int y = event.getClientY() - (int) value.y;
 				model.setPosition(x, y);
-				Repulsion.do_repulsion();
 			}
 			SVGDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
 		}
@@ -286,6 +292,8 @@ public class GraphView implements GraphChangeListener {
 		@Override
 		public void onDoubleClick(DoubleClickEvent event) {
 			graphView.addBubbleTo(this, "Neue");
+			//TODO: schöner anbinden mir registerListener oder so
+			//Suggestions.makeSuggestions(model);
 		}
 
 		public Bubble getModel() {
@@ -319,7 +327,6 @@ public class GraphView implements GraphChangeListener {
 
 		public void remove() {
 			canvas.remove(line);
-			GWT.log("remove edge...");
 			bubbleA.removeEdge(this);
 			bubbleB.removeEdge(this);
 		}

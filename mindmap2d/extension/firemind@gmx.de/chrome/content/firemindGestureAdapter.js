@@ -2,14 +2,23 @@ Firemind.namespace("touchAPI");
 
 Firemind.touchAPI.GestureAdapter = {
 
-	EVENTS : {
-		onTap : function(touch){
-			Firemind.log("EVENT -> onTap");
+	THR_FINGER_VAR : 15,
+
+	_gestures : [
+		Firemind.touchAPI.TapGesture,
+		Firemind.touchAPI.FlickGesture
+	],
+
+	isGestureInProgress : function(self){
 		
-			Firemind.touchAPI.EventDispatcher.onTouchEvent(
-				"onTap", touch
-			);
+		var rv = false, i = 0, l = this._gestures.length, gesture;
+		for(;i < l;i++){
+			gesture = this._gestures[i];
+			if(gesture != self)
+				rv = rv || gesture.isRunning;
 		}
+		
+		return rv;
 	}
 
 };

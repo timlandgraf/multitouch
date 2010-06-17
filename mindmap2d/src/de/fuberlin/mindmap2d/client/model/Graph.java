@@ -2,7 +2,6 @@ package de.fuberlin.mindmap2d.client.model;
 
 import java.util.*;
 
-import de.fuberlin.mindmap2d.client.Repulsion;
 
 /**
 * The model of a Mind-Map.
@@ -44,8 +43,6 @@ public class Graph {
 		Bubble b = new Bubble(this, t, x, y);
 		bubbles.add(b);
 		
-		Repulsion.registerBubble(b);
-		
 		for(GraphChangeListener l: listeners)
 			l.bubbleAdded(b);
 		
@@ -57,10 +54,7 @@ public class Graph {
 	*	Official way to remove a Bubble.
 	*/
 	protected void unregisterBubble(Bubble b){
-		Repulsion.unregisterBubble(b);
-		
 		ArrayList<Edge> toRemove = new ArrayList<Edge>();
-		
 		for(Edge e: b.getEdges())
 			toRemove.add(e);
 		
@@ -118,19 +112,4 @@ public class Graph {
 		return(edges);
 	}
 
-	public Graph testInit(){	
-		createBubble("Start", -30, -30);
-		createBubble("Test 1", 50, 20);
-		createBubble("Test 2", 40, 10);
-		
-		Bubble last = null;
-		
-		for(Bubble b:bubbles){
-			if(last != null)
-				createEdge(b, last);
-			last = b;
-		}
-		
-		return this;
-	}
 }

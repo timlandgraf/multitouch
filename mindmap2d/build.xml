@@ -45,7 +45,7 @@
       <jvmarg value="-Xmx256M"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="de.fuberlin.MindMap2D"/>
+      <arg value="de.fuberlin.mindmap2d.MindMap2D"/>
     </java>
   </target>
 
@@ -60,7 +60,7 @@
       <arg value="MindMap2D.html"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="de.fuberlin.MindMap2D"/>
+      <arg value="de.fuberlin.mindmap2d.MindMap2D"/>
     </java>
   </target>
 
@@ -147,6 +147,12 @@ Test targets suppressed because -junit argument was not specified when running w
 		<arg value="war/"/>
 		<arg value="schuett.name:/var/www/schuett.name/ole/mindmap2d/"/>
 	 </exec>
+   </target>
+	
+   <target name="install2rails" depends="build" description="Build and copy to rails">
+   	<copy todir="/home/ole/uni/projekt_multitouch/multitouch_mindmap_rails_server/public/gwt_compiled">
+      <fileset dir="war/"/>
+	 </copy>
    </target>
 	
 </project>

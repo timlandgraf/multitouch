@@ -76,6 +76,7 @@ public class UserInterface {
 
 		graph.addThisTo(getCanvas());
 		background.setGraphView(graph);
+<<<<<<< HEAD
 
 		graph.setModel(new Graph().testInit());
 	}
@@ -113,7 +114,15 @@ public class UserInterface {
 
 	DrawingArea getCanvas() {
 		return canvas;
+=======
+		
+	
 	}
+
+	public void setGraphModel(Graph g){
+		graph.setModel(g);
+	}
+	
 
 	enum State {
 		NORMAL, MOUSEDOWN, RIGHTCLICK;

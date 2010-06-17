@@ -45,19 +45,13 @@
 	<head>
 		<title></title>
 	</head>
-
 	<body   style="padding: 0; margin: 0; border: 2px solid black;" 
-			class="touchEnable" >
-	<!-- 
-	<body style="padding: 0; margin: 0; border: 2px solid black;" 
-			class="mouseEnable" 
-			onTouchDown="onTD" 
-			onTouchMove="onTM"
-			onTouchUp="onTU"> 
-	-->
-	<script>
+			class="touchEnable" 	
+	>
+	<script>	
+			
 			var pressedButton = false;
-			var target = null;
+			var target = null, info = null;
 			
 			function onTD(e){
 				target.setAttribute("fill", "#00ff00");
@@ -67,23 +61,40 @@
 			function onTU(e){
 				target.setAttribute("fill", "#ff0000");
 				pressedButton = false;
+				info.textContent  = "";
 			}
 		
 			function onTM(e){
 				if(pressedButton){
 					target.setAttribute("cx", e.x + 'px');
 					target.setAttribute("cy", e.y + 'px');
+					//info.textContent  = e.x + " " + e.y;
 				}
+			}
+			
+			function onTap(e){
+				info.textContent  = "onTab";
+				target.setAttribute("fill", "#00ffff");
+			}
+			
+			function onFlickOut(e){
+				info.textContent  = "onFlickOut radius: " + e.radius + ", angle: " + e.angle + ", touch1ID: " + e.t1 + ", touch2ID: " + e.t2;
+			}
+			
+			function onFlickIn(e){
+				info.textContent  = "onFlickIn radius: " + e.radius + ", angle: " + e.angle + ", touch1ID: " + e.t1 + ", touch2ID: " + e.t2;
 			}
 		
 			window.addEventListener("load", function (){
-				
 				target = document.getElementById("test");
+				info = document.getElementById("info");
+			
 				target.addEventListener("onTouchDown", onTD, false);
 				target.addEventListener("onTouchMove", onTM, false);
 				target.addEventListener("onTouchUp", onTU, false);
-				/*target.onTouchDown = onTD;
-				addListener("onTouchDown", target);*/
+				target.addEventListener("onTap", onTap, false);
+				target.addEventListener("onFlickIn", onFlickIn, false);
+				target.addEventListener("onFlickOut", onFlickOut, false);
 			}, false);
 		
 	</script>
@@ -91,13 +102,13 @@
 	<svg:svg version="1.1" baseProfile="full" width="1280px" height="1024px">
 		<svg:circle id="test" 
 					cx="150px" 
-					onTouchDown="onTD"
 					cy="100px" 
 					r="50px" 
 					fill="#ff0000" 
 					stroke="#000000" 
 					stroke-width="5px"
 		/>
+		<svg:text id="info" x="10" y="20"></svg:text>
 	</svg:svg>
 
   </body>

@@ -2,7 +2,6 @@ package de.fuberlin.mindmap2d.client.model;
 
 import java.util.*;
 
-import de.fuberlin.mindmap2d.client.Repulsion;
 
 public class Bubble{
 
@@ -11,6 +10,9 @@ public class Bubble{
 	private Graph graph;
 	protected List<Edge> edges;
 	private List<BubbleListener> listeners;
+	
+	
+	public boolean position_fixed = false; //used by repulsion
 	//==========================================================================
 	protected Bubble(Graph g, String text, int x, int y){
 		this.x = x;

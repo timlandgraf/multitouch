@@ -17,23 +17,6 @@ Firemind.overlay = {
 		return "";
 	},
 
-<<<<<<< HEAD
-=======
-	_insertScript : function(scriptStr, body) {
-		var script = content.document.createElement("script");
-		script.type = "text/javascript";
-		script.innerHTML = scriptStr;
-		
-		body.appendChild(script);
-		
-		var test = content.document.createElement("div");
-		alert(document.location);
-		test.setAttribute("style", "width: 100px; height: 100px; background-color: red;");
-		body.appendChild(test);
-		
-	},
-		
->>>>>>> 60640c56279e0afbf4f5f35507b57bbc7d5a9085
 	tryRegisterEvents : function(event){
 		
 		if (event.originalTarget instanceof HTMLDocument) {
