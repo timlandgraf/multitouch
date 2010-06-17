@@ -6,8 +6,10 @@ Firemind.touchAPI.TouchList = {
 	data : {},
 
 	add : function(touch){
+		if(this.data[touch.id] == undefined)
+			this.size++;
 		this.data[touch.id] = touch;
-		this.size++;
+		
 	},
 	
 	remove : function(touch){
@@ -31,36 +33,49 @@ Firemind.touchAPI.TouchAdapter = {
 	EVENTS : {
 
 		onTouchDown: function(touch){
-			Firemind.log("EVENT -> onTouchDown");
+			Firemind.log("EVENT -> onTouchDown " + touch.id);
 			
 			Firemind.touchAPI.TouchList.add(touch);
 			Firemind.log("EVENT -> touchList: " + Firemind.touchAPI.TouchList.size);
 			
 			switch(Firemind.touchAPI.TouchList.size){
 				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_ONE:
-					Firemind.touchAPI.TapGesture.onBegin(
-						touch, Firemind.touchAPI.GestureAdapter.EVENTS.onTap
-					);
+					Firemind.touchAPI.TapGesture.onBegin(touch);
+					Firemind.touchAPI.FlickGesture.onBegin(touch);
 					break;
 				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
 					Firemind.touchAPI.TapGesture.execute(
 						touch, Firemind.touchAPI.TouchList.data
 					);
+					Firemind.touchAPI.FlickGesture.execute(
+						touch, Firemind.touchAPI.TouchList.data
+					);
 					break;
-				default: break;
+				default: 
+					Firemind.touchAPI.FlickGesture.onEnd();
+					break;
 			}
-			
+		
 			Firemind.touchAPI.EventDispatcher.onTouchEvent("onTouchDown", touch);
 		},
 		
 		onTouchMove: function(touch){
-			Firemind.log("EVENT -> onTouchMove");
+			Firemind.log("EVENT -> onTouchMove " + Firemind.touchAPI.TouchList.size);
 		
+			switch(Firemind.touchAPI.TouchList.size){
+				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
+					Firemind.touchAPI.FlickGesture.execute(
+						touch, Firemind.touchAPI.TouchList.data
+					);
+					break;
+				default: break;
+			}
+	
 			Firemind.touchAPI.EventDispatcher.onTouchEvent("onTouchMove", touch);
 		},
 		
 		onTouchUp: function(touch){
-			Firemind.log("EVENT -> onTouchUp");
+			Firemind.log("EVENT -> onTouchUp " + touch.id);
 		
 			switch(Firemind.touchAPI.TouchList.size){
 				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
@@ -70,6 +85,9 @@ Firemind.touchAPI.TouchAdapter = {
 					break;
 				default: break;
 			}
+	
+			Firemind.touchAPI.TapGesture.onEnd();
+			Firemind.touchAPI.FlickGesture.onEnd();
 	
 			Firemind.touchAPI.TouchList.remove(touch);
 			Firemind.log("EVENT -> touchList: " + Firemind.touchAPI.TouchList.size);
@@ -79,7 +97,7 @@ Firemind.touchAPI.TouchAdapter = {
 	},
 	
 	// wrapps raw touch data into an touch object
-	acceptTouch : function(id_, x_, y_, time_, type_){
+	acceptTouch : function(id_, x_, y_, time_, type_){ 
 		switch(type_){
 			case Firemind.touchAPI.TouchAdapter.EVENT_TOUCHDOWN : 
 				Firemind.touchAPI.TouchAdapter.EVENTS.onTouchDown(

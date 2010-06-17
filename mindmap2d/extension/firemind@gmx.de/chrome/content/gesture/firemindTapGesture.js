@@ -6,34 +6,42 @@ Firemind.touchAPI.TapGesture = {
 
 	touchOne : null,
 	touchTwo : null,
-	onTap : null,
 	
 	releaseThreshold : 500,
+	cancelId : -1,
 	
-	onBegin : function(touchOne, onTap){
+	onBegin : function(touchOne){
 		this.isRunning = true;
 		
 		this.touchOne = touchOne;
-		this.onTap = onTap;
 	},
 	
 	onEnd : function(){
-		this.isRunning = false;
-		this.touchOne = null;
-		this.touchTwo = null;
-		this.onTap = null;
+		Firemind.touchAPI.TapGesture.isRunning = false;
+		Firemind.touchAPI.TapGesture.touchOne = null;
+		Firemind.touchAPI.TapGesture.touchTwo = null;
 	},
 	
 	execute : function(currentTouch, touchList){
 	
 		if(this.touchTwo == null){
+			
 			this.touchTwo = currentTouch;
+			this.cancelId = window.setTimeout(
+				Firemind.touchAPI.TapGesture.onEnd,
+				Firemind.touchAPI.TapGesture.releaseThreshold
+			);
+			
 		}else {
+			
+			window.clearTimeout(this.cancelId);
+			
 			if(this.touchTwo.id == currentTouch.id && touchList[this.touchOne.id] != undefined && (currentTouch.time - this.touchTwo.time) <= this.releaseThreshold){
-				this.onTap(this.touchOne);
+				Firemind.touchAPI.EventDispatcher.onGestureEvent("onTap", this.touchOne);
 			}
 				
 			this.onEnd();
+
 		}
 	
 	}
