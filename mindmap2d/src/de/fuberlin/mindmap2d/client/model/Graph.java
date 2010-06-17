@@ -57,12 +57,17 @@ public class Graph {
 	*	Official way to remove a Bubble.
 	*/
 	protected void unregisterBubble(Bubble b){
-		bubbles.remove(b);
-		
 		Repulsion.unregisterBubble(b);
 		
+		ArrayList<Edge> toRemove = new ArrayList<Edge>();
+		
 		for(Edge e: b.getEdges())
-			edges.remove(e);
+			toRemove.add(e);
+		
+		for(Edge e: toRemove)
+			removeEdge(e);
+		
+		bubbles.remove(b);
 		
 		for(GraphChangeListener l:listeners)
 			l.bubbleRemoved(b);

@@ -21,23 +21,15 @@ import de.fuberlin.mindmap2d.client.svg.shape.Rectangle;
 
 public class MindMap2D implements EntryPoint {
 	UserInterface ui;
-	DrawingArea canvas;
-	Rectangle background;
 
 	public void onModuleLoad() {
-		canvas = new DrawingArea(Window.getClientWidth(), Window
-				.getClientHeight() - 5);
-		RootPanel.get().add(canvas);
+		ui = UserInterface.getUI();
 		
-		ui = new UserInterface(canvas);
-
 		Window.addResizeHandler(new ResizeHandler() {
 
 			@Override
 			public void onResize(ResizeEvent event) {
-				canvas.setHeight(event.getHeight() - 5);
-				canvas.setWidth(event.getWidth());
-				ui.updateUI();
+				ui.updateUI(event);
 			}
 		});
 

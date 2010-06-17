@@ -146,6 +146,7 @@ public class SlidingMenu {
 			circle = new Circle(x, y, r);
 			group.add(circle);
 			group.setOpacity(0.6);
+			group.deactivateContextMenu();
 		}
 
 		protected void setRadius(int r){
@@ -169,10 +170,8 @@ public class SlidingMenu {
 				break;
 			case HIGHLIGHTED:
 				break;
-			case MOUSEDOWN_1:
-			case MOUSEDOWN_2:
+			case MOUSEDOWN:
 			case MOVING:
-			case ACTIVATED:
 				onClick();
 				setState(State.HIGHLIGHTED);
 				break;

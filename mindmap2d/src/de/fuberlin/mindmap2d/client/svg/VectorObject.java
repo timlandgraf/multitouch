@@ -22,7 +22,9 @@ import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -33,36 +35,48 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class VectorObject extends Widget implements HasClickHandlers,
 		HasAllMouseHandlers, HasDoubleClickHandlers {
-	
+
 	/**
 	 * Return-Object for Transfrom-Getter(Scale,Translate,Rotation,SkewX,SkewY)
-	 * Which values are set depends on the getter.
-	 * x + y: Scale, Translate, Rotation
-	 * angle: Rotation, SkewX, SkewY
+	 * Which values are set depends on the getter. x + y: Scale, Translate,
+	 * Rotation angle: Rotation, SkewX, SkewY
 	 */
-	public class TransfromValue{
-		public float x,y,angle;
-		
-		TransfromValue(float angle){
+	public class TransfromValue {
+		public float x, y, angle;
+
+		TransfromValue(float angle) {
 			this.angle = angle;
 		}
-		
-		TransfromValue(float x, float y){
+
+		TransfromValue(float x, float y) {
 			this.x = x;
 			this.y = y;
 		}
-		
-		TransfromValue(float x, float y, float angle){
+
+		TransfromValue(float x, float y, float angle) {
 			this.x = x;
 			this.y = y;
 			this.angle = angle;
 		}
 	}
-	
+
 	private Widget parent;
 
 	public VectorObject() {
 		setElement(createElement());
+	}
+	
+	public void deactivateContextMenu(){
+		sinkEvents(Event.ONCONTEXTMENU);
+	}
+
+	@Override
+	public void onBrowserEvent(Event event) {
+		if (DOM.eventGetType(event) == Event.ONCONTEXTMENU) {
+			event.stopPropagation();
+			event.preventDefault();
+		} else
+			super.onBrowserEvent(event);
 	}
 
 	protected abstract Element createElement();
@@ -105,8 +119,11 @@ public abstract class VectorObject extends Widget implements HasClickHandlers,
 	}
 
 	public TransfromValue getRotation() {
-		String[] values = SVGDom.getTransformProperty(getElement(), "rotate").split(",\\s");
-		return (values.length == 3)?new TransfromValue(Float.parseFloat(values[1]),Float.parseFloat(values[2]),Float.parseFloat(values[0])):new TransfromValue(0);
+		String[] values = SVGDom.getTransformProperty(getElement(), "rotate")
+				.split(",\\s");
+		return (values.length == 3) ? new TransfromValue(Float
+				.parseFloat(values[1]), Float.parseFloat(values[2]), Float
+				.parseFloat(values[0])) : new TransfromValue(0);
 	}
 
 	public void setRotation(final float degree) {
@@ -119,14 +136,18 @@ public abstract class VectorObject extends Widget implements HasClickHandlers,
 				SVGBBox box = SVGDom.getBBBox(getElement(), isAttached());
 				int x = box.getX() + box.getWidth() / 2;
 				int y = box.getY() + box.getHeight() / 2;
-				SVGDom.addTransformProperty(getElement(), "rotate", degree + "," + x + "," + y);
+				SVGDom.addTransformProperty(getElement(), "rotate", degree
+						+ "," + x + "," + y);
 			}
 		});
 	}
-	
+
 	public TransfromValue getTranslation() {
-		String[] values = SVGDom.getTransformProperty(getElement(), "translate").split(",\\s");
-		return (values.length == 2)?new TransfromValue(Float.parseFloat(values[0]),Float.parseFloat(values[1])):new TransfromValue(0);
+		String[] values = SVGDom
+				.getTransformProperty(getElement(), "translate").split(",\\s");
+		return (values.length == 2) ? new TransfromValue(Float
+				.parseFloat(values[0]), Float.parseFloat(values[1]))
+				: new TransfromValue(0);
 	}
 
 	public void setTranslation(final float x, final float y) {
@@ -136,10 +157,13 @@ public abstract class VectorObject extends Widget implements HasClickHandlers,
 		}
 		SVGDom.addTransformProperty(getElement(), "translate", x + "," + y);
 	}
-	
+
 	public TransfromValue getScale() {
-		String[] values = SVGDom.getTransformProperty(getElement(), "scale").split(",\\s");
-		return (values.length == 2)?new TransfromValue(Float.parseFloat(values[0]),Float.parseFloat(values[1])):new TransfromValue(0);
+		String[] values = SVGDom.getTransformProperty(getElement(), "scale")
+				.split(",\\s");
+		return (values.length == 2) ? new TransfromValue(Float
+				.parseFloat(values[0]), Float.parseFloat(values[1]))
+				: new TransfromValue(0);
 	}
 
 	public void setScale(final float x, final float y) {
@@ -149,10 +173,11 @@ public abstract class VectorObject extends Widget implements HasClickHandlers,
 		}
 		SVGDom.addTransformProperty(getElement(), "scale", x + "," + y);
 	}
-	
+
 	public TransfromValue getSkewX() {
 		String value = SVGDom.getTransformProperty(getElement(), "skewX");
-		return (value == "")?new TransfromValue(Float.parseFloat(value)):new TransfromValue(0);
+		return (value == "") ? new TransfromValue(Float.parseFloat(value))
+				: new TransfromValue(0);
 	}
 
 	public void setSkewX(final int degree) {
@@ -162,10 +187,11 @@ public abstract class VectorObject extends Widget implements HasClickHandlers,
 		}
 		SVGDom.addTransformProperty(getElement(), "rotate", "" + degree);
 	}
-	
+
 	public TransfromValue getSkewY() {
 		String value = SVGDom.getTransformProperty(getElement(), "skewX");
-		return (value == "")?new TransfromValue(Float.parseFloat(value)):new TransfromValue(0);
+		return (value == "") ? new TransfromValue(Float.parseFloat(value))
+				: new TransfromValue(0);
 	}
 
 	public void setSkewY(final int degree) {
@@ -173,9 +199,9 @@ public abstract class VectorObject extends Widget implements HasClickHandlers,
 			SVGDom.removeTransformProperty(getElement(), "rotate");
 			return;
 		}
-		
+
 		SVGDom.addTransformProperty(getElement(), "rotate", "" + degree);
-		
+
 	}
 
 	@Override

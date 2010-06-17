@@ -3,10 +3,11 @@ package de.fuberlin.mindmap2d.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.user.client.DOM;
@@ -96,15 +97,18 @@ public class GraphView implements GraphChangeListener {
 		bubbles.remove(bv);
 	}
 
+	@Override
 	public void edgeAdded(Edge edge) {
 		BubbleView bubbleA = getViewToBubble(edge.bubbleA);
 		BubbleView bubbleB = getViewToBubble(edge.bubbleB);
 		if (bubbleA != null && bubbleB != null) {
 			EdgeView ev = new EdgeView(bubbleA, bubbleB, edge);
+			edges.add(ev);
 			ev.addToThis(canvas);
 		}
 	}
 
+	@Override
 	public void edgeRemoved(Edge edge) {
 		EdgeView e = getViewToEdge(edge);
 		if (e != null)
@@ -133,7 +137,7 @@ public class GraphView implements GraphChangeListener {
 	 */
 	private EdgeView getViewToEdge(Edge edge) {
 		for (EdgeView ev : edges)
-			if (ev.model == edges)
+			if (ev.model == edge)
 				return ev;
 
 		return null;
@@ -143,7 +147,6 @@ public class GraphView implements GraphChangeListener {
 			BubbleListener, DoubleClickHandler {
 
 		public int x, y;
-		public int width, height;
 
 		private GraphView graphView;
 		private Bubble model;
@@ -167,6 +170,7 @@ public class GraphView implements GraphChangeListener {
 			text.setTextAnchorMiddle();
 			group.add(text);
 			group.addDoubleClickHandler(this);
+			group.deactivateContextMenu();
 
 			update();
 		}
@@ -188,10 +192,6 @@ public class GraphView implements GraphChangeListener {
 				edgeList.add(e);
 		}
 
-		protected void removeEdge(EdgeView e) {
-			edgeList.remove(e);
-		}
-
 		public void setState(State s) {
 			this.state = s;
 			switch (s) {
@@ -201,10 +201,8 @@ public class GraphView implements GraphChangeListener {
 			case HIGHLIGHTED:
 				circle.setFillColor(Configurator.bubbleHighlightedColor);
 				break;
-			case MOUSEDOWN_1: // fall through
-			case MOUSEDOWN_2:
+			case MOUSEDOWN:
 			case MOVING:
-			case ACTIVATED:
 				circle.setFillColor(Configurator.bubbleHighlightedColor);
 				break;
 			}
@@ -214,9 +212,20 @@ public class GraphView implements GraphChangeListener {
 			super.remove();
 		}
 
+		protected void removeEdge(EdgeView e) {
+			edgeList.remove(e);
+		}
+
 		public void update() {
 			setPosition(model.getX(), model.getY());
 			text.setText(model.getText());
+		}
+		
+		public TransfromValue getRealPosition(){
+			TransfromValue trans = canvas.getTranslation();
+			trans.x += this.x;
+			trans.y += this.y;
+			return trans;
 		}
 
 		public void setPosition(int x, int y) {
@@ -230,6 +239,10 @@ public class GraphView implements GraphChangeListener {
 			for (EdgeView e : edgeList)
 				e.update();
 		}
+		
+		public GraphView getGraph(){
+			return graphView;
+		}
 
 		@Override
 		public void bubbleChanged(Bubble b) {
@@ -238,9 +251,14 @@ public class GraphView implements GraphChangeListener {
 		
 		@Override
 		public void onMouseDown(MouseDownEvent event){
+			if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT){
+				UserInterface.getUI().openContextMenu(this);
+				event.stopPropagation();
+				return;
+			}else{
+				DOM.setCapture(group.getElement());
+			}
 			super.onMouseDown(event);
-			DOM.setCapture(group.getElement());
-			event.stopPropagation();
 		}
 
 		@Override
@@ -255,7 +273,6 @@ public class GraphView implements GraphChangeListener {
 				int y = event.getClientY() - (int) value.y;
 				model.setPosition(x, y);
 				Repulsion.do_repulsion();
-				event.stopPropagation();
 			}
 			SVGDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
 		}
@@ -264,12 +281,15 @@ public class GraphView implements GraphChangeListener {
 		public void onMouseUp(MouseUpEvent event) {
 			super.onMouseUp(event);
 			DOM.releaseCapture(group.getElement());
-			event.stopPropagation();
 		}
 
 		@Override
 		public void onDoubleClick(DoubleClickEvent event) {
 			graphView.addBubbleTo(this, "Neue");
+		}
+
+		public Bubble getModel() {
+			return model;
 		}
 	}
 
@@ -299,6 +319,7 @@ public class GraphView implements GraphChangeListener {
 
 		public void remove() {
 			canvas.remove(line);
+			GWT.log("remove edge...");
 			bubbleA.removeEdge(this);
 			bubbleB.removeEdge(this);
 		}

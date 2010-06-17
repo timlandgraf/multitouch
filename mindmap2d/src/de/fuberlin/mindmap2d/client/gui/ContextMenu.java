@@ -3,6 +3,11 @@ package de.fuberlin.mindmap2d.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.js.rhino.Context;
+
+import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
+import de.fuberlin.mindmap2d.client.gui.UserInterface.Background;
 import de.fuberlin.mindmap2d.client.svg.Animatable;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
 import de.fuberlin.mindmap2d.client.svg.Group;
@@ -12,166 +17,177 @@ import de.fuberlin.mindmap2d.client.svg.shape.Text;
 public class ContextMenu {
 	Group group = new Group();
 	private List<ContextMenuButton> buttons;
-	int radius;
+	int radius, bubbleRadius;
 	double angleFrom, angleTo;
 
+	ContextMenu(final BubbleView bubble, final int x, final int y, final int radius, final int bubbleRadius){
+		this(x, y, radius, bubbleRadius);
+		buttons = bubbleButtons(bubble);
+		initButtons(x, y);
+	}
+	
+	ContextMenu(final Background background, final int x, final int y, final int radius, final int bubbleRadius){
+		this(x, y, radius, bubbleRadius);
+		buttons = backgroundButtons();
+		initButtons(x, y);
+	}
+	
 	// x = r * cos a
 	// y = r * sin a
-	ContextMenu(int x, int y, int radius, DrawingArea canvas) {
-		group.setTranslation(x, y);
-		// TODO: Generischer machen
-		if (radius < 250)
-			this.radius = 250;
+	ContextMenu(final int x, final int y, final int radius, final int bubbleRadius) {	
+		if (radius < 50)
+			this.radius = 50;
 		else
 			this.radius = radius;
-
-		// TODO: calculateAngle
-		angleFrom = 0.0;
-		angleTo = 2 * Math.PI;
-		buttons = testButtons();
-		initButtons();
+		
+		this.bubbleRadius = bubbleRadius;
+		group.setStyleName("contextMenu");
+		UserInterface.getUI().getCanvas().add(group);
 	}
 
-	private ArrayList<ContextMenuButton> testButtons() {
+	private ArrayList<ContextMenuButton> bubbleButtons(final BubbleView bubble) {
 		ArrayList<ContextMenuButton> buttons = new ArrayList<ContextMenuButton>();
 
-		buttons.add(new ContextMenuButton(0, 0, 40, this) {
-			Text text;
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "add") {
 			
-			{
-				text = new Text(0, 0 + 5, "HAHA");
-				text.setFillColor("black");
-				text.setStrokeWidth(0);
-				text.getElement().setAttribute("text-anchor", "middle");
-				group.add(text);
-				group.setOpacity(0);
-			}
 			@Override
 			public void onClick() {
-				menu.remove();
-			}
-
-			@Override
-			protected void setPosition(int x, int y) {
-				text.setX(x);
-				text.setY(y);
-				super.setPosition(x, y);
-			}
-
-			@Override
-			public void setPropertyDouble(String property, double value) {
-				text.setPropertyDouble(property, value);
-				super.setPropertyDouble(property, value);
+				bubble.getGraph().addBubbleTo(bubble, "");
 			}
 		});
 		
-		buttons.add(new ContextMenuButton(0, 0, 40, this) {
-			Text text;
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "rename") {
 			
-			{
-				text = new Text(0, 0 + 5, "HAHA");
-				text.setFillColor("black");
-				text.setStrokeWidth(0);
-				text.getElement().setAttribute("text-anchor", "middle");
-				group.add(text);
-				group.setOpacity(0);
-			}
 			@Override
 			public void onClick() {
-				menu.remove();
+				GWT.log("rename");
 			}
-
+		});
+		
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "deattach") {
+			
 			@Override
-			protected void setPosition(int x, int y) {
-				text.setX(x);
-				text.setY(y);
-				super.setPosition(x, y);
+			public void onClick() {
+				GWT.log("deattach");
 			}
-
+		});
+		
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "open link") {
+			
 			@Override
-			public void setPropertyDouble(String property, double value) {
-				text.setPropertyDouble(property, value);
-				super.setPropertyDouble(property, value);
+			public void onClick() {
+				GWT.log("open link");
+			}
+		});
+		
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "suggest") {
+			
+			@Override
+			public void onClick() {
+				GWT.log("suggest");
+			}
+		});
+		
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "remove") {
+			
+			@Override
+			public void onClick() {
+				bubble.getModel().remove();
+			}
+		});
+		
+		return buttons;
+	}
+	
+	private ArrayList<ContextMenuButton> backgroundButtons() {
+		ArrayList<ContextMenuButton> buttons = new ArrayList<ContextMenuButton>();
+
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "nothing") {
+			
+			@Override
+			public void onClick() {
+				GWT.log("Background");
 			}
 		});
 		
 		return buttons;
 	}
 
-	private void initButtons() {
-		double padding = (angleTo-angleFrom)/buttons.size();
+	private void initButtons(int x, int y) {
+		angleFrom = 0.0;
+		angleTo = 2 * Math.PI;
+
+		double padding = (angleTo - angleFrom) / buttons.size();
 		double angle = angleFrom;
+
+		if (buttons.size() == 1)
+			 radius = 0;
+		
+		int totalRadius = radius + bubbleRadius;
+		DrawingArea canvas = UserInterface.getUI().getCanvas();
+		
+		if(x-totalRadius < 0)
+			x = totalRadius;
+		else if(x+totalRadius > canvas.getWidth())
+			x = canvas.getWidth() - totalRadius;
+		if(y-totalRadius < 0)
+			y = totalRadius;
+		else if(y+totalRadius > canvas.getHeight())
+			y = canvas.getHeight() - totalRadius;
+		
+		group.setTranslation(x, y);
 		
 		for (ContextMenuButton cb : buttons) {
-			cb.setPosition(calculateX(radius,angle), calculateY(radius,angle));
+			cb.setPosition(calculateX(radius, angle), calculateY(radius,angle));
 			cb.addThisTo(group);
 			angle = angle + padding;
 		}
 	}
-	
-	private static int calculateX(int radius, double angle){
+
+	private static int calculateX(int radius, double angle) {
 		return (int) (radius * Math.cos(angle));
 	}
-	
-	private static int calculateY(int radius, double angle){
+
+	private static int calculateY(int radius, double angle) {
 		return (int) (radius * Math.sin(angle));
 	}
 
-	public void addThisTo(DrawingArea canvas) {
-		canvas.add(group);
-	}
-
 	public void remove() {
-		group.removeFromParent();
+		UserInterface.getUI().getCanvas().remove(group);
 	}
+	
+	abstract class TextContextMenuButton extends ContextMenuButton{
+		Text text;
 
-	/*
-	 * private Bubble parent_bubble;
-	 * 
-	 * private SVGButton btn1, btn2, btn3, btn4; private DrawingArea canvas;
-	 * 
-	 * //TODO: einen UIThing-Container erfinden public ContextMenu(Bubble
-	 * parent_bubble){ this.parent_bubble = parent_bubble; }
-	 * 
-	 * public void addToCanvas(DrawingArea canvas){ int x = parent_bubble.x; int
-	 * y = parent_bubble.y; btn1 = new SVGButton(x+80, y, "-"){ public void
-	 * onClick(){ parent_bubble.suicide();
-	 * //parent_bubble.setState(State.NORMAL); not necessary }};
-	 * 
-	 * btn2 = new SVGButton(x-80, y, "+"){ public void onClick(){ Bubble b = new
-	 * Bubble(parent_bubble.x+80, parent_bubble.y+80, "NEW"); Edge e = new
-	 * Edge(parent_bubble, b); b.addToCanvas(canvas); e.addToCanvas(canvas);
-	 * parent_bubble.setState(State.NORMAL); }};
-	 * 
-	 * btn3 = new SVGButton(x, y+80, "set"){ public void onClick(){ (new
-	 * NewBubbleDialog(parent_bubble)).show(); }};
-	 * 
-	 * btn4 = new SVGButton(x, y-80, "btn4"){ public void onClick(){
-	 * GWT.log("btn4 clicked"); //parent_bubble.setState(State.NORMAL); }};
-	 * 
-	 * 
-	 * btn1.addToCanvas(canvas); btn2.addToCanvas(canvas);
-	 * btn3.addToCanvas(canvas); btn4.addToCanvas(canvas);
-	 * 
-	 * }
-	 * 
-	 * public void suicide(){ btn1.suicide(); btn2.suicide(); btn3.suicide();
-	 * btn4.suicide();
-	 * 
-	 * }
-	 */
+		public TextContextMenuButton(int r, ContextMenu menu, String text) {
+			super(r, menu);
+			this.text = new Text(0, 0 + 5, text);
+			this.text.setFillColor("black");
+			this.text.setStrokeWidth(0);
+			this.text.setTextAnchorMiddle();
+			group.add(this.text);
+		}
+		
+		@Override
+		protected void setPosition(int x, int y) {
+			text.setX(x);
+			text.setY(y+5);
+			super.setPosition(x, y);
+		}
+	}
 
 	abstract class ContextMenuButton extends InteractiveElement implements
 			Animatable {
-		public ContextMenu menu;
+		protected ContextMenu menu;
 		private Circle circle;
 
-		public ContextMenuButton(int x, int y, int r, ContextMenu menu) {
-
+		public ContextMenuButton(int r, ContextMenu menu) {
 			this.menu = menu;
-
-			circle = new Circle(x, y, r);
+			
+			circle = new Circle(0, 0, r);
 			group.add(circle);
+			group.setStyleName("slidingMenuButton");
+			group.deactivateContextMenu();
 		}
 
 		protected void setRadius(int r) {
@@ -182,7 +198,6 @@ public class ContextMenu {
 		protected void setPosition(int x, int y) {
 			circle.setX(x);
 			circle.setY(y);
-			group.setStyleName("slidingMenuButton");
 		}
 
 		abstract public void onClick();
@@ -195,10 +210,8 @@ public class ContextMenu {
 				break;
 			case HIGHLIGHTED:
 				break;
-			case MOUSEDOWN_1:
-			case MOUSEDOWN_2:
+			case MOUSEDOWN:
 			case MOVING:
-			case ACTIVATED:
 				onClick();
 				setState(State.HIGHLIGHTED);
 				break;
@@ -206,7 +219,6 @@ public class ContextMenu {
 		}
 
 		public void setPropertyDouble(String property, double value) {
-			// TODO: Funktioniert nur bis Opacity auf andere aktuallisiert wurde
 			if (property.equals("opacity"))
 				group.setOpacity(value);
 

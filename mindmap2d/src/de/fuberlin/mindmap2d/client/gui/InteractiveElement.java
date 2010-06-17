@@ -1,5 +1,6 @@
 package de.fuberlin.mindmap2d.client.gui;
 
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -17,7 +18,7 @@ import de.fuberlin.mindmap2d.client.svg.VectorObjectContainer;
 public abstract class InteractiveElement implements MouseDownHandler,
 		MouseUpHandler, MouseMoveHandler, MouseOverHandler, MouseOutHandler {
 	enum State {
-		NORMAL, HIGHLIGHTED, MOUSEDOWN_1, MOUSEDOWN_2, MOVING, ACTIVATED
+		NORMAL, HIGHLIGHTED, MOUSEDOWN, MOVING, RIGHTCLICK;
 	};
 
 	Group group = new Group();
@@ -58,38 +59,39 @@ public abstract class InteractiveElement implements MouseDownHandler,
 	}
 
 	public void onMouseDown(MouseDownEvent event) {
-		switch (state) {
-		case HIGHLIGHTED:
-			setState(State.MOUSEDOWN_1);
-			break;
-		case ACTIVATED:
-			setState(State.MOUSEDOWN_2);
-			break;
+		if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT){
+			setState(State.RIGHTCLICK);
+		}else if(state == State.HIGHLIGHTED ){
+			setState(State.MOUSEDOWN);
+			UserInterface.getUI().closeContextMenu();
 		}
+			
+		event.stopPropagation();
 	}
 
 	public void onMouseUp(MouseUpEvent event) {
+		
 		switch (state) {
+		case RIGHTCLICK:
+			setState(State.HIGHLIGHTED);
+			break;
 		case MOVING:
+		case MOUSEDOWN:
 			setState(State.HIGHLIGHTED);
-			break;
-		case MOUSEDOWN_1:
-			setState(State.ACTIVATED);
-			break;
-		case MOUSEDOWN_2:
-			setState(State.HIGHLIGHTED);
+			UserInterface.getUI().closeContextMenu();
 			break;
 		}
+		
+		event.stopPropagation();
 	}
 
 	public void onMouseMove(MouseMoveEvent event) {
 		switch (state) {
-		case MOUSEDOWN_1:
-			setState(State.MOVING);
-			break;
-		case MOUSEDOWN_2:
+		case MOUSEDOWN:
 			setState(State.MOVING);
 			break;
 		}
+
+		event.stopPropagation();
 	}
 }
