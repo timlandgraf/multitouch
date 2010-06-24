@@ -2,6 +2,8 @@ package de.fuberlin.mindmap2d.client.gui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -9,11 +11,11 @@ import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
-import de.fuberlin.mindmap2d.client.gui.InteractiveElement.State;
 import de.fuberlin.mindmap2d.client.model.Graph;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
 import de.fuberlin.mindmap2d.client.svg.VectorObjectContainer;
@@ -76,9 +78,6 @@ public class UserInterface {
 
 		graph.addThisTo(getCanvas());
 		background.setGraphView(graph);
-<<<<<<< HEAD
-
-		graph.setModel(new Graph().testInit());
 	}
 
 	public void openContextMenu(BubbleView bubble) {
@@ -114,9 +113,6 @@ public class UserInterface {
 
 	DrawingArea getCanvas() {
 		return canvas;
-=======
-		
-	
 	}
 
 	public void setGraphModel(Graph g){
@@ -129,7 +125,7 @@ public class UserInterface {
 	};
 
 	public class Background extends Rectangle implements MouseDownHandler,
-			MouseUpHandler, MouseMoveHandler {
+			MouseUpHandler, MouseMoveHandler, ContextMenuHandler {
 
 		private GraphView graph = null;
 		private State state = State.NORMAL;
@@ -137,7 +133,6 @@ public class UserInterface {
 
 		public Background(int x, int y, int width, int height) {
 			super(x, y, width, height);
-			this.deactivateContextMenu();
 		}
 
 		public void setGraphView(GraphView graph) {
@@ -149,6 +144,7 @@ public class UserInterface {
 			canvas.addMouseDownHandler(this);
 			canvas.addMouseMoveHandler(this);
 			canvas.addMouseUpHandler(this);
+			canvas.addContextMenuHandler(this);
 		}
 
 		private void setState(State s) {
@@ -166,6 +162,7 @@ public class UserInterface {
 		@Override
 		public void onMouseDown(MouseDownEvent event) {
 			GWT.log("down");
+			DOM.setCapture(canvas.getElement());
 			if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT) {
 				setState(State.RIGHTCLICK);
 				openContextMenu(this, event.getClientX(), event.getClientY());
@@ -177,11 +174,13 @@ public class UserInterface {
 				closeContextMenu();
 				setState(State.MOUSEDOWN);
 			}
+			
 			event.stopPropagation();
 		}
 
 		@Override
 		public void onMouseUp(MouseUpEvent event) {
+			DOM.releaseCapture(canvas.getElement());
 			GWT.log("up");
 			setState(State.NORMAL);
 			event.stopPropagation();
@@ -190,12 +189,17 @@ public class UserInterface {
 		@Override
 		public void onMouseMove(MouseMoveEvent event) {
 			if (state == State.MOUSEDOWN) {
-				GWT.log("move");
 				graph.move(event.getClientX() - x, event.getClientY() - y);
 				x = event.getClientX();
 				y = event.getClientY();
 				event.stopPropagation();
 			}
+		}
+
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+			event.preventDefault();
+			event.stopPropagation();
 		}
 	}
 }

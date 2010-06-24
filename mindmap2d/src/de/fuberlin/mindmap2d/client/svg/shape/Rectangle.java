@@ -2,7 +2,7 @@ package de.fuberlin.mindmap2d.client.svg.shape;
 
 import com.google.gwt.dom.client.Element;
 
-import de.fuberlin.mindmap2d.client.svg.SVGDom;
+import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.Shape;
 
 
@@ -38,7 +38,7 @@ public class Rectangle extends Shape {
 
 	@Override
 	protected Element createElement() {
-		return SVGDom.createSVGElementNS("rect");
+		return SvgDom.createSVGElementNS("rect");
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class Rectangle extends Shape {
 	 * @return the width of the Rectangle in pixels
 	 */
 	public int getWidth() {
-		return SVGDom.parseIntValue(getElement(), "width", 0);
+		return SvgDom.parseIntValue(getElement(), "width", 0);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Rectangle extends Shape {
 	 *            the new width in pixels
 	 */
 	public void setWidth(int width) {
-		SVGDom.setAttributeNS(getElement(), "width", width);
+		SvgDom.setAttributeNS(getElement(), "width", width);
 	}
 
 	/*@Override
@@ -76,7 +76,7 @@ public class Rectangle extends Shape {
 	 * @return the height of the Rectangle in pixels
 	 */
 	public int getHeight() {
-		return SVGDom.parseIntValue(getElement(), "height", 0);
+		return SvgDom.parseIntValue(getElement(), "height", 0);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class Rectangle extends Shape {
 	 *            the new height in pixels
 	 */
 	public void setHeight(int height) {
-		SVGDom.setAttributeNS(getElement(), "height", height);
+		SvgDom.setAttributeNS(getElement(), "height", height);
 	}
 
 	/*@Override
@@ -116,7 +116,7 @@ public class Rectangle extends Shape {
 	 * @return radius of x-axis of rounded corners in pixels
 	 */
 	public int getRoundedCornersRX() {
-		return SVGDom.parseIntValue(getElement(), "rx", 0);
+		return SvgDom.parseIntValue(getElement(), "rx", 0);
 	}
 	
 	/**
@@ -126,7 +126,7 @@ public class Rectangle extends Shape {
 	 * @return radius of y-axis of rounded corners in pixels
 	 */
 	public int getRoundedCornesRY(){
-		return SVGDom.parseIntValue(getElement(), "ry", 0);
+		return SvgDom.parseIntValue(getElement(), "ry", 0);
 	}
 
 	/**
@@ -140,8 +140,8 @@ public class Rectangle extends Shape {
 		if (radius < 0) {
 			radius = 0;
 		}
-		SVGDom.setAttributeNS(getElement(), "rx", radius);
-		SVGDom.setAttributeNS(getElement(), "ry", radius);
+		SvgDom.setAttributeNS(getElement(), "rx", radius);
+		SvgDom.setAttributeNS(getElement(), "ry", radius);
 	}
 	
 	/**
@@ -160,8 +160,8 @@ public class Rectangle extends Shape {
 		if (radiusY < 0)
 			radiusY = 0;
 
-		SVGDom.setAttributeNS(getElement(), "rx", radiusX);
-		SVGDom.setAttributeNS(getElement(), "ry", radiusY);
+		SvgDom.setAttributeNS(getElement(), "rx", radiusX);
+		SvgDom.setAttributeNS(getElement(), "ry", radiusY);
 	}
 
 	public void setPropertyDouble(String property, double value) {

@@ -2,7 +2,7 @@ package de.fuberlin.mindmap2d.client.svg.shape;
 
 import com.google.gwt.dom.client.Element;
 
-import de.fuberlin.mindmap2d.client.svg.SVGDom;
+import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.Shape;
 
 
@@ -37,7 +37,7 @@ public class Ellipse extends Shape {
 
 	@Override
 	protected Element createElement() {
-		return SVGDom.createSVGElementNS("path");
+		return SvgDom.createSVGElementNS("path");
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class Ellipse extends Shape {
 	 * @return the x-axis radius of the ellipse in pixels
 	 */
 	public int getRadiusX() {
-		return SVGDom.parseIntValue(getElement(), "rx", 0);
+		return SvgDom.parseIntValue(getElement(), "rx", 0);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class Ellipse extends Shape {
 	 *            the x-axis radius of the ellipse in pixels
 	 */
 	public void setRadiusX(int radiusX) {
-		SVGDom.setAttributeNS(getElement(), "rx", radiusX);
+		SvgDom.setAttributeNS(getElement(), "rx", radiusX);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class Ellipse extends Shape {
 	 * @return the y-axis radius of the ellipse in pixels
 	 */
 	public int getRadiusY() {
-		return SVGDom.parseIntValue(getElement(), "ry", 0);
+		return SvgDom.parseIntValue(getElement(), "ry", 0);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class Ellipse extends Shape {
 	 *            the y-axis radius of the ellipse in pixels
 	 */
 	public void setRadiusY(int radiusY) {
-		SVGDom.setAttributeNS(getElement(), "ry", radiusY);
+		SvgDom.setAttributeNS(getElement(), "ry", radiusY);
 	}
 
 	/*
@@ -98,21 +98,21 @@ public class Ellipse extends Shape {
 
 	@Override
 	public int getX() {
-		return SVGDom.parseIntValue(getElement(), "cx", 0);
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
 	}
 
 	@Override
 	public int getY() {
-		return SVGDom.parseIntValue(getElement(), "cx", 0);
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
 	}
 
 	@Override
 	public void setX(int x) {
-		SVGDom.setAttributeNS(getElement(), "cx", x);
+		SvgDom.setAttributeNS(getElement(), "cx", x);
 	}
 
 	@Override
 	public void setY(int y) {
-		SVGDom.setAttributeNS(getElement(), "cy", y);
+		SvgDom.setAttributeNS(getElement(), "cy", y);
 	}
 }

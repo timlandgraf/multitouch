@@ -2,9 +2,9 @@ package de.fuberlin.mindmap2d.client.svg;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public final class SVGBBox extends JavaScriptObject {
+public final class SvgBbox extends JavaScriptObject {
 
-	protected SVGBBox() {
+	protected SvgBbox() {
 
 	}
 

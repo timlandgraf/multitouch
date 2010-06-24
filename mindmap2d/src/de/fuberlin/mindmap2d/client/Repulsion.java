@@ -1,8 +1,5 @@
 package de.fuberlin.mindmap2d.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.google.gwt.core.client.GWT;
 import de.fuberlin.mindmap2d.client.model.*;
 
 public class Repulsion implements GraphChangeListener, BubbleListener{

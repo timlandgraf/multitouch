@@ -3,6 +3,8 @@ package de.fuberlin.mindmap2d.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+
 import de.fuberlin.mindmap2d.client.svg.Animatable;
 import de.fuberlin.mindmap2d.client.svg.Animate;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
@@ -146,7 +148,6 @@ public class SlidingMenu {
 			circle = new Circle(x, y, r);
 			group.add(circle);
 			group.setOpacity(0.6);
-			group.deactivateContextMenu();
 		}
 
 		protected void setRadius(int r){
@@ -176,6 +177,12 @@ public class SlidingMenu {
 				setState(State.HIGHLIGHTED);
 				break;
 			}
+		}
+
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+			event.preventDefault();
+			super.onContextMenu(event);
 		}
 
 		public void setPropertyDouble(String property, double value) {

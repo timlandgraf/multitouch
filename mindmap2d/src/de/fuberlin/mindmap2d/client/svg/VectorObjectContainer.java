@@ -3,6 +3,7 @@ package de.fuberlin.mindmap2d.client.svg;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasContextMenuHandlers;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 
 /**
@@ -12,7 +13,7 @@ import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
  * 
  */
 public interface VectorObjectContainer extends HasClickHandlers,
-		HasAllMouseHandlers, HasDoubleClickHandlers{
+		HasAllMouseHandlers, HasDoubleClickHandlers, HasContextMenuHandlers{
 
 	/**
 	 * 

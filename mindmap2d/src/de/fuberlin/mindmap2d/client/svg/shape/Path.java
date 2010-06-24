@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Element;
 
-import de.fuberlin.mindmap2d.client.svg.SVGDom;
+import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.Shape;
 import de.fuberlin.mindmap2d.client.svg.shape.path.Arc;
 import de.fuberlin.mindmap2d.client.svg.shape.path.ClosePath;
@@ -60,7 +60,7 @@ public class Path extends Shape {
 
 	@Override
 	protected Element createElement() {
-		return SVGDom.createSVGElementNS("path");
+		return SvgDom.createSVGElementNS("path");
 	}
 	
 	@Override
@@ -279,6 +279,6 @@ public class Path extends Shape {
 			}
 		}
 
-		SVGDom.setAttributeNS(getElement(), "d", path.toString());
+		SvgDom.setAttributeNS(getElement(), "d", path.toString());
 	}
 }

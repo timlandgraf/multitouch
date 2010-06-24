@@ -36,25 +36,25 @@ public class Image extends VectorObject implements Positionable, Animatable {
 
 	@Override
 	protected Element createElement() {
-		Element element = SVGDom.createSVGElementNS("image");
+		Element element = SvgDom.createSVGElementNS("image");
 		element.setAttribute("preserveAspectRatio", "none");
 		return element;
 	}
 
 	public int getX() {
-		return SVGDom.parseIntValue(getElement(), "x", 0);
+		return SvgDom.parseIntValue(getElement(), "x", 0);
 	}
 
 	public void setX(int x) {
-		SVGDom.setAttributeNS(getElement(), "x", x);
+		SvgDom.setAttributeNS(getElement(), "x", x);
 	}
 
 	public int getY() {
-		return SVGDom.parseIntValue(getElement(), "y", 0);
+		return SvgDom.parseIntValue(getElement(), "y", 0);
 	}
 
 	public void setY(int y) {
-		SVGDom.setAttributeNS(getElement(), "y", y);
+		SvgDom.setAttributeNS(getElement(), "y", y);
 	}
 
 	/**
@@ -73,23 +73,23 @@ public class Image extends VectorObject implements Positionable, Animatable {
 	 *            URL of the image to be shown
 	 */
 	public void setHref(String href) {
-		SVGDom.setAttributeNS(SVGDom.XLINK_NS, getElement(), "href", href);
+		SvgDom.setAttributeNS(SvgDom.XLINK_NS, getElement(), "href", href);
 	}
 
 	public int getWidth() {
-		return SVGDom.parseIntValue(getElement(), "width", 0);
+		return SvgDom.parseIntValue(getElement(), "width", 0);
 	}
 
 	public void setWidth(int width) {
-		SVGDom.setAttributeNS(getElement(), "width", width);
+		SvgDom.setAttributeNS(getElement(), "width", width);
 	}
 
 	public int getHeight() {
-		return SVGDom.parseIntValue(getElement(), "height", 0);
+		return SvgDom.parseIntValue(getElement(), "height", 0);
 	}
 
 	public void setHeight(int height) {
-		SVGDom.setAttributeNS(getElement(), "height", height);
+		SvgDom.setAttributeNS(getElement(), "height", height);
 	}
 
 	//TODO: Opacity

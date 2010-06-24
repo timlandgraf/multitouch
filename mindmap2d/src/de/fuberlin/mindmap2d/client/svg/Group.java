@@ -17,7 +17,7 @@ public class Group extends VectorObject implements VectorObjectContainer {
 	
 	@Override
 	protected Element createElement() {
-		return SVGDom.createSVGElementNS("g");
+		return SvgDom.createSVGElementNS("g");
 	}
 	
 	public VectorObject add(VectorObject vo) {

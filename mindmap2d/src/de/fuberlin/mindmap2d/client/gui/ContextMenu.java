@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dev.js.rhino.Context;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.user.client.ui.RootPanel;
 
 import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
 import de.fuberlin.mindmap2d.client.gui.UserInterface.Background;
@@ -60,7 +61,7 @@ public class ContextMenu {
 			
 			@Override
 			public void onClick() {
-				GWT.log("rename");
+				RootPanel.get().add(new NewBubbleDialog(bubble));
 			}
 		});
 		
@@ -187,7 +188,6 @@ public class ContextMenu {
 			circle = new Circle(0, 0, r);
 			group.add(circle);
 			group.setStyleName("slidingMenuButton");
-			group.deactivateContextMenu();
 		}
 
 		protected void setRadius(int r) {
@@ -216,6 +216,12 @@ public class ContextMenu {
 				setState(State.HIGHLIGHTED);
 				break;
 			}
+		}
+
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+			event.preventDefault();
+			super.onContextMenu(event);
 		}
 
 		public void setPropertyDouble(String property, double value) {

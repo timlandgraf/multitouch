@@ -7,6 +7,8 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -69,12 +71,12 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 		DivElement container = Document.get().createDivElement();
 		setElement(container);
 
-		root = SVGDom.createSVGElementNS("svg");
+		root = SvgDom.createSVGElementNS("svg");
 		container.appendChild(root);
 		setWidth(width);
 		setHeight(height);
 
-		Element defs = SVGDom.createSVGElementNS("defs");
+		Element defs = SvgDom.createSVGElementNS("defs");
 		root.appendChild(defs);
 	}
 	
@@ -85,10 +87,10 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 		DivElement container = Document.get().createDivElement();
 		setElement(container);
 
-		root = SVGDom.createSVGElementNS("svg");
+		root = SvgDom.createSVGElementNS("svg");
 		container.appendChild(root);
 
-		Element defs = SVGDom.createSVGElementNS("defs");
+		Element defs = SvgDom.createSVGElementNS("defs");
 		root.appendChild(defs);
 	}
 
@@ -139,7 +141,7 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 	 * @return the width of the DrawingArea in pixels.
 	 */
 	public int getWidth() {
-		return SVGDom.parseIntValue(root, "width", 0);
+		return SvgDom.parseIntValue(root, "width", 0);
 	}
 
 	/**
@@ -149,7 +151,7 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 	 *            the new width in pixels
 	 */
 	public void setWidth(int width) {
-		SVGDom.setAttributeNS(root, "width", width);
+		SvgDom.setAttributeNS(root, "width", width);
 		root.getParentElement().getStyle().setPropertyPx("width", width);
 	}
 
@@ -159,7 +161,7 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 	 * @return the height of the DrawingArea in pixels.
 	 */
 	public int getHeight() {
-		return SVGDom.parseIntValue(root, "height", 0);
+		return SvgDom.parseIntValue(root, "height", 0);
 	}
 
 	/**
@@ -169,7 +171,7 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 	 *            the new height
 	 */
 	public void setHeight(int height) {
-		SVGDom.setAttributeNS(root, "height", height);
+		SvgDom.setAttributeNS(root, "height", height);
 		root.getParentElement().getStyle().setPropertyPx("height", height);
 	}
 
@@ -209,40 +211,53 @@ public class DrawingArea extends Widget implements VectorObjectContainer {
 
 	public void setViewBox(int x, int y, int width, int height){
 		if(!(x<0||y<0||width<0||height<0)){
-			SVGDom.setAttributeNS(root, "viewBox", x+" "+y+" "+width+" "+height);
+			SvgDom.setAttributeNS(root, "viewBox", x+" "+y+" "+width+" "+height);
 		}
 	}
 	
+	@Override
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
 		return addDomHandler(handler, ClickEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
 		return addDomHandler(handler, DoubleClickEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
 		return addDomHandler(handler, MouseDownEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
 		return addDomHandler(handler, MouseUpEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
 		return addDomHandler(handler, MouseOutEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
 		return addDomHandler(handler, MouseOverEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
 		return addDomHandler(handler, MouseMoveEvent.getType());
 	}
 
+	@Override
 	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
 		return addDomHandler(handler, MouseWheelEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addContextMenuHandler(ContextMenuHandler handler) {
+		return addDomHandler(handler, ContextMenuEvent.getType());
 	}
 
 	public Element getSVGElement(){

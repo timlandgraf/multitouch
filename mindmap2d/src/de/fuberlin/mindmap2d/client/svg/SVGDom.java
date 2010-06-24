@@ -8,7 +8,7 @@ import com.google.gwt.dom.client.Element;
  * @author Henri Kerola / IT Mill Ltd
  * @author flofreud
  */
-public class SVGDom {
+public class SvgDom {
 	public static final String SVG_NS = "http://www.w3.org/2000/svg";
 
 	public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
@@ -39,13 +39,13 @@ public class SVGDom {
 		element.className.baseVal = name;
 	}-*/;
 
-	public static native SVGBBox getBBBox(Element element, boolean attached)
+	public static native SvgBbox getBBBox(Element element, boolean attached)
 	/*-{
 		var bbox = null;
 		if (attached) {
 			bbox = element.getBBox();
 		} else {
-			var ns = @de.fuberlin.mindmap2d.client.svg.SVGDom::SVG_NS;
+			var ns = @de.fuberlin.mindmap2d.client.svg.SvgDom::SVG_NS;
 			var svg = $doc.createElementNS(ns, "svg");
 			var parent = element.parentNode;
 			svg.appendChild(element);

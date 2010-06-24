@@ -3,27 +3,24 @@ package de.fuberlin.mindmap2d.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.core.client.GWT;
 
-import de.fuberlin.mindmap2d.client.Repulsion;
 import de.fuberlin.mindmap2d.client.model.*;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
 import de.fuberlin.mindmap2d.client.svg.Group;
 import de.fuberlin.mindmap2d.client.svg.Line;
-import de.fuberlin.mindmap2d.client.svg.SVGDom;
+import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.VectorObject.TransfromValue;
 import de.fuberlin.mindmap2d.client.svg.shape.Circle;
 import de.fuberlin.mindmap2d.client.svg.shape.Text;
 
-import de.fuberlin.mindmap2d.client.Suggestions;
 import com.google.gwt.user.client.Random;
 
 public class GraphView implements GraphChangeListener {
@@ -113,6 +110,9 @@ public class GraphView implements GraphChangeListener {
 			edges.add(ev);
 			ev.addToThis(canvas);
 		}
+		//TODO: hässlich
+		for(BubbleView bv:bubbles)
+			bv.toFront();
 	}
 
 	@Override
@@ -177,7 +177,6 @@ public class GraphView implements GraphChangeListener {
 			text.setTextAnchorMiddle();
 			group.add(text);
 			group.addDoubleClickHandler(this);
-			group.deactivateContextMenu();
 
 			update();
 		}
@@ -272,7 +271,7 @@ public class GraphView implements GraphChangeListener {
 		public void onMouseMove(MouseMoveEvent event) {
 			super.onMouseMove(event);
 			
-			int id = SVGDom.suspendRedraw(drawingArea.getSVGElement());
+			int id = SvgDom.suspendRedraw(drawingArea.getSVGElement());
 			
 			if (state == State.MOVING) {
 				TransfromValue value = graphView.canvas.getTranslation();
@@ -280,7 +279,7 @@ public class GraphView implements GraphChangeListener {
 				int y = event.getClientY() - (int) value.y;
 				model.setPosition(x, y);
 			}
-			SVGDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
+			SvgDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
 		}
 
 		@Override
@@ -298,6 +297,12 @@ public class GraphView implements GraphChangeListener {
 
 		public Bubble getModel() {
 			return model;
+		}
+
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+			event.preventDefault();
+			super.onContextMenu(event);
 		}
 	}
 

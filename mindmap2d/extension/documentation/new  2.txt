@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns = "http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="100" height="150" fill="gray"/>
+  <foreignObject x="10" y="10" width="100" height="150">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <div>Here is a <strong>paragraph</strong> that requires <em>word wrap</em></div>
+    </body>
+
+  </foreignObject>
+  
+  <circle cx="200" cy="200" r="100" fill="blue" stoke="red"/>
+  <foreignObject x="120" y="120" width="180" height="180">
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <div>
+        <ul>
+          <li><strong>First</strong> item</li>
+
+          <li><em>Second</em> item</li>
+          <li>Thrid item</li>
+        </ul>
+      </div>
+    </body>
+  </foreignObject>
+</svg>

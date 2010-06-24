@@ -2,7 +2,7 @@ package de.fuberlin.mindmap2d.client.svg.shape;
 
 import com.google.gwt.dom.client.Element;
 
-import de.fuberlin.mindmap2d.client.svg.SVGDom;
+import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.Shape;
 
 
@@ -36,7 +36,7 @@ public class Text extends Shape {
 
 	@Override
 	protected Element createElement() {
-		Element element = SVGDom.createSVGElementNS("text");
+		Element element = SvgDom.createSVGElementNS("text");
 		return element;
 	}
 
@@ -75,7 +75,7 @@ public class Text extends Shape {
 	 *            the font family
 	 */
 	public void setFontFamily(String family) {
-		SVGDom.setAttributeNS(getElement(), "font-family", family);
+		SvgDom.setAttributeNS(getElement(), "font-family", family);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class Text extends Shape {
 	 * @return the size
 	 */
 	public int getFontSize() {
-		return SVGDom.parseIntValue(getElement(), "font-size", 0);
+		return SvgDom.parseIntValue(getElement(), "font-size", 0);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class Text extends Shape {
 	 *            the size
 	 */
 	public void setFontSize(int size) {
-		SVGDom.setAttributeNS(getElement(), "font-size", size);
+		SvgDom.setAttributeNS(getElement(), "font-size", size);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class Text extends Shape {
 	 * start the text.
 	 */
 	public void setTextAnchorStart() {
-		SVGDom.setAttributeNS(getElement(), "text-anchor", "start");
+		SvgDom.setAttributeNS(getElement(), "text-anchor", "start");
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class Text extends Shape {
 	 * be the center of the text.
 	 */
 	public void setTextAnchorMiddle() {
-		SVGDom.setAttributeNS(getElement(), "text-anchor", "middle");
+		SvgDom.setAttributeNS(getElement(), "text-anchor", "middle");
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class Text extends Shape {
 	 * end the text.
 	 */
 	public void setTextAnchorEnd() {
-		SVGDom.setAttributeNS(getElement(), "text-anchor", "end");
+		SvgDom.setAttributeNS(getElement(), "text-anchor", "end");
 	}
 
 	public void setPropertyDouble(String property, double value) {

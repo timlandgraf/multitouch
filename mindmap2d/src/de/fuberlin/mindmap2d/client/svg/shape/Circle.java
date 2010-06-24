@@ -2,7 +2,7 @@ package de.fuberlin.mindmap2d.client.svg.shape;
 
 import com.google.gwt.dom.client.Element;
 
-import de.fuberlin.mindmap2d.client.svg.SVGDom;
+import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.Shape;
 
 
@@ -34,7 +34,7 @@ public class Circle extends Shape {
 	
 	@Override
 	protected Element createElement() {
-		return SVGDom.createSVGElementNS("circle");
+		return SvgDom.createSVGElementNS("circle");
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class Circle extends Shape {
 	 * @return the radius of the circle in pixels
 	 */
 	public int getRadius() {
-		return SVGDom.parseIntValue(getElement(), "r", 0);
+		return SvgDom.parseIntValue(getElement(), "r", 0);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class Circle extends Shape {
 	 *            the radius of the circle in pixels
 	 */
 	public void setRadius(int radius) {
-		SVGDom.setAttributeNS(getElement(), "r", radius);
+		SvgDom.setAttributeNS(getElement(), "r", radius);
 	}
 
 	public void setPropertyDouble(String property, double value) {
@@ -67,21 +67,21 @@ public class Circle extends Shape {
 
 	@Override
 	public int getX() {
-		return SVGDom.parseIntValue(getElement(), "cx", 0);
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
 	}
 
 	@Override
 	public int getY() {
-		return SVGDom.parseIntValue(getElement(), "cx", 0);
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
 	}
 
 	@Override
 	public void setX(int x) {
-		SVGDom.setAttributeNS(getElement(), "cx", x);
+		SvgDom.setAttributeNS(getElement(), "cx", x);
 	}
 
 	@Override
 	public void setY(int y) {
-		SVGDom.setAttributeNS(getElement(), "cy", y);
+		SvgDom.setAttributeNS(getElement(), "cy", y);
 	}
 }

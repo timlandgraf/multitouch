@@ -36,7 +36,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 
 	@Override
 	protected Element createElement() {
-		return SVGDom.createSVGElementNS("line");
+		return SvgDom.createSVGElementNS("line");
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 * @return the x-coordinate in pixels
 	 */
 	public int getX1() {
-		return SVGDom.parseIntValue(getElement(), "x1", 0);
+		return SvgDom.parseIntValue(getElement(), "x1", 0);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 *            the new x-coordinate in pixels
 	 */
 	public void setX1(int x1) {
-		SVGDom.setAttributeNS(getElement(), "x1", x1);
+		SvgDom.setAttributeNS(getElement(), "x1", x1);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 * @return the y-coordinate in pixels
 	 */
 	public int getY1() {
-		return SVGDom.parseIntValue(getElement(), "y1", 0);
+		return SvgDom.parseIntValue(getElement(), "y1", 0);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 *            the new y-coordinate in pixels
 	 */
 	public void setY1(int y1) {
-		SVGDom.setAttributeNS(getElement(), "y1", y1);
+		SvgDom.setAttributeNS(getElement(), "y1", y1);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 * @return the x-coordinate in pixels
 	 */
 	public int getX2() {
-		return SVGDom.parseIntValue(getElement(), "x2", 0);
+		return SvgDom.parseIntValue(getElement(), "x2", 0);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 *            the new x-coordinate in pixels
 	 */
 	public void setX2(int x2) {
-		SVGDom.setAttributeNS(getElement(), "x2", x2);
+		SvgDom.setAttributeNS(getElement(), "x2", x2);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 * @return the y-coordinate in pixels
 	 */
 	public int getY2() {
-		return SVGDom.parseIntValue(getElement(), "y2", 0);
+		return SvgDom.parseIntValue(getElement(), "y2", 0);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 *            the new x-coordinate in pixels
 	 */
 	public void setY2(int y2) {
-		SVGDom.setAttributeNS(getElement(), "y2", y2);
+		SvgDom.setAttributeNS(getElement(), "y2", y2);
 	}
 
 	public String getStrokeColor() {
@@ -120,24 +120,24 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	}
 
 	public void setStrokeColor(String color) {
-		SVGDom.setAttributeNS(getElement(), "stroke", color);
+		SvgDom.setAttributeNS(getElement(), "stroke", color);
 	}
 
 	public int getStrokeWidth() {
-		return SVGDom.parseIntValue(getElement(), "stroke-width", 0);
+		return SvgDom.parseIntValue(getElement(), "stroke-width", 0);
 	}
 
 	public void setStrokeWidth(int width) {
-		SVGDom.setAttributeNS(getElement(), "stroke-width", width);
+		SvgDom.setAttributeNS(getElement(), "stroke-width", width);
 	}
 
 	public double getStrokeOpacity() {
-		return SVGDom.parseDoubleValue(getElement()
+		return SvgDom.parseDoubleValue(getElement()
 				.getAttribute("stroke-opacity"), 1);
 	}
 
 	public void setStrokeOpacity(double opacity) {
-		SVGDom.setAttributeNS(getElement(), "stroke-opacity", "" + opacity);
+		SvgDom.setAttributeNS(getElement(), "stroke-opacity", "" + opacity);
 	}
 
 	//TODO:Opacity
