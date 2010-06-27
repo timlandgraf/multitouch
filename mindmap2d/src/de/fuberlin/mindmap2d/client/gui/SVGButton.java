@@ -38,9 +38,9 @@ public abstract class SVGButton extends InteractiveElement {
 		switch (s) {
 			case NORMAL: circle.setFillColor("gray"); break;
 			case HIGHLIGHTED: circle.setFillColor("green"); break;
-			case MOUSEDOWN_1: 
-			case MOUSEDOWN_2:
-			case MOVING:
+			case MOUSEDOWN_1: break;
+			case MOUSEDOWN_2: break;
+			case MOVING: break;
 			case ACTIVATED: onClick(); setState(State.HIGHLIGHTED); break; 
 		}
 	}

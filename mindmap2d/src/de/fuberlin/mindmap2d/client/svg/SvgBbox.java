@@ -1,4 +1,4 @@
-package de.fuberlin.mindmap2d.client.svg;
+ package de.fuberlin.mindmap2d.client.svg;
 
 import com.google.gwt.core.client.JavaScriptObject;
 

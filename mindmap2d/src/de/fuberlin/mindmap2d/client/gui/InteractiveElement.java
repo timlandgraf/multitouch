@@ -21,7 +21,8 @@ public abstract class InteractiveElement implements MouseDownHandler,
 		MouseUpHandler, MouseMoveHandler, MouseOverHandler, MouseOutHandler, 
 		ContextMenuHandler {
 	enum State {
-		NORMAL, HIGHLIGHTED, MOUSEDOWN, MOVING, RIGHTCLICK;
+		NORMAL, HIGHLIGHTED, MOUSEDOWN, MOVING, RIGHTCLICK, 
+			ACTIVATED, MOUSEDOWN_1, MOUSEDOWN_2; //was auch immer die machen - Flo benutzt sie in SVGButton
 	};
 
 	Group group = new Group();
