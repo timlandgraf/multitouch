@@ -23,6 +23,7 @@ import de.fuberlin.mindmap2d.client.svg.shape.Text;
 
 import com.google.gwt.user.client.Random;
 
+
 public class GraphView implements GraphChangeListener {
 	private Graph model;
 	private DrawingArea drawingArea;
@@ -110,7 +111,7 @@ public class GraphView implements GraphChangeListener {
 			edges.add(ev);
 			ev.addToThis(canvas);
 		}
-		//TODO: h�sslich
+		//TODO: hässlich
 		for(BubbleView bv:bubbles)
 			bv.toFront();
 	}
@@ -291,8 +292,6 @@ public class GraphView implements GraphChangeListener {
 		@Override
 		public void onDoubleClick(DoubleClickEvent event) {
 			graphView.addBubbleTo(this, "Neue");
-			//TODO: schöner anbinden mir registerListener oder so
-			//Suggestions.makeSuggestions(model);
 		}
 
 		public Bubble getModel() {

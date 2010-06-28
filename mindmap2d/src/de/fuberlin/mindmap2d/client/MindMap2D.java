@@ -19,7 +19,7 @@ public class MindMap2D implements EntryPoint {
 		//disableSOP();
 		Graph model = new Graph();
 		
-		Suggestions.setGraphModel(model);
+		
 		new Repulsion(model);
 		ui.setGraphModel(model);
 		

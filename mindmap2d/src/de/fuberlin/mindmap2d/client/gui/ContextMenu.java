@@ -15,6 +15,8 @@ import de.fuberlin.mindmap2d.client.svg.Group;
 import de.fuberlin.mindmap2d.client.svg.shape.Circle;
 import de.fuberlin.mindmap2d.client.svg.shape.Text;
 
+import de.fuberlin.mindmap2d.client.Suggestions;
+
 public class ContextMenu {
 	Group group = new Group();
 	private List<ContextMenuButton> buttons;
@@ -61,7 +63,7 @@ public class ContextMenu {
 			
 			@Override
 			public void onClick() {
-				RootPanel.get().add(new NewBubbleDialog(bubble));
+				(new NewBubbleDialog(bubble)).center();
 			}
 		});
 		
@@ -85,7 +87,8 @@ public class ContextMenu {
 			
 			@Override
 			public void onClick() {
-				GWT.log("suggest");
+				SuggestionsDialog d = new SuggestionsDialog(bubble);
+				d.center(); //show
 			}
 		});
 		
