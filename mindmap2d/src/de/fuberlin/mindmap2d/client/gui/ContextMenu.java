@@ -55,15 +55,17 @@ public class ContextMenu {
 			
 			@Override
 			public void onClick() {
-				bubble.getGraph().addBubbleTo(bubble, "");
+				NewBubbleDialog d = new NewBubbleDialog(bubble);
+				d.center(); //show
 			}
 		});
 		
-		buttons.add(new TextContextMenuButton(bubbleRadius, this, "rename") {
-			
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "edit") {
+
 			@Override
 			public void onClick() {
-				(new NewBubbleDialog(bubble)).center();
+				EditBubbleDialog d = new EditBubbleDialog(bubble);
+				d.center(); //show
 			}
 		});
 		

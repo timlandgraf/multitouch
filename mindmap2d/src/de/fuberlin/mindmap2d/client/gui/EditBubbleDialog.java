@@ -5,19 +5,20 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.core.client.GWT;
 import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
 
-
-public class NewBubbleDialog extends BubbleDialog {
+public class EditBubbleDialog extends BubbleDialog {
 	
-	BubbleView neighbour;
+	BubbleView bubble;
 	
-	public NewBubbleDialog(BubbleView bubble) {
-		this.neighbour = bubble;
-		setText("New Bubble");
+	public EditBubbleDialog(BubbleView bubble) {
+		this.bubble = bubble;
+		setText("Edit Bubble");
+		text_box.setText(bubble.getText());
+		
     }
 
 	@Override
 	public void onClick(ClickEvent event) {
-		neighbour.getGraph().addBubbleTo(neighbour, text_box.getText());
+		bubble.setText(text_box.getText());
 		this.hide();
 	}
 }

@@ -291,7 +291,8 @@ public class GraphView implements GraphChangeListener {
 
 		@Override
 		public void onDoubleClick(DoubleClickEvent event) {
-			graphView.addBubbleTo(this, "Neue");
+			NewBubbleDialog d = new NewBubbleDialog(this);
+			d.center(); //show
 		}
 
 		public Bubble getModel() {
