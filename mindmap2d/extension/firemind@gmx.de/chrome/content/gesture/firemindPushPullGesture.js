@@ -1,13 +1,13 @@
 Firemind.namespace("touchAPI");
 
-Firemind.touchAPI.FlickGesture = {
+Firemind.touchAPI.PushPullGesture = {
 	
 	isRunning : false,
 
 	touchOne : null,
 	touchTwo : null,
 	
-	distance : null,
+	distance : 200,
 	
 	onBegin : function(touchOne){
 		this.isRunning = true;
@@ -24,27 +24,18 @@ Firemind.touchAPI.FlickGesture = {
 	
 	execute : function(currentTouch, touchList){
 	
-		if(this.touchOne == null || Firemind.touchAPI.TapGesture.isRunning) return;
+		if(this.touchOne == null || Firemind.touchAPI.HoldTapGesture.isRunning || !Firemind.touchAPI.PushPullGesture.isRunning) return;
 	
 		if(this.touchTwo == null && this.touchOne.id != currentTouch.id){
-			
+
 			this.touchTwo = currentTouch;
-			
-			// calculate start distance
-			var diffX = (this.touchOne.x - this.touchTwo.x);
-			var diffY = (this.touchOne.y - this.touchTwo.y);
-			this.distance = Math.sqrt(diffX * diffX + diffY * diffY);
-	
+
 		}else {
 
 			if(this.touchTwo.id == currentTouch.id && touchList[this.touchOne.id] != undefined){
-					
-					var thr = 15;
-					var varX = Math.abs(this.touchTwo.x - currentTouch.x);
-					var varY = Math.abs(this.touchTwo.y - currentTouch.y);
-			
-					if(varX < thr && varY < thr) return;
-			
+				
+				if(Firemind.touchAPI.GestureAdapter.isTouchMoving(this.touchTwo, currentTouch)){
+
 					this.touchTwo = currentTouch;
 			
 					// calculate distance
@@ -57,13 +48,12 @@ Firemind.touchAPI.FlickGesture = {
 					var cos = Math.acos(b / r);
 					
 					if(r < this.distance){
-						Firemind.touchAPI.EventDispatcher.onGestureEvent("onFlickIn", this.touchOne, {radius: r, angle: cos, t2: this.touchTwo.id, t1: this.touchOne.id});
+						Firemind.touchAPI.EventDispatcher.onGestureEvent("pushin", this.touchOne, {radius: r, angle: cos});
 					}else if(r > this.distance){
-						Firemind.touchAPI.EventDispatcher.onGestureEvent("onFlickOut", this.touchOne, {radius: r, angle: cos, t2: this.touchTwo.id, t1: this.touchOne.id});
+						Firemind.touchAPI.EventDispatcher.onGestureEvent("pullout", this.touchOne, {radius: r, angle: cos});
 					}
-				
-					this.distance = r;
-				
+					
+				}
 			}
 	
 		}
