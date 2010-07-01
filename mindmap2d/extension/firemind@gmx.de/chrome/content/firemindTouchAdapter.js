@@ -40,59 +40,73 @@ Firemind.touchAPI.TouchAdapter = {
 			
 			switch(Firemind.touchAPI.TouchList.size){
 				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_ONE:
+					Firemind.touchAPI.MoveGesture.onBegin(touch);
 					Firemind.touchAPI.TapGesture.onBegin(touch);
-					Firemind.touchAPI.FlickGesture.onBegin(touch);
+					Firemind.touchAPI.HoldTapGesture.onBegin(touch);
+					Firemind.touchAPI.PushPullGesture.onBegin(touch);
 					break;
 				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
-					Firemind.touchAPI.TapGesture.execute(
+					Firemind.touchAPI.HoldTapGesture.execute(
 						touch, Firemind.touchAPI.TouchList.data
 					);
-					Firemind.touchAPI.FlickGesture.execute(
+					Firemind.touchAPI.PushPullGesture.execute(
 						touch, Firemind.touchAPI.TouchList.data
 					);
 					break;
 				default: 
-					Firemind.touchAPI.FlickGesture.onEnd();
+					Firemind.touchAPI.MoveGesture.onEnd();
+					Firemind.touchAPI.PushPullGesture.onEnd();
 					break;
 			}
 		
-			Firemind.touchAPI.EventDispatcher.onTouchEvent("onTouchDown", touch);
+			Firemind.touchAPI.EventDispatcher.onTouchEvent("touchdown", touch);
 		},
 		
 		onTouchMove: function(touch){
 			Firemind.log("EVENT -> onTouchMove " + Firemind.touchAPI.TouchList.size);
 		
 			switch(Firemind.touchAPI.TouchList.size){
+				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_ONE:
+					Firemind.touchAPI.MoveGesture.execute(
+						touch, Firemind.touchAPI.TouchList.data
+					);
+					break;
 				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
-					Firemind.touchAPI.FlickGesture.execute(
+					Firemind.touchAPI.PushPullGesture.execute(
 						touch, Firemind.touchAPI.TouchList.data
 					);
 					break;
 				default: break;
 			}
 	
-			Firemind.touchAPI.EventDispatcher.onTouchEvent("onTouchMove", touch);
+			Firemind.touchAPI.EventDispatcher.onTouchEvent("touchmove", touch);
 		},
 		
 		onTouchUp: function(touch){
 			Firemind.log("EVENT -> onTouchUp " + touch.id);
 		
 			switch(Firemind.touchAPI.TouchList.size){
-				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
+				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_ONE:
 					Firemind.touchAPI.TapGesture.execute(
+						touch, Firemind.touchAPI.TouchList.data
+					);
+					break;
+				case Firemind.touchAPI.TouchAdapter.TOUCH_TYPE_TWO:
+					Firemind.touchAPI.HoldTapGesture.execute(
 						touch, Firemind.touchAPI.TouchList.data
 					);
 					break;
 				default: break;
 			}
 	
-			Firemind.touchAPI.TapGesture.onEnd();
-			Firemind.touchAPI.FlickGesture.onEnd();
+			Firemind.touchAPI.MoveGesture.onEnd();
+			Firemind.touchAPI.HoldTapGesture.onEnd();
+			Firemind.touchAPI.PushPullGesture.onEnd();
 	
 			Firemind.touchAPI.TouchList.remove(touch);
 			Firemind.log("EVENT -> touchList: " + Firemind.touchAPI.TouchList.size);
 		
-			Firemind.touchAPI.EventDispatcher.onTouchEvent("onTouchUp", touch);
+			Firemind.touchAPI.EventDispatcher.onTouchEvent("touchup", touch);
 		}
 	},
 	

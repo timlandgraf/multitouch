@@ -3,22 +3,19 @@ Firemind.namespace("touchAPI");
 Firemind.touchAPI.GestureAdapter = {
 
 	THR_FINGER_VAR : 15,
-
-	_gestures : [
-		Firemind.touchAPI.TapGesture,
-		Firemind.touchAPI.FlickGesture
-	],
-
-	isGestureInProgress : function(self){
-		
-		var rv = false, i = 0, l = this._gestures.length, gesture;
-		for(;i < l;i++){
-			gesture = this._gestures[i];
-			if(gesture != self)
-				rv = rv || gesture.isRunning;
-		}
-		
-		return rv;
+	
+	isTouchMoving : function(touchOne, touchTwo){
+		var varX = Math.abs(touchTwo.x - touchOne.x);
+		var varY = Math.abs(touchTwo.y - touchOne.y);
+			
+		return !(
+			varX < Firemind.touchAPI.GestureAdapter.THR_FINGER_VAR && 
+			varY < Firemind.touchAPI.GestureAdapter.THR_FINGER_VAR
+		);
+	},
+	
+	isTouchNotMoving : function(touchOne, touchTwo){
+		return !Firemind.touchAPI.GestureAdapter.isTouchMoving(touchOne, touchTwo);
 	}
 
 };
