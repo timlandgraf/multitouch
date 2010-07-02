@@ -12,16 +12,19 @@
 <servlet>
     <servlet-name>proxy</servlet-name>
     <servlet-class>de.fuberlin.mindmap2d.ProxyServlet</servlet-class>
-    
+  
     <init-param>
     	<param-name>proxyHost</param-name>
-    	<param-value>localhost</param-value>
+<!--   	<param-value>localhost</param-value> -->
+	   	<param-value>blooming-water-51.heroku.com</param-value>
+
     </init-param>
     
     <init-param>
     	<param-name>proxyPort</param-name>
-    	<param-value>3000</param-value>
-    </init-param>
+<!--  	<param-value>3000</param-value> -->
+	  	<param-value>80</param-value>
+    </init-param>->
 </servlet>
  
 <servlet-mapping>
