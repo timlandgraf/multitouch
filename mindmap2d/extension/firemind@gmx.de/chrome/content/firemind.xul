@@ -14,8 +14,10 @@
 	
 	<script src="firemindEventDispatcher.js" />
 	
+	<script src="gesture/firemindMoveGesture.js" />
 	<script src="gesture/firemindTapGesture.js" />
-	<script src="gesture/firemindFlickGesture.js" />
+	<script src="gesture/firemindHoldTapGesture.js" />
+	<script src="gesture/firemindPushPullGesture.js" />
 	
 	<script src="firemindGestureAdapter.js" />
 	<script src="firemindTouchAdapter.js" />

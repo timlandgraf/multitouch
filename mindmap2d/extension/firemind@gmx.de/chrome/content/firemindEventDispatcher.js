@@ -7,11 +7,14 @@ Firemind.touchAPI.EventDispatcher = {
 	
 		touchevt.initTouchEvent = function(type, canBubble, cancelable, view, detail, x, y, time, id, args){
 			this.wrappedJSObject.initUIEvent(type, canBubble, cancelable, view, detail);
-			this.wrappedJSObject.x = x;
-			this.wrappedJSObject.y = y;
+			this.wrappedJSObject.clientX = x;
+			this.wrappedJSObject.clientY = y;
 			this.wrappedJSObject.time = time;
 			this.wrappedJSObject.id = id;
 			this.wrappedJSObject.targetEl = Firemind.content.document.elementFromPoint(x, y);
+			
+			this.wrappedJSObject.radius = -1;
+			this.wrappedJSObject.angle = -1;
 			
 			if(args){
 				for(var key in args){
