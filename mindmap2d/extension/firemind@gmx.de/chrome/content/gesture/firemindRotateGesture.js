@@ -23,7 +23,9 @@ Firemind.touchAPI.RotateGesture = {
 	},
 	
 	execute : function(currentTouch, touchList){
-	
+		if(Firemind.touchAPI.RotateGesture.isRunning){
+		
+		}
 	}
 	
 };

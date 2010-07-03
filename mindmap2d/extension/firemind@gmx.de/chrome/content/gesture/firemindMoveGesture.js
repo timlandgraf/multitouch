@@ -18,11 +18,11 @@ Firemind.touchAPI.MoveGesture = {
 	
 	//touchList.size == 1
 	execute : function(currentTouch, touchList){
-	
-		if(this.touchOne.id == currentTouch.id && touchList[this.touchOne.id] != undefined && Firemind.touchAPI.GestureAdapter.isTouchMoving(this.touchOne, currentTouch)){
-			Firemind.touchAPI.EventDispatcher.onGestureEvent("move", currentTouch);
+		if(Firemind.touchAPI.MoveGesture.isRunning){
+			if(this.touchOne.id == currentTouch.id && touchList[this.touchOne.id] != undefined && Firemind.touchAPI.GestureAdapter.isTouchMoving(this.touchOne, currentTouch)){
+				Firemind.touchAPI.EventDispatcher.onGestureEvent("move", currentTouch);
+			}
 		}
-
 	}
 	
 };

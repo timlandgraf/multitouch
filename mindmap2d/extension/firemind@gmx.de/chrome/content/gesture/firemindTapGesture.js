@@ -43,40 +43,41 @@ Firemind.touchAPI.TapGesture = {
 	
 	//touchList.size == 1
 	execute : function(currentTouch, touchList){
-	
-		window.clearTimeout(this.tapCancelId);
-		
-		if(this.touchOne.id == currentTouch.id && touchList[this.touchOne.id] != undefined && (currentTouch.time - this.touchOne.time) <= this.releaseThreshold){
+		if(Firemind.touchAPI.TapGesture.isRunning){
+
+			window.clearTimeout(this.tapCancelId);
 			
-			Firemind.touchAPI.TapGesture.tapCount++;
-			
-			if(Firemind.touchAPI.TapGesture.tapCount == 1){
+			if(this.touchOne.id == currentTouch.id && touchList[this.touchOne.id] != undefined && (currentTouch.time - this.touchOne.time) <= this.releaseThreshold){
 				
-				window.touchOne = Firemind.touchAPI.TapGesture.touchOne;
-				window.onEnd = Firemind.touchAPI.TapGesture.onEnd;
+				Firemind.touchAPI.TapGesture.tapCount++;
 				
-				this.doubleTapCancelId = window.setTimeout(
-					Firemind.touchAPI.TapGesture.executeTap,
-					Firemind.touchAPI.TapGesture.doubleTapReleaseThreshold
-				);
+				if(Firemind.touchAPI.TapGesture.tapCount == 1){
+					
+					window.touchOne = Firemind.touchAPI.TapGesture.touchOne;
+					window.onEnd = Firemind.touchAPI.TapGesture.onEnd;
+					
+					this.doubleTapCancelId = window.setTimeout(
+						Firemind.touchAPI.TapGesture.executeTap,
+						Firemind.touchAPI.TapGesture.doubleTapReleaseThreshold
+					);
+					
+				}else if(Firemind.touchAPI.TapGesture.tapCount == 2){
+					
+					window.clearTimeout(this.doubleTapCancelId);
+					Firemind.touchAPI.TapGesture.tapCount = 0;
+					Firemind.touchAPI.EventDispatcher.onGestureEvent("doubletap", this.touchOne);
+					
+				}else {
 				
-			}else if(Firemind.touchAPI.TapGesture.tapCount == 2){
+					Firemind.touchAPI.TapGesture.onEnd();
+					
+				}
 				
-				window.clearTimeout(this.doubleTapCancelId);
-				Firemind.touchAPI.TapGesture.tapCount = 0;
-				Firemind.touchAPI.EventDispatcher.onGestureEvent("doubletap", this.touchOne);
-				
-			}else {
-			
-				Firemind.touchAPI.TapGesture.onEnd();
 				
 			}
-			
-			
+					
+			this.onEnd();
 		}
-				
-		this.onEnd();
-
 	}
 	
 };

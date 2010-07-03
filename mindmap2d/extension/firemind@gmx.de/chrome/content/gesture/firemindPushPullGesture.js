@@ -7,7 +7,7 @@ Firemind.touchAPI.PushPullGesture = {
 	touchOne : null,
 	touchTwo : null,
 	
-	distance : 200,
+	distance : null,
 	
 	onBegin : function(touchOne){
 		this.isRunning = true;
@@ -24,40 +24,46 @@ Firemind.touchAPI.PushPullGesture = {
 	
 	execute : function(currentTouch, touchList){
 	
-		if(this.touchOne == null || Firemind.touchAPI.HoldTapGesture.isRunning || !Firemind.touchAPI.PushPullGesture.isRunning) return;
+		if(!Firemind.touchAPI.HoldTapGesture.isRunning && Firemind.touchAPI.PushPullGesture.isRunning){
 	
-		if(this.touchTwo == null && this.touchOne.id != currentTouch.id){
+			if(this.touchTwo == null && this.touchOne.id != currentTouch.id){
 
-			this.touchTwo = currentTouch;
+				this.touchTwo = currentTouch;
 
-		}else {
-
-			if(this.touchTwo.id == currentTouch.id && touchList[this.touchOne.id] != undefined){
+				var diffX = (this.touchOne.x - this.touchTwo.x);
+				var diffY = (this.touchOne.y - this.touchTwo.y);
+				this.distance = Math.sqrt(diffX * diffX + diffY * diffY);
 				
-				if(Firemind.touchAPI.GestureAdapter.isTouchMoving(this.touchTwo, currentTouch)){
+			}else {
 
-					this.touchTwo = currentTouch;
-			
-					// calculate distance
-					var diffX = (this.touchOne.x - this.touchTwo.x);
-					var diffY = (this.touchOne.y - this.touchTwo.y);
-					var r = Math.sqrt(diffX * diffX + diffY * diffY);
+				if(this.touchTwo.id == currentTouch.id && touchList[this.touchOne.id] != undefined){
 					
-					// calculate angle
-					var b = Math.abs(diffX);
-					var cos = Math.acos(b / r);
-					
-					if(r < this.distance){
-						Firemind.touchAPI.EventDispatcher.onGestureEvent("pushin", this.touchOne, {radius: r, angle: cos});
-					}else if(r > this.distance){
-						Firemind.touchAPI.EventDispatcher.onGestureEvent("pullout", this.touchOne, {radius: r, angle: cos});
+					if(Firemind.touchAPI.GestureAdapter.isTouchMoving(this.touchTwo, currentTouch)){
+
+						this.touchTwo = currentTouch;
+				
+						// calculate distance
+						var diffX = (this.touchOne.x - this.touchTwo.x);
+						var diffY = (this.touchOne.y - this.touchTwo.y);
+						var r = Math.sqrt(diffX * diffX + diffY * diffY);
+						
+						// calculate angle
+						var b = Math.abs(diffX);
+						var cos = Math.acos(b / r);
+						
+						if(r < this.distance){
+							Firemind.touchAPI.EventDispatcher.onGestureEvent("pushin", this.touchOne, {radius: r, angle: cos});
+						}else if(r > this.distance){
+							Firemind.touchAPI.EventDispatcher.onGestureEvent("pullout", this.touchOne, {radius: r, angle: cos});
+						}
+						
+						this.onEnd();
+						
 					}
-					
 				}
 			}
-	
+			
 		}
-
 	}
 	
 };
