@@ -35,8 +35,8 @@ NS_IMPL_ISUPPORTS1(JSCallback, JSCallback)
 JSCallback::JSCallback(){}
 JSCallback::~JSCallback(){}
 
-/* void acceptTouch (in long id_, in long x_, in long y_, in long time_, in long type_); */
-NS_IMETHODIMP JSCallback::AcceptTouch(PRInt32 id_, PRInt32 x_, PRInt32 y_, PRInt32 time_, PRInt32 type_)
+/* void acceptTouch (in long id_, in long clientX_, in long clientY_, in long screenX_, in long screenY_, in long time_, in long type_); */
+NS_IMETHODIMP JSCallback::AcceptTouch(PRInt32 id_, PRInt32 clientX_, PRInt32 clientY_, PRInt32 screenX_, PRInt32 screenY_, PRInt32 time_, PRInt32 type_)
 {
     return NS_OK;
 }
@@ -76,7 +76,7 @@ NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, 
 				(LONG_PTR)TouchSupport::WndProc
 			);
 
-			if(type == 0) // touch
+			if(type == IS_TOUCH_WINDOW) // touch
 				*_retval = RegisterTouchWindow(hWnd, 0); // WIN32 -> 0
 			else // gesture
 				*_retval = true;
@@ -93,7 +93,7 @@ NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, 
 NS_IMETHODIMP TouchSupport::UnregisterWindow(nsIBaseWindow *window, PRBool *_retval)
 {
 	try {
-		if(this->type == 0){ // touch
+		if(this->type == IS_TOUCH_WINDOW){ // touch
 			HWND hWnd = getWindowHWND(window);
 
 			if (hWnd != NULL){
@@ -141,17 +141,22 @@ LRESULT TouchSupport::OnTouch(HWND hWnd, WPARAM wParam, LPARAM lParam )
 				}
 
 				if(type != -1){
-					 tagPOINT point;
+					long screenX = ti.x / 100;
+					long screenY = ti.y / 100;
 
-					point.x = ti.x / 100;
-					point.y = ti.y / 100;
+					tagPOINT client;
 
-					BOOL b = ScreenToClient(hWnd, &point);
+					client.x = screenX;
+					client.y = screenY;
+
+					BOOL b = ScreenToClient(hWnd, &client);
 
 					self->observer->AcceptTouch(
 						ti.dwID,
-						point.x, // convert to screenX
-						point.y, // convert to screenY
+						client.x,
+						client.y,
+						screenX,
+						screenY,
 						ti.dwTime,
 						type
 					);
@@ -181,8 +186,19 @@ LRESULT CALLBACK TouchSupport::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	TouchSupport * self = (TouchSupport*)::GetProp(hWnd, TOUCHSUPPORT_REF_PROP);
 
 	switch(message){
+		case WM_MOUSEFIRST:
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
+		case WM_LBUTTONDBLCLK:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_RBUTTONDBLCLK:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MBUTTONDBLCLK:
+		case WM_XBUTTONDOWN:
+		case WM_XBUTTONUP:
+		case WM_XBUTTONDBLCLK:
 			if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH) { 
 				return 0;
 			}
@@ -190,7 +206,7 @@ LRESULT CALLBACK TouchSupport::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 			CloseGestureInfoHandle((HGESTUREINFO)lParam);
 			return 0;
 		case WM_TOUCH:
-			if(self->type == 0){
+			if(self->type == IS_TOUCH_WINDOW){
 				return TouchSupport::OnTouch(hWnd, wParam, lParam);
 			}
 			CloseTouchInputHandle((HTOUCHINPUT)lParam);

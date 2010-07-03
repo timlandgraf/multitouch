@@ -12,7 +12,15 @@ interface IJSCallback : nsISupports
 	// @param time_ timestamp
 	// @param type_ 0 = touchup, 1 = touchup, 2 = touchmove
 	//
-	void acceptTouch(in long id_, in long x_, in long y_, in long time_, in long type_);
+	void acceptTouch(
+		in long id_, 
+		in long clientX_, 
+		in long clientY_,
+		in long screenX_, 
+		in long screenY_,
+		in long time_, 
+		in long type_
+	);
 };
 
 // Component that registers an firefox window as touchable.

@@ -12,6 +12,8 @@
 
 #define TOUCHSUPPORT_REF_PROP "TOUCHSUPPORT_REF_PROP"
 #define MOUSEEVENTF_FROMTOUCH 0xFF515700
+#define IS_TOUCH_WINDOW 0
+
 
 class JSCallback : public IJSCallback
 {
