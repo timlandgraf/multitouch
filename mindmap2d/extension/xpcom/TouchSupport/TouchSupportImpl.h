@@ -11,6 +11,7 @@
 #include <Winuser.h>
 
 #define TOUCHSUPPORT_REF_PROP "TOUCHSUPPORT_REF_PROP"
+#define MOUSEEVENTF_FROMTOUCH 0xFF515700
 
 class JSCallback : public IJSCallback
 {
@@ -35,6 +36,7 @@ public:
   NS_DECL_ITOUCHSUPPORT
 
   PRInt32 type;
+
   IJSCallback *observer;
   WNDPROC oldProc;
 

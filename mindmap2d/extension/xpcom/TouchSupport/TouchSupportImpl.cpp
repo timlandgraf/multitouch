@@ -49,7 +49,7 @@ TouchSupport::~TouchSupport(){}
 /* long checkTouchCapabilities (); */
 NS_IMETHODIMP TouchSupport::CheckTouchCapabilities(PRInt32 *_retval)
 {
-	*_retval = GetSystemMetrics(SM_DIGITIZER);
+	*_retval = ::GetSystemMetrics(SM_DIGITIZER);
     return NS_OK;
 }
 
@@ -57,7 +57,7 @@ NS_IMETHODIMP TouchSupport::CheckTouchCapabilities(PRInt32 *_retval)
 NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, IJSCallback *observer, PRBool *_retval)
 {
 	try {
-		HWND hWnd = getWindowHWND(window);
+		HWND hWnd = ::getWindowHWND(window);
 
 		if (hWnd != NULL){
 
@@ -181,13 +181,20 @@ LRESULT CALLBACK TouchSupport::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	TouchSupport * self = (TouchSupport*)::GetProp(hWnd, TOUCHSUPPORT_REF_PROP);
 
 	switch(message){
-		/*case WM_LBUTTONDOWN:
-			self->observer->AcceptTouch(
-				1, 1, 1, 1, 1
-			);
-			break;*/
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+			if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH) { 
+				return 0;
+			}
+		case WM_GESTURE:
+			CloseGestureInfoHandle((HGESTUREINFO)lParam);
+			return 0;
 		case WM_TOUCH:
-			return TouchSupport::OnTouch(hWnd, wParam, lParam);
+			if(self->type == 0){
+				return TouchSupport::OnTouch(hWnd, wParam, lParam);
+			}
+			CloseTouchInputHandle((HTOUCHINPUT)lParam);
+			return 0;
 		default: break;
 	}
 
