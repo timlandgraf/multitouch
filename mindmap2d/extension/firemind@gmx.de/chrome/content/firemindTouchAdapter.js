@@ -111,21 +111,27 @@ Firemind.touchAPI.TouchAdapter = {
 	},
 	
 	// wrapps raw touch data into an touch object
-	acceptTouch : function(id_, x_, y_, time_, type_){ 
+	acceptTouch : function(id_, clientX_, clientY_, screenX_, screenY_, time_, type_){ 
 		switch(type_){
 			case Firemind.touchAPI.TouchAdapter.EVENT_TOUCHDOWN : 
 				Firemind.touchAPI.TouchAdapter.EVENTS.onTouchDown(
-					new Firemind.touchAPI.Touch(x_, y_, id_, time_)
+					new Firemind.touchAPI.Touch(
+						clientX_, clientY_, screenX_, screenY_, id_, time_
+					)
 				);
 				return;
 			case Firemind.touchAPI.TouchAdapter.EVENT_TOUCHUP : 
 				Firemind.touchAPI.TouchAdapter.EVENTS.onTouchUp(
-					new Firemind.touchAPI.Touch(x_, y_, id_, time_)
+					new Firemind.touchAPI.Touch(
+						clientX_, clientY_, screenX_, screenY_, id_, time_
+					)
 				);
 				return;
 			case Firemind.touchAPI.TouchAdapter.EVENT_TOUCHMOVE : 
 				Firemind.touchAPI.TouchAdapter.EVENTS.onTouchMove(
-					new Firemind.touchAPI.Touch(x_, y_, id_, time_)
+					new Firemind.touchAPI.Touch(
+						clientX_, clientY_, screenX_, screenY_, id_, time_
+					)
 				);
 				return;
 			default: throw "ERROR: Undefined event of type: " + type_;

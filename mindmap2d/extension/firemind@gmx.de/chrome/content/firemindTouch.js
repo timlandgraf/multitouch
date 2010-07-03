@@ -1,12 +1,18 @@
 Firemind.namespace("touchAPI");
 
-Firemind.touchAPI.Touch = function(x, y, id, time){
+Firemind.touchAPI.Touch = function(clientX, clientY, screenX, screenY, id, time){
 
 	// The x - coordinate of the touch relative to the client viewport.
-	this.x = x;
+	this.clientX = clientX;
 	
 	// The y - coordinate of the touch relative to the client viewport.
-	this.y = y;
+	this.clientY = clientY;
+	
+	// The screens x - coordinate where the touch was executed.
+	this.screenX = screenX;
+	
+	// The screens y - coordinate where the touch was executed.
+	this.screenY = screenY;
 	
 	// The width of the touch contact area.
 	this.cxContact = Firemind.prefs().getIntPref("firemind.touch.contactx");

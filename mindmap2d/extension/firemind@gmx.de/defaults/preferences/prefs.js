@@ -1,4 +1,4 @@
 
-pref("firemind.touch.contactx", 10);
-pref("firemind.touch.contacty", 10);
+pref("firemind.touch.contactx", 15);
+pref("firemind.touch.contacty", 15);
 pref("firemind.touch.url", "");

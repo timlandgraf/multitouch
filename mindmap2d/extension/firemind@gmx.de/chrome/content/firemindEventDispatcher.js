@@ -5,26 +5,47 @@ Firemind.touchAPI.EventDispatcher = {
 	_createEvent : function(eventName, touch, args){
 		var touchevt = Firemind.content.document.createEvent("UIEvents").wrappedJSObject;
 	
-		touchevt.initTouchEvent = function(type, canBubble, cancelable, view, detail, x, y, time, id, args){
+		touchevt.initTouchEvent = function(
+			type, 
+			canBubble, 
+			cancelable, 
+			view, 
+			detail, 
+			clientX, 
+			clientY, 
+			screenX, 
+			screenY, 
+			time, 
+			id, 
+			args){
+			
 			this.wrappedJSObject.initUIEvent(type, canBubble, cancelable, view, detail);
-			this.wrappedJSObject.clientX = x;
-			this.wrappedJSObject.clientY = y;
+			this.wrappedJSObject.clientX = clientX;
+			this.wrappedJSObject.clientY = clientY;
+			this.wrappedJSObject.screenX = screenX;
+			this.wrappedJSObject.screenY = screenY;
 			this.wrappedJSObject.time = time;
 			this.wrappedJSObject.id = id;
 			this.wrappedJSObject.targetEl = Firemind.content.document.elementFromPoint(x, y);
 			
-			this.wrappedJSObject.radius = -1;
-			this.wrappedJSObject.angle = -1;
+			this.wrappedJSObject.radius = (args && args.radius) ? args.radius : -1;
+			this.wrappedJSObject.angle = (args && args.angle) ? args.angle : -1;
 			
-			if(args){
-				for(var key in args){
-					this.wrappedJSObject[key] = args[key];
-				}
-			}
 		};
 
 		touchevt.initTouchEvent(
-			eventName, true, false, Firemind.content, 1, touch.x, touch.y, touch.time, touch.id, args
+			eventName, 
+			true, 
+			false, 
+			Firemind.content, 
+			1, 
+			touch.clientX, 
+			touch.clientY, 
+			touch.screenX, 
+			touch.screenY, 
+			touch.time, 
+			touch.id, 
+			args
 		);
 		
 		return touchevt;
