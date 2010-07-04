@@ -202,6 +202,7 @@ LRESULT CALLBACK TouchSupport::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 			if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH) { 
 				return 0;
 			}
+			break;
 		case WM_GESTURE:
 			CloseGestureInfoHandle((HGESTUREINFO)lParam);
 			return 0;
