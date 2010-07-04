@@ -26,7 +26,7 @@ Firemind.touchAPI.EventDispatcher = {
 			this.wrappedJSObject.screenY = screenY;
 			this.wrappedJSObject.time = time;
 			this.wrappedJSObject.id = id;
-			this.wrappedJSObject.targetEl = Firemind.content.document.elementFromPoint(x, y);
+			this.wrappedJSObject.targetEl = Firemind.content.document.elementFromPoint(clientX, clientY);
 			
 			this.wrappedJSObject.radius = (args && args.radius) ? args.radius : -1;
 			this.wrappedJSObject.angle = (args && args.angle) ? args.angle : -1;
