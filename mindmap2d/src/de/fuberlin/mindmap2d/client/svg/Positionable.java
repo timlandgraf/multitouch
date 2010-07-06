@@ -17,19 +17,19 @@ public interface Positionable {
 	public abstract int getX();
 
 	/**
+	 * Returns the y-coordinate position of the element.
+	 * 
+	 * @return the y-coordinate position in pixels
+	 */
+	public abstract int getY();
+
+	/**
 	 * Sets the x-coordinate position of the element.
 	 * 
 	 * @param x
 	 *            the new x-coordinate position in pixels
 	 */
 	public abstract void setX(int x);
-
-	/**
-	 * Returns the y-coordinate position of the element.
-	 * 
-	 * @return the y-coordinate position in pixels
-	 */
-	public abstract int getY();
 
 	/**
 	 * Sets the y-coordinate position of the element.

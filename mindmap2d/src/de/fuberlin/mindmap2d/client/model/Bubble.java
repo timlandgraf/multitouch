@@ -23,22 +23,17 @@ public class Bubble{
 		listeners = new ArrayList<BubbleListener>();
 	}
 	
-	public String getText(){
-		return(text);
-	}
-	
 	public void addListener(BubbleListener l){
 		if(!listeners.contains(l))
 			listeners.add(l);
 	}
 	
-	public void removeListener(BubbleListener l){
-		listeners.remove(l);
+	public List<Edge> getEdges(){
+		return(edges);
 	}
 	
-	public void setText(String t){
-		text = t;
-		propagateChange();
+	public String getText(){
+		return(text);
 	}
 	
 	public int getX(){
@@ -49,6 +44,19 @@ public class Bubble{
 		return(y);
 	}
 	
+	private void propagateChange(){
+		for(BubbleListener bl:listeners)
+			bl.bubbleChanged(this);
+	}
+	
+	public void remove(){
+		graph.unregisterBubble(this);
+	}
+	
+	public void removeListener(BubbleListener l){
+		listeners.remove(l);
+	}
+	
 	public void setPosition(int x, int y){
 		this.x = x;
 		this.y = y;
@@ -56,17 +64,9 @@ public class Bubble{
 		propagateChange();
 	}
 	
-	public List<Edge> getEdges(){
-		return(edges);
-	}
-	
-	public void remove(){
-		graph.unregisterBubble(this);
-	}
-	
-	private void propagateChange(){
-		for(BubbleListener bl:listeners)
-			bl.bubbleChanged(this);
+	public void setText(String t){
+		text = t;
+		propagateChange();
 	}
 	
 }

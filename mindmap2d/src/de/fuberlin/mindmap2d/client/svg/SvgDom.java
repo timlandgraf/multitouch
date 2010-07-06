@@ -13,31 +13,27 @@ public class SvgDom {
 
 	public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
 
-	public static Element createSVGElementNS(String tag) {
-		return createElementNS(SVG_NS, tag);
+	public static void addTransformProperty(Element element, String property,
+			String value) {
+		String result = "";
+		String[] properties = element.getAttribute("transform").concat(" ").split("\\)\\s");
+
+		for (String prop : properties) {
+			if (!prop.startsWith(property))
+				result = result + prop + " ";
+		}
+		
+		setAttributeNS(element, "transform", result + property + "("
+				+ value + ")");
 	}
 
 	public static native Element createElementNS(String ns, String tag) /*-{
 		return $doc.createElementNS(ns, tag);
 	}-*/;
 
-	public static void setAttributeNS(Element elem, String attr, int value) {
-		setAttributeNS(null, elem, attr, "" + value);
+	public static Element createSVGElementNS(String tag) {
+		return createElementNS(SVG_NS, tag);
 	}
-
-	public static void setAttributeNS(Element elem, String attr, String value) {
-		setAttributeNS(null, elem, attr, value);
-	}
-
-	public static native void setAttributeNS(String uri, Element elem,
-			String attr, String value) /*-{
-		elem.setAttributeNS(uri, attr, value);
-	}-*/;
-
-	public static native void setClassName(Element element, String name) /*-{
-		// See http://newsgroups.cryer.info/mozilla/dev.tech.svg/200803/080318666.html
-		element.className.baseVal = name;
-	}-*/;
 
 	public static native SvgBbox getBBBox(Element element, boolean attached)
 	/*-{
@@ -69,34 +65,27 @@ public class SvgDom {
 		return "";
 	}
 
-	public static void addTransformProperty(Element element, String property,
-			String value) {
-		String result = "";
-		String[] properties = element.getAttribute("transform").concat(" ").split("\\)\\s");
-
-		for (String prop : properties) {
-			if (!prop.startsWith(property))
-				result = result + prop + " ";
+	/**
+	 * Parses a double value from a given String. If this String is null or
+	 * does't contain a parsable double, defaultVal is returned.
+	 * 
+	 * @param value
+	 *            String to be parsed.
+	 * @param defaultVal
+	 * @return
+	 */
+	public static double parseDoubleValue(String value, double defaultVal) {
+		if (value == null) {
+			return defaultVal;
 		}
-		
-		setAttributeNS(element, "transform", result + property + "("
-				+ value + ")");
-	}
-
-	public static void removeTransformProperty(Element element, String property) {
-		String result = "";
-		String[] properties = element.getAttribute("transform").concat(" ").split("\\)\\s");
-
-		for (String prop : properties) {
-			if (!prop.startsWith(property))
-				result = result + prop + " ";
+		if (value.endsWith("px")) {
+			value = value.substring(0, value.length() - 2);
 		}
-		
-		if (result.length() > 1)
-			if (result.charAt(result.length() - 1) == ' ')
-				result = result.substring(0, result.length() - 1);
-
-		setAttributeNS(element, "transfrom", result);
+		try {
+			return Double.parseDouble(value);
+		} catch (NumberFormatException e) {
+			return defaultVal;
+		}
 	}
 
 	/**
@@ -132,28 +121,39 @@ public class SvgDom {
 		}
 	}
 
-	/**
-	 * Parses a double value from a given String. If this String is null or
-	 * does't contain a parsable double, defaultVal is returned.
-	 * 
-	 * @param value
-	 *            String to be parsed.
-	 * @param defaultVal
-	 * @return
-	 */
-	public static double parseDoubleValue(String value, double defaultVal) {
-		if (value == null) {
-			return defaultVal;
+	public static void removeTransformProperty(Element element, String property) {
+		String result = "";
+		String[] properties = element.getAttribute("transform").concat(" ").split("\\)\\s");
+
+		for (String prop : properties) {
+			if (!prop.startsWith(property))
+				result = result + prop + " ";
 		}
-		if (value.endsWith("px")) {
-			value = value.substring(0, value.length() - 2);
-		}
-		try {
-			return Double.parseDouble(value);
-		} catch (NumberFormatException e) {
-			return defaultVal;
-		}
+		
+		if (result.length() > 1)
+			if (result.charAt(result.length() - 1) == ' ')
+				result = result.substring(0, result.length() - 1);
+
+		setAttributeNS(element, "transfrom", result);
 	}
+
+	public static void setAttributeNS(Element elem, String attr, int value) {
+		setAttributeNS(null, elem, attr, "" + value);
+	}
+
+	public static void setAttributeNS(Element elem, String attr, String value) {
+		setAttributeNS(null, elem, attr, value);
+	}
+
+	public static native void setAttributeNS(String uri, Element elem,
+			String attr, String value) /*-{
+		elem.setAttributeNS(uri, attr, value);
+	}-*/;
+
+	public static native void setClassName(Element element, String name) /*-{
+		// See http://newsgroups.cryer.info/mozilla/dev.tech.svg/200803/080318666.html
+		element.className.baseVal = name;
+	}-*/;
 	
 	public static native int suspendRedraw(Element svgroot) /*-{
 		var suspendID = svgroot.suspendRedraw(5000);

@@ -40,21 +40,6 @@ public class SuggestionsDialog extends DialogBox implements ChangeHandler {
 		
     }
 
-	@Override
-	public void onChange(ChangeEvent event){
-		int i = list_box.getSelectedIndex();
-		String v = list_box.getValue(i);
-		bubble.getGraph().addBubbleTo(bubble, v);
-		this.hide();
-	}
-	
-	private void signalServerError(String txt){
-		list_box.clear();
-		list_box.addItem("Server Error");
-		list_box.addItem(txt);
-		GWT.log("Server-error:"+txt);
-	}
-	
 	private void askServer(String txt){
 		txt = txt.replace(" ", "_"); 
 		String url = "/get_suggestions/"+txt+".json";
@@ -94,5 +79,20 @@ public class SuggestionsDialog extends DialogBox implements ChangeHandler {
 		} catch (RequestException e) {
 			signalServerError(e.toString());
 		}
+	}
+	
+	@Override
+	public void onChange(ChangeEvent event){
+		int i = list_box.getSelectedIndex();
+		String v = list_box.getValue(i);
+		bubble.getGraph().addBubbleTo(bubble, v);
+		this.hide();
+	}
+	
+	private void signalServerError(String txt){
+		list_box.clear();
+		list_box.addItem("Server Error");
+		list_box.addItem(txt);
+		GWT.log("Server-error:"+txt);
 	}
 }

@@ -30,22 +30,6 @@ public abstract class Shape extends VectorObject implements Strokeable,
 		setStrokeWidth(1);
 	}
 
-	public int getX() {
-		return SvgDom.parseIntValue(getElement(), "x", 0);
-	}
-
-	public void setX(int x) {
-		SvgDom.setAttributeNS(getElement(), "x", x);
-	}
-
-	public int getY() {
-		return SvgDom.parseIntValue(getElement(), "y", 0);
-	}
-
-	public void setY(int y) {
-		SvgDom.setAttributeNS(getElement(), "y", y);
-	}
-
 	/**
 	 * Returns the current fill color of the element.
 	 * 
@@ -54,6 +38,37 @@ public abstract class Shape extends VectorObject implements Strokeable,
 	 */
 	public String getFillColor() {
 		return getElement().getAttribute("fill");
+	}
+
+	/**
+	 * Returns the fill opacity of the Shape element.
+	 * 
+	 * @return the current fill opacity
+	 */
+	public double getFillOpacity() {
+		return SvgDom.parseDoubleValue(
+				getElement().getAttribute("fill-opacity"), 1);
+	}
+
+	public String getStrokeColor() {
+		return getElement().getAttribute("stroke");
+	}
+
+	public double getStrokeOpacity() {
+		return SvgDom.parseDoubleValue(getElement()
+				.getAttribute("stroke-opacity"), 1);
+	}
+
+	public int getStrokeWidth() {
+		return SvgDom.parseIntValue(getElement(), "stroke-width", 0);
+	}
+
+	public int getX() {
+		return SvgDom.parseIntValue(getElement(), "x", 0);
+	}
+
+	public int getY() {
+		return SvgDom.parseIntValue(getElement(), "y", 0);
 	}
 
 	/**
@@ -79,16 +94,6 @@ public abstract class Shape extends VectorObject implements Strokeable,
 	}
 
 	/**
-	 * Returns the fill opacity of the Shape element.
-	 * 
-	 * @return the current fill opacity
-	 */
-	public double getFillOpacity() {
-		return SvgDom.parseDoubleValue(
-				getElement().getAttribute("fill-opacity"), 1);
-	}
-
-	/**
 	 * Sets the fill opacity of the Shape element. The initial value 1.0 means
 	 * fully opaque fill. On the other hand, value 0.0 means fully transparent
 	 * paint.
@@ -98,31 +103,6 @@ public abstract class Shape extends VectorObject implements Strokeable,
 	 */
 	public void setFillOpacity(double opacity) {
 		SvgDom.setAttributeNS(getElement(), "fill-opacity", "" + opacity);
-	}
-
-	public String getStrokeColor() {
-		return getElement().getAttribute("stroke");
-	}
-
-	public void setStrokeColor(String color) {
-		SvgDom.setAttributeNS(getElement(), "stroke", color);
-	}
-
-	public int getStrokeWidth() {
-		return SvgDom.parseIntValue(getElement(), "stroke-width", 0);
-	}
-
-	public void setStrokeWidth(int width) {
-		SvgDom.setAttributeNS(getElement(), "stroke-width", width);
-	}
-
-	public double getStrokeOpacity() {
-		return SvgDom.parseDoubleValue(getElement()
-				.getAttribute("stroke-opacity"), 1);
-	}
-
-	public void setStrokeOpacity(double opacity) {
-		SvgDom.setAttributeNS(getElement(), "stroke-opacity", "" + opacity);
 	}
 
 	//TODO: ???
@@ -141,5 +121,25 @@ public abstract class Shape extends VectorObject implements Strokeable,
 		} else if ("rotation".equals(property)) {
 			setRotation((int) value);
 		}
+	}
+
+	public void setStrokeColor(String color) {
+		SvgDom.setAttributeNS(getElement(), "stroke", color);
+	}
+
+	public void setStrokeOpacity(double opacity) {
+		SvgDom.setAttributeNS(getElement(), "stroke-opacity", "" + opacity);
+	}
+
+	public void setStrokeWidth(int width) {
+		SvgDom.setAttributeNS(getElement(), "stroke-width", width);
+	}
+
+	public void setX(int x) {
+		SvgDom.setAttributeNS(getElement(), "x", x);
+	}
+
+	public void setY(int y) {
+		SvgDom.setAttributeNS(getElement(), "y", y);
 	}
 }

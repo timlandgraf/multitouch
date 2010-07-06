@@ -19,12 +19,12 @@ public class Repulsion implements GraphChangeListener, BubbleListener{
 		do_repulsion(b);
 	}
 	
-	public void bubbleRemoved(Bubble b){
-		b.removeListener(this);
-	}
-	
 	public void bubbleChanged(Bubble b){
 		do_repulsion(b);
+	}
+	
+	public void bubbleRemoved(Bubble b){
+		b.removeListener(this);
 	}
 	
 	

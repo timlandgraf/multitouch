@@ -31,14 +31,9 @@ public class MoveTo extends ClosePath {
 		this.y = y;
 	}
 
-	/**
-	 * Returns true if coordinates relative. False means that coordinates are
-	 * absolute.
-	 * 
-	 * @return true of coordinates are relative
-	 */
-	public boolean isRelativeCoords() {
-		return relativeCoords;
+	@Override
+	public String getSVGString() {
+		return isRelativeCoords() ? "m" : "M" + getX() + " " + getY();
 	}
 
 	/**
@@ -59,8 +54,13 @@ public class MoveTo extends ClosePath {
 		return y;
 	}
 
-	@Override
-	public String getSVGString() {
-		return isRelativeCoords() ? "m" : "M" + getX() + " " + getY();
+	/**
+	 * Returns true if coordinates relative. False means that coordinates are
+	 * absolute.
+	 * 
+	 * @return true of coordinates are relative
+	 */
+	public boolean isRelativeCoords() {
+		return relativeCoords;
 	}
 }

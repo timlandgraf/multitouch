@@ -9,11 +9,31 @@ import com.google.gwt.user.client.Window;
 import de.fuberlin.mindmap2d.client.gui.UserInterface;
 import de.fuberlin.mindmap2d.client.model.Bubble;
 import de.fuberlin.mindmap2d.client.model.Graph;
+import de.fuberlin.mindmap2d.client.touch.TouchService;
 
 public class MindMap2D implements EntryPoint {
 	UserInterface ui;
 
+	//disables the Same-Origin-Policy
+	//Da wir unsern kram nicht signieren muss beim firefox inner config 
+	//signed.applets.codebase_principal_support=true gesetzt sein.
+	private native void disableSOP() /*-{
+		if (navigator.userAgent.indexOf("Firefox") != -1) {
+			try {
+				netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+			} 
+			catch (e) {
+				alert("Permission UniversalBrowserRead denied -- not running Mozilla?");
+			}
+		}
+	}-*/;
+	
+	private void myCallback() {
+		Window.alert("callback");
+	}
+	
 	public void onModuleLoad() {
+		
 		ui = UserInterface.getUI();
 
 		//disableSOP();
@@ -38,36 +58,5 @@ public class MindMap2D implements EntryPoint {
 		Bubble b3 = model.createBubble("Test 2", +100, 00);
 		model.createEdge(b1, b2);
 		model.createEdge(b1, b3);
-		
-		// muss noch mit Maik geklärt werden
-		//registerMT(canvas.getElement());
 	}
-	
-	//disables the Same-Origin-Policy
-	//Da wir unsern kram nicht signieren muss beim firefox inner config 
-	//signed.applets.codebase_principal_support=true gesetzt sein.
-	private native void disableSOP() /*-{
-		if (navigator.userAgent.indexOf("Firefox") != -1) {
-			try {
-				netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-			} 
-			catch (e) {
-				alert("Permission UniversalBrowserRead denied -- not running Mozilla?");
-			}
-		}
-	}-*/;
-	
-	private void myCallback() {
-		Window.alert("callback");
-	}
-
-	private native void registerMT(Element svgroot) /*-{
-		svgroot.onTouchDown = this.@de.fuberlin.mindmap2d.client.MindMap2D::myCallback();
-		//$wnd.addListener("onTouchDown", svgroot);
-		//addListener("onTouchDown", svgroot);0        
-		alert("registerMT called");
-		alert(svgroot.onTouchDown);
-		alert(svgroot);
-	}-*/;
-	
 }

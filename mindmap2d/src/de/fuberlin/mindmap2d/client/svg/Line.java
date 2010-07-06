@@ -39,6 +39,19 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 		return SvgDom.createSVGElementNS("line");
 	}
 
+	public String getStrokeColor() {
+		return getElement().getAttribute("stroke");
+	}
+
+	public double getStrokeOpacity() {
+		return SvgDom.parseDoubleValue(getElement()
+				.getAttribute("stroke-opacity"), 1);
+	}
+
+	public int getStrokeWidth() {
+		return SvgDom.parseIntValue(getElement(), "stroke-width", 0);
+	}
+
 	/**
 	 * Returns the x-coordinate position of the starting point of Line.
 	 * 
@@ -46,35 +59,6 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 */
 	public int getX1() {
 		return SvgDom.parseIntValue(getElement(), "x1", 0);
-	}
-
-	/**
-	 * Sets the x-coordinate position of the starting point of Line.
-	 * 
-	 * @param x1
-	 *            the new x-coordinate in pixels
-	 */
-	public void setX1(int x1) {
-		SvgDom.setAttributeNS(getElement(), "x1", x1);
-	}
-
-	/**
-	 * Returns the y-coordinate position of the starting point of Line.
-	 * 
-	 * @return the y-coordinate in pixels
-	 */
-	public int getY1() {
-		return SvgDom.parseIntValue(getElement(), "y1", 0);
-	}
-
-	/**
-	 * Sets the y-coordinate position of the starting point of Line.
-	 * 
-	 * @param y1
-	 *            the new y-coordinate in pixels
-	 */
-	public void setY1(int y1) {
-		SvgDom.setAttributeNS(getElement(), "y1", y1);
 	}
 
 	/**
@@ -87,13 +71,12 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	}
 
 	/**
-	 * Sets the y-coordinate position of the ending point of Line.
+	 * Returns the y-coordinate position of the starting point of Line.
 	 * 
-	 * @param x2
-	 *            the new x-coordinate in pixels
+	 * @return the y-coordinate in pixels
 	 */
-	public void setX2(int x2) {
-		SvgDom.setAttributeNS(getElement(), "x2", x2);
+	public int getY1() {
+		return SvgDom.parseIntValue(getElement(), "y1", 0);
 	}
 
 	/**
@@ -103,41 +86,6 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 	 */
 	public int getY2() {
 		return SvgDom.parseIntValue(getElement(), "y2", 0);
-	}
-
-	/**
-	 * Sets the y-coordinate position of the ending point of Line.
-	 * 
-	 * @param y2
-	 *            the new x-coordinate in pixels
-	 */
-	public void setY2(int y2) {
-		SvgDom.setAttributeNS(getElement(), "y2", y2);
-	}
-
-	public String getStrokeColor() {
-		return getElement().getAttribute("stroke");
-	}
-
-	public void setStrokeColor(String color) {
-		SvgDom.setAttributeNS(getElement(), "stroke", color);
-	}
-
-	public int getStrokeWidth() {
-		return SvgDom.parseIntValue(getElement(), "stroke-width", 0);
-	}
-
-	public void setStrokeWidth(int width) {
-		SvgDom.setAttributeNS(getElement(), "stroke-width", width);
-	}
-
-	public double getStrokeOpacity() {
-		return SvgDom.parseDoubleValue(getElement()
-				.getAttribute("stroke-opacity"), 1);
-	}
-
-	public void setStrokeOpacity(double opacity) {
-		SvgDom.setAttributeNS(getElement(), "stroke-opacity", "" + opacity);
 	}
 
 	//TODO:Opacity
@@ -158,5 +106,57 @@ public class Line extends VectorObject implements Strokeable, Animatable {
 		} else if ("rotation".equals(property)) {
 			setRotation((int) value);
 		}
+	}
+
+	public void setStrokeColor(String color) {
+		SvgDom.setAttributeNS(getElement(), "stroke", color);
+	}
+
+	public void setStrokeOpacity(double opacity) {
+		SvgDom.setAttributeNS(getElement(), "stroke-opacity", "" + opacity);
+	}
+
+	public void setStrokeWidth(int width) {
+		SvgDom.setAttributeNS(getElement(), "stroke-width", width);
+	}
+
+	/**
+	 * Sets the x-coordinate position of the starting point of Line.
+	 * 
+	 * @param x1
+	 *            the new x-coordinate in pixels
+	 */
+	public void setX1(int x1) {
+		SvgDom.setAttributeNS(getElement(), "x1", x1);
+	}
+
+	/**
+	 * Sets the y-coordinate position of the ending point of Line.
+	 * 
+	 * @param x2
+	 *            the new x-coordinate in pixels
+	 */
+	public void setX2(int x2) {
+		SvgDom.setAttributeNS(getElement(), "x2", x2);
+	}
+
+	/**
+	 * Sets the y-coordinate position of the starting point of Line.
+	 * 
+	 * @param y1
+	 *            the new y-coordinate in pixels
+	 */
+	public void setY1(int y1) {
+		SvgDom.setAttributeNS(getElement(), "y1", y1);
+	}
+
+	/**
+	 * Sets the y-coordinate position of the ending point of Line.
+	 * 
+	 * @param y2
+	 *            the new x-coordinate in pixels
+	 */
+	public void setY2(int y2) {
+		SvgDom.setAttributeNS(getElement(), "y2", y2);
 	}
 }

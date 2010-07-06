@@ -39,6 +39,26 @@ public class Animate {
 		this.duration = duration;
 	}
 
+	public int getDuration() {
+		return duration;
+	}
+
+	public double getEndValue() {
+		return endValue;
+	}
+	
+	public String getProperty() {
+		return property;
+	}
+
+	public double getStartValue() {
+		return startValue;
+	}
+
+	public Animatable getTarget() {
+		return target;
+	}
+
 	/**
 	 * Start the animation.
 	 */
@@ -51,26 +71,6 @@ public class Animate {
 	 */
 	public void stop() {
 		animation.cancel();
-	}
-	
-	public Animatable getTarget() {
-		return target;
-	}
-
-	public String getProperty() {
-		return property;
-	}
-
-	public double getStartValue() {
-		return startValue;
-	}
-
-	public double getEndValue() {
-		return endValue;
-	}
-
-	public int getDuration() {
-		return duration;
 	}
 
 }

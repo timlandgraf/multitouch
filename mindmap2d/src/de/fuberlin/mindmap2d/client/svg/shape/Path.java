@@ -58,157 +58,29 @@ public class Path extends Shape {
 		moveTo(x, y);
 	}
 
+	public void arc(int rx, int ry, int xAxisRotation, boolean largeArc,
+			boolean sweep, int x, int y) {
+		steps.add(new Arc(false, rx, ry, xAxisRotation, largeArc, sweep, x, y));
+		drawPath();
+	}
+	
+	public void arcRelatively(int rx, int ry, int xAxisRotation,
+			boolean largeArc, boolean sweep, int x, int y) {
+		steps.add(new Arc(true, rx, ry, xAxisRotation, largeArc, sweep, x, y));
+		drawPath();
+	}
+
+	/**
+	 * Close the path.
+	 */
+	public void close() {
+		steps.add(new ClosePath());
+		drawPath();
+	}
+
 	@Override
 	protected Element createElement() {
 		return SvgDom.createSVGElementNS("path");
-	}
-	
-	@Override
-	public int getX() {
-		return ((MoveTo) steps.get(0)).getX();
-	}
-
-	@Override
-	public void setX(int x) {
-		steps.set(0, new MoveTo(false, x, getY()));
-		drawPath();
-	}
-
-	@Override
-	public int getY() {
-		return ((MoveTo) steps.get(0)).getY();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vaadin.gwtgraphics.client.Shape#setY(int)
-	 */
-	@Override
-	public void setY(int y) {
-		steps.set(0, new MoveTo(false, getX(), y));
-		drawPath();
-	}
-
-	/**
-	 * Sets PathStep at the specified position.
-	 * 
-	 * @param index
-	 *            the index of the PathStep element to set
-	 * @param step
-	 *            PathStep to be stored at the specified position
-	 * @throws IllegalArgumentException
-	 */
-	public void setStep(int index, PathStep step)
-			throws IllegalArgumentException {
-		if (index == 0
-				&& !(step instanceof MoveTo || ((MoveTo) step)
-						.isRelativeCoords())) {
-			throw new IllegalArgumentException(
-					"The first step must be an absolute MoveTo step.");
-		} else {
-			steps.set(index, step);
-			drawPath();
-		}
-	}
-
-	/**
-	 * Removes the PathStep element at the specified position. Shifts any
-	 * subsequent elements to the left.
-	 * 
-	 * @param index
-	 *            the index of the PathStep element to removed
-	 */
-	public void removeStep(int index) {
-		steps.remove(index);
-		drawPath();
-	}
-
-	/**
-	 * Returns the number of PathSteps in this Path.
-	 * 
-	 * @return the number of PathSteps in this Path.
-	 */
-	public int getStepCount() {
-		return steps.size();
-	}
-
-	/**
-	 * Returns the PathStep element at the specified position.
-	 * 
-	 * @param index
-	 *            index of element to return.
-	 * @return the PathStep element at the specified position.
-	 */
-	public PathStep getStep(int index) {
-		return steps.get(index);
-	}
-
-	/**
-	 * Start a new sub-path at the given absolute point.
-	 * 
-	 * @param x
-	 *            an absolute x-coordinate in pixels
-	 * @param y
-	 *            an absolute y-coordinate in pixels
-	 */
-	public void moveTo(int x, int y) {
-		steps.add(new MoveTo(false, x, y));
-		drawPath();
-	}
-
-	/**
-	 * Start a new sub-path at the given relative point.
-	 * 
-	 * @param x
-	 *            a relative x-coordinate in pixels
-	 * @param y
-	 *            a relative y-coordinate in pixels
-	 */
-	public void moveRelativelyTo(int x, int y) {
-		steps.add(new MoveTo(true, x, y));
-		drawPath();
-	}
-
-	/**
-	 * Draw a line from the current point to the given absolute point.
-	 * 
-	 * @param x
-	 *            an absolute x-coordinate in pixels
-	 * @param y
-	 *            an absolute y-coordinate in pixels
-	 */
-	public void lineTo(int x, int y) {
-		steps.add(new LineTo(false, x, y));
-		drawPath();
-	}
-
-	/**
-	 * Draw a line from the current point to the given relative point.
-	 * 
-	 * @param x
-	 *            a relative x-coordinate in pixels
-	 * @param y
-	 *            a relative y-coordinate in pixels
-	 */
-	public void lineRelativelyTo(int x, int y) {
-		steps.add(new LineTo(true, x, y));
-		drawPath();
-	}
-
-	/**
-	 * Draws a cubic BŽzier curve.
-	 * 
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param x
-	 * @param y
-	 */
-	public void curveTo(int x1, int y1, int x2, int y2, int x, int y) {
-		steps.add(new CurveTo(false, x1, y1, x2, y2, x, y));
-		drawPath();
 	}
 
 	/**
@@ -226,23 +98,18 @@ public class Path extends Shape {
 		drawPath();
 	}
 
-	public void arc(int rx, int ry, int xAxisRotation, boolean largeArc,
-			boolean sweep, int x, int y) {
-		steps.add(new Arc(false, rx, ry, xAxisRotation, largeArc, sweep, x, y));
-		drawPath();
-	}
-
-	public void arcRelatively(int rx, int ry, int xAxisRotation,
-			boolean largeArc, boolean sweep, int x, int y) {
-		steps.add(new Arc(true, rx, ry, xAxisRotation, largeArc, sweep, x, y));
-		drawPath();
-	}
-
 	/**
-	 * Close the path.
+	 * Draws a cubic BŽzier curve.
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @param x
+	 * @param y
 	 */
-	public void close() {
-		steps.add(new ClosePath());
+	public void curveTo(int x1, int y1, int x2, int y2, int x, int y) {
+		steps.add(new CurveTo(false, x1, y1, x2, y2, x, y));
 		drawPath();
 	}
 
@@ -280,5 +147,138 @@ public class Path extends Shape {
 		}
 
 		SvgDom.setAttributeNS(getElement(), "d", path.toString());
+	}
+
+	/**
+	 * Returns the PathStep element at the specified position.
+	 * 
+	 * @param index
+	 *            index of element to return.
+	 * @return the PathStep element at the specified position.
+	 */
+	public PathStep getStep(int index) {
+		return steps.get(index);
+	}
+
+	/**
+	 * Returns the number of PathSteps in this Path.
+	 * 
+	 * @return the number of PathSteps in this Path.
+	 */
+	public int getStepCount() {
+		return steps.size();
+	}
+
+	@Override
+	public int getX() {
+		return ((MoveTo) steps.get(0)).getX();
+	}
+
+	@Override
+	public int getY() {
+		return ((MoveTo) steps.get(0)).getY();
+	}
+
+	/**
+	 * Draw a line from the current point to the given relative point.
+	 * 
+	 * @param x
+	 *            a relative x-coordinate in pixels
+	 * @param y
+	 *            a relative y-coordinate in pixels
+	 */
+	public void lineRelativelyTo(int x, int y) {
+		steps.add(new LineTo(true, x, y));
+		drawPath();
+	}
+
+	/**
+	 * Draw a line from the current point to the given absolute point.
+	 * 
+	 * @param x
+	 *            an absolute x-coordinate in pixels
+	 * @param y
+	 *            an absolute y-coordinate in pixels
+	 */
+	public void lineTo(int x, int y) {
+		steps.add(new LineTo(false, x, y));
+		drawPath();
+	}
+
+	/**
+	 * Start a new sub-path at the given relative point.
+	 * 
+	 * @param x
+	 *            a relative x-coordinate in pixels
+	 * @param y
+	 *            a relative y-coordinate in pixels
+	 */
+	public void moveRelativelyTo(int x, int y) {
+		steps.add(new MoveTo(true, x, y));
+		drawPath();
+	}
+
+	/**
+	 * Start a new sub-path at the given absolute point.
+	 * 
+	 * @param x
+	 *            an absolute x-coordinate in pixels
+	 * @param y
+	 *            an absolute y-coordinate in pixels
+	 */
+	public void moveTo(int x, int y) {
+		steps.add(new MoveTo(false, x, y));
+		drawPath();
+	}
+
+	/**
+	 * Removes the PathStep element at the specified position. Shifts any
+	 * subsequent elements to the left.
+	 * 
+	 * @param index
+	 *            the index of the PathStep element to removed
+	 */
+	public void removeStep(int index) {
+		steps.remove(index);
+		drawPath();
+	}
+
+	/**
+	 * Sets PathStep at the specified position.
+	 * 
+	 * @param index
+	 *            the index of the PathStep element to set
+	 * @param step
+	 *            PathStep to be stored at the specified position
+	 * @throws IllegalArgumentException
+	 */
+	public void setStep(int index, PathStep step)
+			throws IllegalArgumentException {
+		if (index == 0
+				&& !(step instanceof MoveTo || ((MoveTo) step)
+						.isRelativeCoords())) {
+			throw new IllegalArgumentException(
+					"The first step must be an absolute MoveTo step.");
+		} else {
+			steps.set(index, step);
+			drawPath();
+		}
+	}
+
+	@Override
+	public void setX(int x) {
+		steps.set(0, new MoveTo(false, x, getY()));
+		drawPath();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.vaadin.gwtgraphics.client.Shape#setY(int)
+	 */
+	@Override
+	public void setY(int y) {
+		steps.set(0, new MoveTo(false, getX(), y));
+		drawPath();
 	}
 }

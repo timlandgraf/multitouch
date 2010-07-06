@@ -20,32 +20,228 @@ import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.VectorObject.TransfromValue;
 import de.fuberlin.mindmap2d.client.svg.shape.Circle;
 import de.fuberlin.mindmap2d.client.svg.shape.Text;
+import de.fuberlin.mindmap2d.client.touch.events.MoveGestureEvent;
+import de.fuberlin.mindmap2d.client.touch.events.MoveGestureHandler;
 
 import com.google.gwt.user.client.Random;
 
 
 public class GraphView implements GraphChangeListener {
+	public class BubbleView extends InteractiveElement implements
+			BubbleListener, DoubleClickHandler, MoveGestureHandler {
+
+		public int x, y;
+
+		private GraphView graphView;
+		private Bubble model;
+		private Circle circle;
+		private Text text;
+		private List<EdgeView> edgeList;
+
+		public BubbleView(Bubble model, GraphView graphView) {
+			this.model = model;
+			this.graphView = graphView;
+			edgeList = new ArrayList<EdgeView>();
+			model.addListener(this);
+
+			circle = new Circle(0, 0, 50);
+			circle.setStrokeColor(Configurator.bubbleStrokeColor);
+			circle.setStrokeWidth(3);
+			group.add(circle);
+			text = new Text(0, 0, "");
+			text.setFillColor("black");
+			text.setStrokeWidth(0);
+			text.setTextAnchorMiddle();
+			group.add(text);
+			group.addDoubleClickHandler(this);
+			group.addMoveGestureHandler(this);
+
+			update();
+		}
+
+		public void addEdge(EdgeView e) {
+			if (!edgeList.contains(e))
+				edgeList.add(e);
+		}
+
+		@Override
+		public void bubbleChanged(Bubble b) {
+			update();
+		}
+
+		public GraphView getGraph(){
+			return graphView;
+		}
+
+		public Bubble getModel() {
+			return model;
+		}
+
+		public TransfromValue getRealPosition(){
+			TransfromValue trans = canvas.getTranslation();
+			trans.x += this.x;
+			trans.y += this.y;
+			return trans;
+		}
+
+		public String getText() {
+			return text.getText();
+		}
+
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+			event.preventDefault();
+			super.onContextMenu(event);
+		}
+
+		@Override
+		public void onDoubleClick(DoubleClickEvent event) {
+			NewBubbleDialog d = new NewBubbleDialog(this);
+			d.center(); //show
+		}
+		
+		@Override
+		public void onMouseDown(MouseDownEvent event){
+			if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT){
+				UserInterface.getUI().openContextMenu(this);
+				event.stopPropagation();
+				return;
+			}else{
+				DOM.setCapture(group.getElement());
+			}
+			super.onMouseDown(event);
+		}
+
+		@Override
+		public void onMouseMove(MouseMoveEvent event) {
+			super.onMouseMove(event);
+			
+			int id = SvgDom.suspendRedraw(drawingArea.getSVGElement());
+			
+			if (state == State.MOVING) {
+				TransfromValue value = graphView.canvas.getTranslation();
+				int x = event.getClientX() - (int) value.x;
+				int y = event.getClientY() - (int) value.y;
+				model.setPosition(x, y);
+			}
+			SvgDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
+		}
+		
+		@Override
+		public void onMouseUp(MouseUpEvent event) {
+			super.onMouseUp(event);
+			DOM.releaseCapture(group.getElement());
+		}
+
+		public void remove() {
+			super.remove();
+		}
+		
+		protected void removeEdge(EdgeView e) {
+			edgeList.remove(e);
+		}
+
+		public void setPosition(int x, int y) {
+			this.x = x;
+			this.y = y;
+			circle.setX(x);
+			circle.setY(y);
+			text.setX(x);
+			text.setY(y + 5);
+
+			for (EdgeView e : edgeList)
+				e.update();
+		}
+
+		public void setState(State s) {
+			this.state = s;
+			switch (s) {
+			case NORMAL:
+				circle.setFillColor(Configurator.bubbleNormalFillColor);
+				break;
+			case HIGHLIGHTED:
+				circle.setFillColor(Configurator.bubbleHighlightedColor);
+				break;
+			case MOUSEDOWN:
+			case MOVING:
+				circle.setFillColor(Configurator.bubbleHighlightedColor);
+				break;
+			}
+		}
+
+		public void setText(String t) {
+			model.setText(t);
+		}
+
+		public void toFront() {
+			graphView.canvas.pop(group);
+		}
+
+		public void update() {
+			setPosition(model.getX(), model.getY());
+			text.setText(model.getText());
+		}
+
+		@Override
+		public void onMoveTouch(MoveGestureEvent event) {
+			int id = SvgDom.suspendRedraw(drawingArea.getSVGElement());
+			
+			TransfromValue value = graphView.canvas.getTranslation();
+			int x = event.getClientX() - (int) value.x;
+			int y = event.getClientY() - (int) value.y;
+			model.setPosition(x, y);
+				
+			SvgDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
+		}
+	}
+	public class EdgeView {
+		private BubbleView bubbleA, bubbleB;
+		private Edge model;
+		private Group canvas;
+		private Line line;
+
+		public EdgeView(BubbleView bubbleA, BubbleView bubbleB, Edge model) {
+			this.bubbleA = bubbleA;
+			this.bubbleB = bubbleB;
+			this.model = model;
+			bubbleA.addEdge(this);
+			bubbleB.addEdge(this);
+		}
+
+		public void addToThis(Group canvas) {
+			this.canvas = canvas;
+			line = new Line(0, 0, 0, 0);
+			line.setStrokeColor(Configurator.edgeColor);
+			update();
+			canvas.add(line);
+			bubbleA.toFront();
+			bubbleB.toFront();
+		}
+
+		public void remove() {
+			canvas.remove(line);
+			bubbleA.removeEdge(this);
+			bubbleB.removeEdge(this);
+		}
+
+		public void update() {
+			line.setX1(bubbleA.x);
+			line.setY1(bubbleA.y);
+			line.setX2(bubbleB.x);
+			line.setY2(bubbleB.y);
+		}
+	}
 	private Graph model;
 	private DrawingArea drawingArea;
 	private Group canvas;
-	private List<BubbleView> bubbles = new ArrayList<BubbleView>();
-	private List<EdgeView> edges = new ArrayList<EdgeView>();
 
+	private List<BubbleView> bubbles = new ArrayList<BubbleView>();
+
+	private List<EdgeView> edges = new ArrayList<EdgeView>();
+	
 	public GraphView() {
 		this.canvas = new Group();
 		this.canvas.setStyleName("graph");
-	}
-
-	public void addThisTo(DrawingArea canvas){
-		this.canvas.setTranslation(canvas.getWidth() / 2,
-				canvas.getHeight() / 2);
-		canvas.add(this.canvas);
-		drawingArea = canvas;
-	}
-	
-	public void move(int dx, int dy){
-		TransfromValue value = canvas.getTranslation();
-		canvas.setTranslation(value.x + dx, value.y + dy);
 	}
 	
 	public void addBubbleTo(BubbleView oldBubble,String text){
@@ -57,31 +253,11 @@ public class GraphView implements GraphChangeListener {
 		model.createEdge(oldBubble.model, newBubble);
 	}
 	
-	public void setModel(Graph model) {
-		if (model != null) {
-			model.removeListerner(this);
-			removeAll();
-		}
-
-		this.model = model;
-		model.addListerner(this);
-
-		for (Bubble b : model.getBubbles())
-			bubbleAdded(b);
-
-		for (Edge e : model.getEdges())
-			edgeAdded(e);
-	}
-
-	public void removeAll() {
-		for (BubbleView b : bubbles)
-			b.remove();
-
-		for (EdgeView e : edges)
-			e.remove();
-
-		bubbles.clear();
-		edges.clear();
+	public void addThisTo(DrawingArea canvas){
+		this.canvas.setTranslation(canvas.getWidth() / 2,
+				canvas.getHeight() / 2);
+		canvas.add(this.canvas);
+		drawingArea = canvas;
 	}
 
 	@Override
@@ -151,196 +327,35 @@ public class GraphView implements GraphChangeListener {
 		return null;
 	}
 
-	public class BubbleView extends InteractiveElement implements
-			BubbleListener, DoubleClickHandler {
-
-		public int x, y;
-
-		private GraphView graphView;
-		private Bubble model;
-		private Circle circle;
-		private Text text;
-		private List<EdgeView> edgeList;
-
-		public BubbleView(Bubble model, GraphView graphView) {
-			this.model = model;
-			this.graphView = graphView;
-			edgeList = new ArrayList<EdgeView>();
-			model.addListener(this);
-
-			circle = new Circle(0, 0, 50);
-			circle.setStrokeColor(Configurator.bubbleStrokeColor);
-			circle.setStrokeWidth(3);
-			group.add(circle);
-			text = new Text(0, 0, "");
-			text.setFillColor("black");
-			text.setStrokeWidth(0);
-			text.setTextAnchorMiddle();
-			group.add(text);
-			group.addDoubleClickHandler(this);
-
-			update();
-		}
-
-		public void toFront() {
-			graphView.canvas.pop(group);
-		}
-
-		public String getText() {
-			return text.getText();
-		}
-
-		public void setText(String t) {
-			model.setText(t);
-		}
-
-		public void addEdge(EdgeView e) {
-			if (!edgeList.contains(e))
-				edgeList.add(e);
-		}
-
-		public void setState(State s) {
-			this.state = s;
-			switch (s) {
-			case NORMAL:
-				circle.setFillColor(Configurator.bubbleNormalFillColor);
-				break;
-			case HIGHLIGHTED:
-				circle.setFillColor(Configurator.bubbleHighlightedColor);
-				break;
-			case MOUSEDOWN:
-			case MOVING:
-				circle.setFillColor(Configurator.bubbleHighlightedColor);
-				break;
-			}
-		}
-
-		public void remove() {
-			super.remove();
-		}
-
-		protected void removeEdge(EdgeView e) {
-			edgeList.remove(e);
-		}
-
-		public void update() {
-			setPosition(model.getX(), model.getY());
-			text.setText(model.getText());
-		}
-		
-		public TransfromValue getRealPosition(){
-			TransfromValue trans = canvas.getTranslation();
-			trans.x += this.x;
-			trans.y += this.y;
-			return trans;
-		}
-
-		public void setPosition(int x, int y) {
-			this.x = x;
-			this.y = y;
-			circle.setX(x);
-			circle.setY(y);
-			text.setX(x);
-			text.setY(y + 5);
-
-			for (EdgeView e : edgeList)
-				e.update();
-		}
-		
-		public GraphView getGraph(){
-			return graphView;
-		}
-
-		@Override
-		public void bubbleChanged(Bubble b) {
-			update();
-		}
-		
-		@Override
-		public void onMouseDown(MouseDownEvent event){
-			if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT){
-				UserInterface.getUI().openContextMenu(this);
-				event.stopPropagation();
-				return;
-			}else{
-				DOM.setCapture(group.getElement());
-			}
-			super.onMouseDown(event);
-		}
-
-		@Override
-		public void onMouseMove(MouseMoveEvent event) {
-			super.onMouseMove(event);
-			
-			int id = SvgDom.suspendRedraw(drawingArea.getSVGElement());
-			
-			if (state == State.MOVING) {
-				TransfromValue value = graphView.canvas.getTranslation();
-				int x = event.getClientX() - (int) value.x;
-				int y = event.getClientY() - (int) value.y;
-				model.setPosition(x, y);
-			}
-			SvgDom.unsuspendRedraw(drawingArea.getSVGElement(),id);
-		}
-
-		@Override
-		public void onMouseUp(MouseUpEvent event) {
-			super.onMouseUp(event);
-			DOM.releaseCapture(group.getElement());
-		}
-
-		@Override
-		public void onDoubleClick(DoubleClickEvent event) {
-			NewBubbleDialog d = new NewBubbleDialog(this);
-			d.center(); //show
-		}
-
-		public Bubble getModel() {
-			return model;
-		}
-
-		@Override
-		public void onContextMenu(ContextMenuEvent event) {
-			event.preventDefault();
-			super.onContextMenu(event);
-		}
+	public void move(int dx, int dy){
+		TransfromValue value = canvas.getTranslation();
+		canvas.setTranslation(value.x + dx, value.y + dy);
 	}
 
-	public class EdgeView {
-		private BubbleView bubbleA, bubbleB;
-		private Edge model;
-		private Group canvas;
-		private Line line;
+	public void removeAll() {
+		for (BubbleView b : bubbles)
+			b.remove();
 
-		public EdgeView(BubbleView bubbleA, BubbleView bubbleB, Edge model) {
-			this.bubbleA = bubbleA;
-			this.bubbleB = bubbleB;
-			this.model = model;
-			bubbleA.addEdge(this);
-			bubbleB.addEdge(this);
+		for (EdgeView e : edges)
+			e.remove();
+
+		bubbles.clear();
+		edges.clear();
+	}
+
+	public void setModel(Graph model) {
+		if (model != null) {
+			model.removeListerner(this);
+			removeAll();
 		}
 
-		public void addToThis(Group canvas) {
-			this.canvas = canvas;
-			line = new Line(0, 0, 0, 0);
-			line.setStrokeColor(Configurator.edgeColor);
-			update();
-			canvas.add(line);
-			bubbleA.toFront();
-			bubbleB.toFront();
-		}
+		this.model = model;
+		model.addListerner(this);
 
-		public void remove() {
-			canvas.remove(line);
-			bubbleA.removeEdge(this);
-			bubbleB.removeEdge(this);
-		}
+		for (Bubble b : model.getBubbles())
+			bubbleAdded(b);
 
-		public void update() {
-			line.setX1(bubbleA.x);
-			line.setY1(bubbleA.y);
-			line.setX2(bubbleB.x);
-			line.setY2(bubbleB.y);
-		}
+		for (Edge e : model.getEdges())
+			edgeAdded(e);
 	}
 }
