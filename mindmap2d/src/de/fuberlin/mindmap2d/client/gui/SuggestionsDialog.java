@@ -7,7 +7,7 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.json.client.*;
 
 //import de.fuberlin.mindmap2d.client.model.*;
-import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
+import de.fuberlin.mindmap2d.client.gui.BubbleView;
 
 
 

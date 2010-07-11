@@ -44,6 +44,8 @@ public abstract class InteractiveElement implements MouseDownHandler,
 		group.addMouseOutHandler(this);
 		
 		group.addContextMenuHandler(this);
+		
+		update();
 	}
 
 	@Override
@@ -105,4 +107,7 @@ public abstract class InteractiveElement implements MouseDownHandler,
 	abstract void setPosition(int x, int y);
 
 	abstract void setState(State s);
+	
+	//this will not get called before Element was added to canvas
+	abstract void update();
 }

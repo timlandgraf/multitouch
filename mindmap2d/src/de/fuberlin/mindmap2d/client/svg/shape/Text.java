@@ -129,4 +129,12 @@ public class Text extends Shape {
 	public void setTextAnchorStart() {
 		SvgDom.setAttributeNS(getElement(), "text-anchor", "start");
 	}
+	
+	public int getTextLength() {
+		return( _getTextLength(getElement()) );
+	}
+	
+	private static native int _getTextLength(Element elem) /*-{
+		return(elem.getComputedTextLength());
+	}-*/;
 }

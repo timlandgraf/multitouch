@@ -4,13 +4,13 @@ import java.util.*;
 
 
 public class Bubble{
-
+	
 	private int x, y;
 	private String text;
 	private Graph graph;
 	protected List<Edge> edges;
 	private List<BubbleListener> listeners;
-	
+	private BubbleShape shape; 
 	
 	public boolean position_fixed = false; //used by repulsion
 	//==========================================================================
@@ -19,6 +19,8 @@ public class Bubble{
 		this.y = y;
 		this.text = text;
 		this.graph = g;
+		//this.shape = BubbleShape.CIRCLE;
+		this.shape = BubbleShape.RECTANGLE;
 		edges = new ArrayList<Edge>();
 		listeners = new ArrayList<BubbleListener>();
 	}
@@ -26,6 +28,10 @@ public class Bubble{
 	public void addListener(BubbleListener l){
 		if(!listeners.contains(l))
 			listeners.add(l);
+	}
+	
+	public BubbleShape getShape(){
+		return(shape);
 	}
 	
 	public List<Edge> getEdges(){

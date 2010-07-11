@@ -19,6 +19,8 @@ public class SlidingMenu {
 		public SlidingMenu menu;
 		private Circle circle;
 
+		public void update(){}
+		
 		public SlidingMenuButton(int x, int y, int r,
 				SlidingMenu menu) {
 
@@ -30,6 +32,7 @@ public class SlidingMenu {
 		}
 
 		abstract public void onClick();
+		
 		
 		@Override
 		public void onContextMenu(ContextMenuEvent event) {

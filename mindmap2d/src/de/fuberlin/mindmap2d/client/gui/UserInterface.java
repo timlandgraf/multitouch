@@ -15,7 +15,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
+import de.fuberlin.mindmap2d.client.gui.BubbleView;
 import de.fuberlin.mindmap2d.client.model.Graph;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
 import de.fuberlin.mindmap2d.client.svg.VectorObjectContainer;

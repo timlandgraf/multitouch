@@ -7,7 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import de.fuberlin.mindmap2d.client.gui.GraphView.BubbleView;
+import de.fuberlin.mindmap2d.client.gui.BubbleView;
 import de.fuberlin.mindmap2d.client.gui.UserInterface.Background;
 import de.fuberlin.mindmap2d.client.svg.Animatable;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
@@ -73,6 +73,8 @@ public class ContextMenu {
 	abstract class TextContextMenuButton extends ContextMenuButton{
 		Text text;
 
+		public void update(){}
+		
 		public TextContextMenuButton(int r, ContextMenu menu, String text) {
 			super(r, menu);
 			this.text = new Text(0, 0 + 5, text);
