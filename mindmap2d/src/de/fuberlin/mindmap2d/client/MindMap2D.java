@@ -7,8 +7,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 
 import de.fuberlin.mindmap2d.client.gui.UserInterface;
-import de.fuberlin.mindmap2d.client.model.Bubble;
-import de.fuberlin.mindmap2d.client.model.Graph;
+import de.fuberlin.mindmap2d.client.model.*;
 import de.fuberlin.mindmap2d.client.touch.TouchService;
 
 public class MindMap2D implements EntryPoint {
@@ -54,8 +53,12 @@ public class MindMap2D implements EntryPoint {
 		
 		//TODO: remove - just inserts demo-data
 		Bubble b1 = model.createBubble("Start", 0, -100);
-		Bubble b2 = model.createBubble("Test 1", -100, 0);
-		Bubble b3 = model.createBubble("Test 2", +100, 00);
+		b1.setShape(BubbleShape.CIRCLE);
+		Bubble b2 = model.createBubble("Test\nnochmal", -100, 0);
+		b2.setFontSize(15);
+		Bubble b3 = model.createBubble("Test\n\nusus", +100, 00);
+		b3.setShape(BubbleShape.ELLIPSE);
+		Bubble b4 = model.createBubble("Test\nasha\nusus\nasdf", +100, 00);
 		model.createEdge(b1, b2);
 		model.createEdge(b1, b3);
 	}
