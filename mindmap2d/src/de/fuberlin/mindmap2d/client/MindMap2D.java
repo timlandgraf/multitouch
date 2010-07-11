@@ -56,9 +56,9 @@ public class MindMap2D implements EntryPoint {
 		b1.setShape(BubbleShape.CIRCLE);
 		Bubble b2 = model.createBubble("Test\nnochmal", -100, 0);
 		b2.setFontSize(15);
-		Bubble b3 = model.createBubble("Test\n\nusus", +100, 00);
+		Bubble b3 = model.createBubble("Test ganz laaaaaaaaaaaaaaaang", +100, 150);
 		b3.setShape(BubbleShape.ELLIPSE);
-		Bubble b4 = model.createBubble("Test\nasha\nusus\nasdf", +100, 00);
+		Bubble b4 = model.createBubble("Test\nfoo\nbar\n\nqux", +100, 00);
 		model.createEdge(b1, b2);
 		model.createEdge(b1, b3);
 	}
