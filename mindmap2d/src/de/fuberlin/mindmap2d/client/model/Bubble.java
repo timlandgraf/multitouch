@@ -2,6 +2,7 @@ package de.fuberlin.mindmap2d.client.model;
 
 import java.util.*;
 import de.fuberlin.mindmap2d.client.gui.Configurator;
+import de.fuberlin.mindmap2d.client.helper.*; 
 
 public class Bubble{
 	
@@ -12,6 +13,7 @@ public class Bubble{
 	private List<BubbleListener> listeners;
 	private BubbleShape shape;
 	private int font_size;
+	private String uuid; 
 	
 	public boolean position_fixed = false; //used by repulsion
 	//==========================================================================
@@ -26,6 +28,7 @@ public class Bubble{
 		edges = new ArrayList<Edge>();
 		listeners = new ArrayList<BubbleListener>();
 		this.font_size = Configurator.bubbleDefaultFontSize;
+		this.uuid = de.fuberlin.mindmap2d.client.helper.UUID.uuid(); 
 	}
 	
 	public void addListener(BubbleListener l){
