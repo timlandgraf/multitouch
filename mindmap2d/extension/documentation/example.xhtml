@@ -32,12 +32,28 @@
 		z.B.: (am Beispiel der oben beschriebenen Funktion test)
 		
 			function test(e){
-				// e.x, x - Koordinate
-				// e.y, y - Koordinate
+				// e.clientX, x - Koordinate
+				// e.clientY, y - Koordinate
 				// e.time, time stamp
 				// e.id, id des Touches
 				// e.targetEl, Element auf dem der Touch ausgeloest wurde
+				// e.radius, Radius falls versorgt
+				// e.angle, Winkel (Radiant) falls versorgt
 			}
+			
+	Alle Gesten im Ueberblick:
+		
+		flickin, flickout: versorgen radius und angle
+		zoomin, zoomout
+		tap, doubletap, holdtap
+		move
+		
+	Alle Touchevents im Ueberblick:
+	
+		touchdown
+		touchup
+		touchmove
+	
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:svg="http://www.w3.org/2000/svg"
@@ -61,40 +77,55 @@
 			function onTU(e){
 				target.setAttribute("fill", "#ff0000");
 				pressedButton = false;
-				info.textContent  = "";
+				//info.textContent  = "";
 			}
 		
 			function onTM(e){
 				if(pressedButton){
-					target.setAttribute("cx", e.x + 'px');
-					target.setAttribute("cy", e.y + 'px');
+					info.textContent  = "onMove";
+					target.setAttribute("cx", e.clientX + 'px');
+					target.setAttribute("cy", e.clientY + 'px');
 					//info.textContent  = e.x + " " + e.y;
 				}
 			}
 			
 			function onTap(e){
-				info.textContent  = "onTab";
+				info.textContent  = "onTap";
 				target.setAttribute("fill", "#00ffff");
 			}
 			
-			function onFlickOut(e){
-				info.textContent  = "onFlickOut radius: " + e.radius + ", angle: " + e.angle + ", touch1ID: " + e.t1 + ", touch2ID: " + e.t2;
+			function onDoubleTap(e){
+				info.textContent  = "onDoubleTap";
+				target.setAttribute("fill", "#00ffff");
 			}
 			
-			function onFlickIn(e){
-				info.textContent  = "onFlickIn radius: " + e.radius + ", angle: " + e.angle + ", touch1ID: " + e.t1 + ", touch2ID: " + e.t2;
+			function onHoldTap(e){
+				info.textContent  = "onHoldTap";
+				target.setAttribute("fill", "#00ffff");
+			}
+			
+			function onPullOut(e){
+				info.textContent  = "onPullOut radius: " + e.radius + ", angle: " + e.angle;
+			}
+			
+			function onPushIn(e){
+				info.textContent  = "onPushIn radius: " + e.radius + ", angle: " + e.angle;
 			}
 		
 			window.addEventListener("load", function (){
 				target = document.getElementById("test");
 				info = document.getElementById("info");
 			
-				target.addEventListener("onTouchDown", onTD, false);
-				target.addEventListener("onTouchMove", onTM, false);
-				target.addEventListener("onTouchUp", onTU, false);
-				target.addEventListener("onTap", onTap, false);
-				target.addEventListener("onFlickIn", onFlickIn, false);
-				target.addEventListener("onFlickOut", onFlickOut, false);
+				target.addEventListener("touchdown", onTD, false);
+				//target.addEventListener("touchmove", onTM, false);
+				target.addEventListener("touchup", onTU, false);
+				
+				target.addEventListener("tap", onTap, false);
+				target.addEventListener("doubletap", onDoubleTap, false);
+				target.addEventListener("move", onTM, false);
+				target.addEventListener("holdtap", onHoldTap, false);
+				target.addEventListener("pushin", onPushIn, false);
+				target.addEventListener("pullout", onPullOut, false);
 			}, false);
 		
 	</script>

@@ -41,20 +41,8 @@ public class Image extends VectorObject implements Positionable, Animatable {
 		return element;
 	}
 
-	public int getX() {
-		return SvgDom.parseIntValue(getElement(), "x", 0);
-	}
-
-	public void setX(int x) {
-		SvgDom.setAttributeNS(getElement(), "x", x);
-	}
-
-	public int getY() {
-		return SvgDom.parseIntValue(getElement(), "y", 0);
-	}
-
-	public void setY(int y) {
-		SvgDom.setAttributeNS(getElement(), "y", y);
+	public int getHeight() {
+		return SvgDom.parseIntValue(getElement(), "height", 0);
 	}
 
 	/**
@@ -66,6 +54,22 @@ public class Image extends VectorObject implements Positionable, Animatable {
 		return getElement().getAttribute("href");
 	}
 
+	public int getWidth() {
+		return SvgDom.parseIntValue(getElement(), "width", 0);
+	}
+
+	public int getX() {
+		return SvgDom.parseIntValue(getElement(), "x", 0);
+	}
+
+	public int getY() {
+		return SvgDom.parseIntValue(getElement(), "y", 0);
+	}
+
+	public void setHeight(int height) {
+		SvgDom.setAttributeNS(getElement(), "height", height);
+	}
+
 	/**
 	 * Sets the URL of the image to be shown.
 	 * 
@@ -74,22 +78,6 @@ public class Image extends VectorObject implements Positionable, Animatable {
 	 */
 	public void setHref(String href) {
 		SvgDom.setAttributeNS(SvgDom.XLINK_NS, getElement(), "href", href);
-	}
-
-	public int getWidth() {
-		return SvgDom.parseIntValue(getElement(), "width", 0);
-	}
-
-	public void setWidth(int width) {
-		SvgDom.setAttributeNS(getElement(), "width", width);
-	}
-
-	public int getHeight() {
-		return SvgDom.parseIntValue(getElement(), "height", 0);
-	}
-
-	public void setHeight(int height) {
-		SvgDom.setAttributeNS(getElement(), "height", height);
 	}
 
 	//TODO: Opacity
@@ -106,5 +94,17 @@ public class Image extends VectorObject implements Positionable, Animatable {
 		} else if ("rotation".equals(property)) {
 			setRotation((int) value);
 		}
+	}
+
+	public void setWidth(int width) {
+		SvgDom.setAttributeNS(getElement(), "width", width);
+	}
+
+	public void setX(int x) {
+		SvgDom.setAttributeNS(getElement(), "x", x);
+	}
+
+	public void setY(int y) {
+		SvgDom.setAttributeNS(getElement(), "y", y);
 	}
 }

@@ -27,25 +27,25 @@ public class CurveTo extends LineTo {
 		this.y2 = y2;
 	}
 
-	public int getX1() {
-		return x1;
+	@Override
+	public String getSVGString() {
+		return isRelativeCoords() ? "c" : "C" + getX1() + " " + getY1() + " "
+				+ getX2() + " " + getY2() + " " + getX() + " " + getY();
 	}
 
-	public int getY1() {
-		return y1;
+	public int getX1() {
+		return x1;
 	}
 
 	public int getX2() {
 		return x2;
 	}
 
-	public int getY2() {
-		return y2;
+	public int getY1() {
+		return y1;
 	}
 
-	@Override
-	public String getSVGString() {
-		return isRelativeCoords() ? "c" : "C" + getX1() + " " + getY1() + " "
-				+ getX2() + " " + getY2() + " " + getX() + " " + getY();
+	public int getY2() {
+		return y2;
 	}
 }

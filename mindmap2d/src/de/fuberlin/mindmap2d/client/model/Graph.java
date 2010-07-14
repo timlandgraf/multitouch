@@ -32,10 +32,6 @@ public class Graph {
 		listeners.add(l);
 	}
 	
-	public void removeListerner(GraphChangeListener l){
-		listeners.remove(l);
-	}
-	
 	/**
 	*	Official way to create a new Bubble.
 	*/
@@ -48,25 +44,6 @@ public class Graph {
 		
 		return(b);
 	}
-	
-		
-	/**
-	*	Official way to remove a Bubble.
-	*/
-	protected void unregisterBubble(Bubble b){
-		ArrayList<Edge> toRemove = new ArrayList<Edge>();
-		for(Edge e: b.getEdges())
-			toRemove.add(e);
-		
-		for(Edge e: toRemove)
-			removeEdge(e);
-		
-		bubbles.remove(b);
-		
-		for(GraphChangeListener l:listeners)
-			l.bubbleRemoved(b);
-	}
-	
 	
 	/**
 	*	Official way to create a new Edge.
@@ -83,6 +60,22 @@ public class Graph {
 		return(e);
 	}
 	
+		
+	/**
+	*	Returns a list of all Bubbles which are currently contained in this Graph.
+	*/
+	public List<Bubble> getBubbles(){
+		return(bubbles);
+	}
+	
+	
+	/**
+	*	Returns a list of all Edges which are currently contained in this Graph.
+	*/
+	public List<Edge> getEdges(){
+		return(edges);
+	}
+	
 	
 	/**
 	*	Official way to remove an Edge.
@@ -97,19 +90,26 @@ public class Graph {
 	}
 	
 	
-	/**
-	*	Returns a list of all Bubbles which are currently contained in this Graph.
-	*/
-	public List<Bubble> getBubbles(){
-		return(bubbles);
+	public void removeListerner(GraphChangeListener l){
+		listeners.remove(l);
 	}
 	
 	
 	/**
-	*	Returns a list of all Edges which are currently contained in this Graph.
+	*	Official way to remove a Bubble.
 	*/
-	public List<Edge> getEdges(){
-		return(edges);
+	protected void unregisterBubble(Bubble b){
+		ArrayList<Edge> toRemove = new ArrayList<Edge>();
+		for(Edge e: b.getEdges())
+			toRemove.add(e);
+		
+		for(Edge e: toRemove)
+			removeEdge(e);
+		
+		bubbles.remove(b);
+		
+		for(GraphChangeListener l:listeners)
+			l.bubbleRemoved(b);
 	}
 
 }

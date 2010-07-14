@@ -14,13 +14,75 @@ import de.fuberlin.mindmap2d.client.svg.shape.Rectangle;
 import de.fuberlin.mindmap2d.client.svg.shape.Text;
 
 public class SlidingMenu {
+	abstract class SlidingMenuButton extends InteractiveElement implements
+			Animatable {
+		public SlidingMenu menu;
+		private Circle circle;
+
+		public void update(){}
+		
+		public SlidingMenuButton(int x, int y, int r,
+				SlidingMenu menu) {
+
+			this.menu = menu;
+			
+			circle = new Circle(x, y, r);
+			group.add(circle);
+			group.setOpacity(0.6);
+		}
+
+		abstract public void onClick();
+		
+		
+		@Override
+		public void onContextMenu(ContextMenuEvent event) {
+			event.preventDefault();
+			super.onContextMenu(event);
+		}
+
+		protected void setPosition(int x, int y) {
+			circle.setX(x);
+			circle.setY(y);
+			group.setStyleName("slidingMenuButton");
+		}
+
+		public void setPropertyDouble(String property, double value) {
+			//TODO: Funktioniert nur bis Opacity auf andere aktuallisiert wurde
+			if(property.equals("opacity"))
+				group.setOpacity(value);
+				
+			circle.setPropertyDouble(property, value);
+		}
+
+		protected void setRadius(int r){
+			if(r >= 0)
+				circle.setRadius(r);
+		}
+
+		void setState(State s) {
+			this.state = s;
+			switch (s) {
+			case NORMAL:
+				circle.setFillColor(Configurator.menuButtonColor);
+				break;
+			case HIGHLIGHTED:
+				break;
+			case MOUSEDOWN:
+			case MOVING:
+				onClick();
+				setState(State.HIGHLIGHTED);
+				break;
+			}
+		}
+	}
 	private Boolean out = false;
 	private int x = 50;
 	private int y = 50;
-	private int r = 40;
 
+	private int r = 40;
 	private List<SlidingMenuButton> buttons = new ArrayList<SlidingMenuButton>();
 	private Rectangle border;
+
 	private Group group = new Group();
 
 	SlidingMenu() {
@@ -39,35 +101,8 @@ public class SlidingMenu {
 			b.addThisTo(group);
 	}
 
-	private SlidingMenuButton buttonMenu() {
-		return new SlidingMenuButton(x, y, r, this) {
-			Text text;
-			
-			{
-				text = new Text(x, y + 5, "Menu");
-				text.setFillColor("black");
-				text.setStrokeWidth(0);
-				text.getElement().setAttribute("text-anchor", "middle");
-				group.add(text);
-			}
-			@Override
-			public void onClick() {
-				menu.switchState();
-			}
-
-			@Override
-			protected void setPosition(int x, int y) {
-				text.setX(x);
-				text.setY(y);
-				super.setPosition(x, y);
-			}
-
-			@Override
-			public void setPropertyDouble(String property, double value) {
-				text.setPropertyDouble(property, value);
-				super.setPropertyDouble(property, value);
-			}
-		};
+	public void addThisTo(DrawingArea canvas) {
+		canvas.add(group);
 	}
 
 	private SlidingMenuButton button(final String input) {
@@ -102,6 +137,44 @@ public class SlidingMenu {
 		};
 	}
 
+	private SlidingMenuButton buttonMenu() {
+		return new SlidingMenuButton(x, y, r, this) {
+			Text text;
+			
+			{
+				text = new Text(x, y + 5, "Menu");
+				text.setFillColor("black");
+				text.setStrokeWidth(0);
+				text.getElement().setAttribute("text-anchor", "middle");
+				group.add(text);
+			}
+			@Override
+			public void onClick() {
+				menu.switchState();
+			}
+
+			@Override
+			protected void setPosition(int x, int y) {
+				text.setX(x);
+				text.setY(y);
+				super.setPosition(x, y);
+			}
+
+			@Override
+			public void setPropertyDouble(String property, double value) {
+				text.setPropertyDouble(property, value);
+				super.setPropertyDouble(property, value);
+			}
+		};
+	}
+
+	public void remove() {
+		border.removeFromParent();
+		group.removeFromParent();
+		for (SlidingMenuButton button : buttons)
+			button.remove();
+	}
+
 	public void switchState() {
 		out = !out;
 		int i = buttons.size() - 1;
@@ -121,76 +194,6 @@ public class SlidingMenu {
 				else new Animate(button, "opacity", 1.0, 0.6, 500).start();
 				i--;
 			}
-		}
-	}
-
-	public void addThisTo(DrawingArea canvas) {
-		canvas.add(group);
-	}
-
-	public void remove() {
-		border.removeFromParent();
-		group.removeFromParent();
-		for (SlidingMenuButton button : buttons)
-			button.remove();
-	}
-
-	abstract class SlidingMenuButton extends InteractiveElement implements
-			Animatable {
-		public SlidingMenu menu;
-		private Circle circle;
-
-		public SlidingMenuButton(int x, int y, int r,
-				SlidingMenu menu) {
-
-			this.menu = menu;
-			
-			circle = new Circle(x, y, r);
-			group.add(circle);
-			group.setOpacity(0.6);
-		}
-
-		protected void setRadius(int r){
-			if(r >= 0)
-				circle.setRadius(r);
-		}
-		
-		protected void setPosition(int x, int y) {
-			circle.setX(x);
-			circle.setY(y);
-			group.setStyleName("slidingMenuButton");
-		}
-
-		abstract public void onClick();
-
-		void setState(State s) {
-			this.state = s;
-			switch (s) {
-			case NORMAL:
-				circle.setFillColor(Configurator.menuButtonColor);
-				break;
-			case HIGHLIGHTED:
-				break;
-			case MOUSEDOWN:
-			case MOVING:
-				onClick();
-				setState(State.HIGHLIGHTED);
-				break;
-			}
-		}
-
-		@Override
-		public void onContextMenu(ContextMenuEvent event) {
-			event.preventDefault();
-			super.onContextMenu(event);
-		}
-
-		public void setPropertyDouble(String property, double value) {
-			//TODO: Funktioniert nur bis Opacity auf andere aktuallisiert wurde
-			if(property.equals("opacity"))
-				group.setOpacity(value);
-				
-			circle.setPropertyDouble(property, value);
 		}
 	}
 }

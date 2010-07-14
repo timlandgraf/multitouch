@@ -6,6 +6,8 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasContextMenuHandlers;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 
+import de.fuberlin.mindmap2d.client.touch.events.HasAllGestureHandlers;
+
 /**
  * Classes implementing this class are able to contain VectorObjects.
  * 
@@ -13,7 +15,8 @@ import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
  * 
  */
 public interface VectorObjectContainer extends HasClickHandlers,
-		HasAllMouseHandlers, HasDoubleClickHandlers, HasContextMenuHandlers{
+		HasAllMouseHandlers, HasDoubleClickHandlers, HasContextMenuHandlers,
+		HasAllGestureHandlers {
 
 	/**
 	 * 
@@ -26,15 +29,32 @@ public interface VectorObjectContainer extends HasClickHandlers,
 	public abstract VectorObject add(VectorObject vo);
 
 	/**
-	 * Remove the given VectorObject from this VectorObjectContainer.
-	 * 
-	 * @param vo
-	 *            VectorObject to be removed
-	 * 
-	 * @return removed VectorObject or null if the container doesn't contained
-	 *         the given VectorObject
+	 * Removes all contained VectorObjects from this VectorObjectContainer.
 	 */
-	public abstract VectorObject remove(VectorObject vo);
+	public abstract void clear();
+
+	/**
+	 * Nasty adapter hook to the getElement of Widget
+	 * 
+	 * @return DOM-Element of this Container
+	 */
+	public abstract Element getElement();
+
+	/**
+	 * Returns the VectorObject element at the specified position.
+	 * 
+	 * @param index
+	 *            index of element to return.
+	 * @return the VectorObject element at the specified position.
+	 */
+	public abstract VectorObject getVectorObject(int index);
+
+	/**
+	 * Returns the number of VectorObjects in this VectorObjectContainer.
+	 * 
+	 * @return the number of VectorObjects in this VectorObjectContainer.
+	 */
+	public abstract int getVectorObjectCount();
 
 	/**
 	 * 
@@ -47,30 +67,14 @@ public interface VectorObjectContainer extends HasClickHandlers,
 	public abstract VectorObject pop(VectorObject vo);
 
 	/**
-	 * Removes all contained VectorObjects from this VectorObjectContainer.
-	 */
-	public abstract void clear();
-
-	/**
-	 * Returns the number of VectorObjects in this VectorObjectContainer.
+	 * Remove the given VectorObject from this VectorObjectContainer.
 	 * 
-	 * @return the number of VectorObjects in this VectorObjectContainer.
-	 */
-	public abstract int getVectorObjectCount();
-
-	/**
-	 * Returns the VectorObject element at the specified position.
+	 * @param vo
+	 *            VectorObject to be removed
 	 * 
-	 * @param index
-	 *            index of element to return.
-	 * @return the VectorObject element at the specified position.
+	 * @return removed VectorObject or null if the container doesn't contained
+	 *         the given VectorObject
 	 */
-	public abstract VectorObject getVectorObject(int index);
+	public abstract VectorObject remove(VectorObject vo);
 
-	/**
-	 * Nasty adapter hook to the getElement of Widget
-	 * @return DOM-Element of this Container
-	 */
-	public abstract Element getElement();
-	
 }

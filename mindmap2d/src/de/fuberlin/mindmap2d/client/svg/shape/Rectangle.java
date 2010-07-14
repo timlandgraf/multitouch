@@ -42,22 +42,22 @@ public class Rectangle extends Shape {
 	}
 	
 	/**
-	 * Returns the width of the Rectangle in pixels.
+	 * Returns the height of the Rectangle in pixels.
 	 * 
-	 * @return the width of the Rectangle in pixels
+	 * @return the height of the Rectangle in pixels
 	 */
-	public int getWidth() {
-		return SvgDom.parseIntValue(getElement(), "width", 0);
+	public int getHeight() {
+		return SvgDom.parseIntValue(getElement(), "height", 0);
 	}
 
 	/**
-	 * Sets the width of the Rectangle in pixels.
+	 * Gets the radius of rounded corners in pixels.
+	 * Same as getRoundedCornersRX()
 	 * 
-	 * @param width
-	 *            the new width in pixels
+	 * @return radius of rounded corners in pixels
 	 */
-	public void setWidth(int width) {
-		SvgDom.setAttributeNS(getElement(), "width", width);
+	public int getRoundedCorners() {
+		return getRoundedCornersRX();
 	}
 
 	/*@Override
@@ -71,22 +71,23 @@ public class Rectangle extends Shape {
 	}*/
 
 	/**
-	 * Returns the height of the Rectangle in pixels.
+	 * Gets the radius rounded corners in pixels of the RX.
+	 * Rounded Corners are elliptic paths.
 	 * 
-	 * @return the height of the Rectangle in pixels
+	 * @return radius of x-axis of rounded corners in pixels
 	 */
-	public int getHeight() {
-		return SvgDom.parseIntValue(getElement(), "height", 0);
+	public int getRoundedCornersRX() {
+		return SvgDom.parseIntValue(getElement(), "rx", 0);
 	}
 
 	/**
-	 * Sets the height of the Rectangle in pixels.
+	 * Gets the radius rounded corners in pixels of the RY.
+	 * Rounded Corners are elliptic paths.
 	 * 
-	 * @param height
-	 *            the new height in pixels
+	 * @return radius of y-axis of rounded corners in pixels
 	 */
-	public void setHeight(int height) {
-		SvgDom.setAttributeNS(getElement(), "height", height);
+	public int getRoundedCornesRY(){
+		return SvgDom.parseIntValue(getElement(), "ry", 0);
 	}
 
 	/*@Override
@@ -100,33 +101,35 @@ public class Rectangle extends Shape {
 	}*/
 
 	/**
-	 * Gets the radius of rounded corners in pixels.
-	 * Same as getRoundedCornersRX()
+	 * Returns the width of the Rectangle in pixels.
 	 * 
-	 * @return radius of rounded corners in pixels
+	 * @return the width of the Rectangle in pixels
 	 */
-	public int getRoundedCorners() {
-		return getRoundedCornersRX();
+	public int getWidth() {
+		return SvgDom.parseIntValue(getElement(), "width", 0);
 	}
 	
 	/**
-	 * Gets the radius rounded corners in pixels of the RX.
-	 * Rounded Corners are elliptic paths.
+	 * Sets the height of the Rectangle in pixels.
 	 * 
-	 * @return radius of x-axis of rounded corners in pixels
+	 * @param height
+	 *            the new height in pixels
 	 */
-	public int getRoundedCornersRX() {
-		return SvgDom.parseIntValue(getElement(), "rx", 0);
+	public void setHeight(int height) {
+		SvgDom.setAttributeNS(getElement(), "height", height);
 	}
 	
-	/**
-	 * Gets the radius rounded corners in pixels of the RY.
-	 * Rounded Corners are elliptic paths.
-	 * 
-	 * @return radius of y-axis of rounded corners in pixels
-	 */
-	public int getRoundedCornesRY(){
-		return SvgDom.parseIntValue(getElement(), "ry", 0);
+	public void setPropertyDouble(String property, double value) {
+		property = property.toLowerCase();
+		if ("width".equals(property)) {
+			setWidth((int) value);
+		} else if ("height".equals(property)) {
+			setHeight((int) value);
+		} else if ("roundedcorners".equals(property)) {
+			setRoundedCorners((int) value);
+		} else {
+			super.setPropertyDouble(property, value);
+		}
 	}
 
 	/**
@@ -164,16 +167,13 @@ public class Rectangle extends Shape {
 		SvgDom.setAttributeNS(getElement(), "ry", radiusY);
 	}
 
-	public void setPropertyDouble(String property, double value) {
-		property = property.toLowerCase();
-		if ("width".equals(property)) {
-			setWidth((int) value);
-		} else if ("height".equals(property)) {
-			setHeight((int) value);
-		} else if ("roundedcorners".equals(property)) {
-			setRoundedCorners((int) value);
-		} else {
-			super.setPropertyDouble(property, value);
-		}
+	/**
+	 * Sets the width of the Rectangle in pixels.
+	 * 
+	 * @param width
+	 *            the new width in pixels
+	 */
+	public void setWidth(int width) {
+		SvgDom.setAttributeNS(getElement(), "width", width);
 	}
 }

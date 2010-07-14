@@ -8,19 +8,19 @@ public final class SvgBbox extends JavaScriptObject {
 
 	}
 
-	public native int getX() /*-{
-		return this.x;
-	}-*/;
-
-	public native int getY() /*-{
-		return this.y;
+	public native int getHeight() /*-{
+		return this.height;
 	}-*/;
 
 	public native int getWidth() /*-{
 		return this.width;
 	}-*/;
 
-	public native int getHeight() /*-{
-		return this.height;
+	public native int getX() /*-{
+		return this.x;
+	}-*/;
+
+	public native int getY() /*-{
+		return this.y;
 	}-*/;
 }

@@ -37,7 +37,9 @@ public class Ellipse extends Shape {
 
 	@Override
 	protected Element createElement() {
-		return SvgDom.createSVGElementNS("path");
+		//Bug??? (ole)
+		//return SvgDom.createSVGElementNS("path");
+		return SvgDom.createSVGElementNS("ellipse");
 	}
 	
 	/**
@@ -50,16 +52,6 @@ public class Ellipse extends Shape {
 	}
 
 	/**
-	 * Sets the x-axis radius of the ellipse in pixels.
-	 * 
-	 * @param radiusX
-	 *            the x-axis radius of the ellipse in pixels
-	 */
-	public void setRadiusX(int radiusX) {
-		SvgDom.setAttributeNS(getElement(), "rx", radiusX);
-	}
-
-	/**
 	 * Returns the y-axis radius of the ellipse in pixels.
 	 * 
 	 * @return the y-axis radius of the ellipse in pixels
@@ -68,14 +60,14 @@ public class Ellipse extends Shape {
 		return SvgDom.parseIntValue(getElement(), "ry", 0);
 	}
 
-	/**
-	 * Sets the y-axis radius of the ellipse in pixels.
-	 * 
-	 * @param radiusY
-	 *            the y-axis radius of the ellipse in pixels
-	 */
-	public void setRadiusY(int radiusY) {
-		SvgDom.setAttributeNS(getElement(), "ry", radiusY);
+	@Override
+	public int getX() {
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
+	}
+
+	@Override
+	public int getY() {
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
 	}
 
 	/*
@@ -96,14 +88,24 @@ public class Ellipse extends Shape {
 		}
 	}
 
-	@Override
-	public int getX() {
-		return SvgDom.parseIntValue(getElement(), "cx", 0);
+	/**
+	 * Sets the x-axis radius of the ellipse in pixels.
+	 * 
+	 * @param radiusX
+	 *            the x-axis radius of the ellipse in pixels
+	 */
+	public void setRadiusX(int radiusX) {
+		SvgDom.setAttributeNS(getElement(), "rx", radiusX);
 	}
 
-	@Override
-	public int getY() {
-		return SvgDom.parseIntValue(getElement(), "cx", 0);
+	/**
+	 * Sets the y-axis radius of the ellipse in pixels.
+	 * 
+	 * @param radiusY
+	 *            the y-axis radius of the ellipse in pixels
+	 */
+	public void setRadiusY(int radiusY) {
+		SvgDom.setAttributeNS(getElement(), "ry", radiusY);
 	}
 
 	@Override

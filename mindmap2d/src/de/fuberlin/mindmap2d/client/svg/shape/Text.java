@@ -41,31 +41,30 @@ public class Text extends Shape {
 	}
 
 	/**
-	 * Returns the rendered text.
-	 * 
-	 * @return the rendered text
-	 */
-	public String getText() {
-		return getElement().getInnerText();
-	}
-
-	/**
-	 * Sets the text to be rendered.
-	 * 
-	 * @param text
-	 *            the text
-	 */
-	public void setText(String text) {
-		getElement().setInnerText(text);
-	}
-
-	/**
 	 * Returns the font family of the text.
 	 * 
 	 * @return the font family
 	 */
 	public String getFontFamily() {
 		return getElement().getAttribute("font-family");
+	}
+
+	/**
+	 * Returns the font size of the text.
+	 * 
+	 * @return the size
+	 */
+	public int getFontSize() {
+		return SvgDom.parseIntValue(getElement(), "font-size", 0);
+	}
+
+	/**
+	 * Returns the rendered text.
+	 * 
+	 * @return the rendered text
+	 */
+	public String getText() {
+		return getElement().getInnerText();
 	}
 
 	/**
@@ -79,15 +78,6 @@ public class Text extends Shape {
 	}
 
 	/**
-	 * Returns the font size of the text.
-	 * 
-	 * @return the size
-	 */
-	public int getFontSize() {
-		return SvgDom.parseIntValue(getElement(), "font-size", 0);
-	}
-
-	/**
 	 * Sets the font size of the text.
 	 * 
 	 * @param size
@@ -97,12 +87,31 @@ public class Text extends Shape {
 		SvgDom.setAttributeNS(getElement(), "font-size", size);
 	}
 
+	public void setPropertyDouble(String property, double value) {
+		property = property.toLowerCase();
+		if ("fontsize".equals(property)) {
+			setFontSize((int) value);
+		} else {
+			super.setPropertyDouble(property, value);
+		}
+	}
+
+	/**
+	 * Sets the text to be rendered.
+	 * 
+	 * @param text
+	 *            the text
+	 */
+	public void setText(String text) {
+		getElement().setInnerText(text);
+	}
+
 	/**
 	 * Sets the text-anchor to the start. That means, at the x-y-position should
-	 * start the text.
+	 * end the text.
 	 */
-	public void setTextAnchorStart() {
-		SvgDom.setAttributeNS(getElement(), "text-anchor", "start");
+	public void setTextAnchorEnd() {
+		SvgDom.setAttributeNS(getElement(), "text-anchor", "end");
 	}
 
 	/**
@@ -115,18 +124,17 @@ public class Text extends Shape {
 
 	/**
 	 * Sets the text-anchor to the start. That means, at the x-y-position should
-	 * end the text.
+	 * start the text.
 	 */
-	public void setTextAnchorEnd() {
-		SvgDom.setAttributeNS(getElement(), "text-anchor", "end");
+	public void setTextAnchorStart() {
+		SvgDom.setAttributeNS(getElement(), "text-anchor", "start");
 	}
-
-	public void setPropertyDouble(String property, double value) {
-		property = property.toLowerCase();
-		if ("fontsize".equals(property)) {
-			setFontSize((int) value);
-		} else {
-			super.setPropertyDouble(property, value);
-		}
+	
+	public int getTextLength() {
+		return( _getTextLength(getElement()) );
 	}
+	
+	private static native int _getTextLength(Element elem) /*-{
+		return(elem.getComputedTextLength());
+	}-*/;
 }

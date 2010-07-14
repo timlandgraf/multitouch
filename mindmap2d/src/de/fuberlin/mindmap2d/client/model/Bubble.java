@@ -1,16 +1,19 @@
 package de.fuberlin.mindmap2d.client.model;
 
 import java.util.*;
-
+import de.fuberlin.mindmap2d.client.gui.Configurator;
+import de.fuberlin.mindmap2d.client.helper.*; 
 
 public class Bubble{
-
+	
 	private int x, y;
 	private String text;
 	private Graph graph;
 	protected List<Edge> edges;
 	private List<BubbleListener> listeners;
-	
+	private BubbleShape shape;
+	private int font_size;
+	private String uuid; 
 	
 	public boolean position_fixed = false; //used by repulsion
 	//==========================================================================
@@ -19,12 +22,13 @@ public class Bubble{
 		this.y = y;
 		this.text = text;
 		this.graph = g;
+		//this.shape = BubbleShape.CIRCLE;
+		this.shape = BubbleShape.RECTANGLE;
+		//this.shape = BubbleShape.ELLIPSE;
 		edges = new ArrayList<Edge>();
 		listeners = new ArrayList<BubbleListener>();
-	}
-	
-	public String getText(){
-		return(text);
+		this.font_size = Configurator.bubbleDefaultFontSize;
+		this.uuid = de.fuberlin.mindmap2d.client.helper.UUID.uuid(); 
 	}
 	
 	public void addListener(BubbleListener l){
@@ -32,13 +36,33 @@ public class Bubble{
 			listeners.add(l);
 	}
 	
-	public void removeListener(BubbleListener l){
-		listeners.remove(l);
+	
+	public void setFontSize(int size){
+		this.font_size = size;
+		for(BubbleListener bl:listeners)
+			bl.bubbleChanged(this);
 	}
 	
-	public void setText(String t){
-		text = t;
-		propagateChange();
+	public int getFontSize(){
+		return(font_size);
+	}
+	
+	public void setShape(BubbleShape shape){
+		this.shape = shape;
+		for(BubbleListener bl:listeners)
+			bl.bubbleChanged(this);
+	}
+	
+	public BubbleShape getShape(){
+		return(shape);
+	}
+	
+	public List<Edge> getEdges(){
+		return(edges);
+	}
+	
+	public String getText(){
+		return(text);
 	}
 	
 	public int getX(){
@@ -49,22 +73,23 @@ public class Bubble{
 		return(y);
 	}
 	
-	public void setPosition(int x, int y){
-		this.x = x;
-		this.y = y;
-		
-		propagateChange();
-	}
-	
-	public List<Edge> getEdges(){
-		return(edges);
-	}
-	
 	public void remove(){
 		graph.unregisterBubble(this);
 	}
 	
-	private void propagateChange(){
+	public void removeListener(BubbleListener l){
+		listeners.remove(l);
+	}
+	
+	public void setPosition(int x, int y){
+		this.x = x;
+		this.y = y;
+		for(BubbleListener bl:listeners)
+			bl.bubbleMoved(this);
+	}
+	
+	public void setText(String t){
+		text = t;
 		for(BubbleListener bl:listeners)
 			bl.bubbleChanged(this);
 	}

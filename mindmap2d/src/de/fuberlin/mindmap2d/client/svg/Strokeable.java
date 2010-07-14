@@ -14,6 +14,20 @@ public interface Strokeable {
 	public abstract String getStrokeColor();
 
 	/**
+	 * Returns the stroke opacity of the element.
+	 * 
+	 * @return the current stroke opacity
+	 */
+	public abstract double getStrokeOpacity();
+
+	/**
+	 * Returns the stroke width in pixels.
+	 * 
+	 * @return the stroke width in pixels
+	 */
+	public abstract int getStrokeWidth();
+
+	/**
 	 * Sets stroke color. The color value is specified using one of the CSS2
 	 * color notations. For example, the following values are legal:
 	 * <ul>
@@ -31,28 +45,6 @@ public interface Strokeable {
 	public abstract void setStrokeColor(String color);
 
 	/**
-	 * Returns the stroke width in pixels.
-	 * 
-	 * @return the stroke width in pixels
-	 */
-	public abstract int getStrokeWidth();
-
-	/**
-	 * Sets the stroke width in pixels.
-	 * 
-	 * @param width
-	 *            the stroke width in pixels
-	 */
-	public abstract void setStrokeWidth(int width);
-
-	/**
-	 * Returns the stroke opacity of the element.
-	 * 
-	 * @return the current stroke opacity
-	 */
-	public abstract double getStrokeOpacity();
-
-	/**
 	 * Sets the stroke opacity of the element. The initial value 1.0 means fully
 	 * opaque stroke. On the other hand, value 0.0 means fully transparent
 	 * paint.
@@ -61,5 +53,13 @@ public interface Strokeable {
 	 *            the new stroke opacity
 	 */
 	public abstract void setStrokeOpacity(double opacity);
+
+	/**
+	 * Sets the stroke width in pixels.
+	 * 
+	 * @param width
+	 *            the stroke width in pixels
+	 */
+	public abstract void setStrokeWidth(int width);
 
 }

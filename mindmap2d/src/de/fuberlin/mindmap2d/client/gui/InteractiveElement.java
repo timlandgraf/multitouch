@@ -29,13 +29,10 @@ public abstract class InteractiveElement implements MouseDownHandler,
 	VectorObjectContainer parent;
 	State state;
 	
-	abstract void setPosition(int x, int y);
-
-	abstract void setState(State s);
-
 	public void addThisTo(VectorObjectContainer parent) {
 		this.parent = parent;
 		parent.add(group);
+		update();
 		setState(State.NORMAL);
 
 		// TODO: evtl nur bei group registrieren
@@ -48,20 +45,13 @@ public abstract class InteractiveElement implements MouseDownHandler,
 		group.addMouseOutHandler(this);
 		
 		group.addContextMenuHandler(this);
+		
+		
 	}
 
-	public void remove() {
-		parent.remove(group);
-	}
-
-	public void onMouseOver(MouseOverEvent event) {
-		if (state == State.NORMAL)
-			setState(State.HIGHLIGHTED);
-	}
-
-	public void onMouseOut(MouseOutEvent event) {
-		if (state == State.HIGHLIGHTED)
-			setState(State.NORMAL);
+	@Override
+	public void onContextMenu(ContextMenuEvent event) {
+		event.stopPropagation();
 	}
 
 	public void onMouseDown(MouseDownEvent event) {
@@ -73,6 +63,26 @@ public abstract class InteractiveElement implements MouseDownHandler,
 		}
 			
 		event.stopPropagation();
+	}
+
+	public void onMouseMove(MouseMoveEvent event) {
+		switch (state) {
+		case MOUSEDOWN:
+			setState(State.MOVING);
+			break;
+		}
+
+		event.stopPropagation();
+	}
+
+	public void onMouseOut(MouseOutEvent event) {
+		if (state == State.HIGHLIGHTED)
+			setState(State.NORMAL);
+	}
+
+	public void onMouseOver(MouseOverEvent event) {
+		if (state == State.NORMAL)
+			setState(State.HIGHLIGHTED);
 	}
 
 	public void onMouseUp(MouseUpEvent event) {
@@ -91,18 +101,14 @@ public abstract class InteractiveElement implements MouseDownHandler,
 		event.stopPropagation();
 	}
 
-	public void onMouseMove(MouseMoveEvent event) {
-		switch (state) {
-		case MOUSEDOWN:
-			setState(State.MOVING);
-			break;
-		}
-
-		event.stopPropagation();
+	public void remove() {
+		parent.remove(group);
 	}
 
-	@Override
-	public void onContextMenu(ContextMenuEvent event) {
-		event.stopPropagation();
-	}
+	abstract void setPosition(int x, int y);
+
+	abstract void setState(State s);
+	
+	//this will not get called before Element was added to canvas
+	abstract void update();
 }

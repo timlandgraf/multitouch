@@ -5,8 +5,6 @@ import com.google.gwt.dom.client.Element;
 import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.Shape;
 
-
-
 /**
  * Circle represents a circle.
  * 
@@ -46,14 +44,14 @@ public class Circle extends Shape {
 		return SvgDom.parseIntValue(getElement(), "r", 0);
 	}
 
-	/**
-	 * Sets the radius of the circle in pixels.
-	 * 
-	 * @param radius
-	 *            the radius of the circle in pixels
-	 */
-	public void setRadius(int radius) {
-		SvgDom.setAttributeNS(getElement(), "r", radius);
+	@Override
+	public int getX() {
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
+	}
+
+	@Override
+	public int getY() {
+		return SvgDom.parseIntValue(getElement(), "cx", 0);
 	}
 
 	public void setPropertyDouble(String property, double value) {
@@ -65,14 +63,14 @@ public class Circle extends Shape {
 		}
 	}
 
-	@Override
-	public int getX() {
-		return SvgDom.parseIntValue(getElement(), "cx", 0);
-	}
-
-	@Override
-	public int getY() {
-		return SvgDom.parseIntValue(getElement(), "cx", 0);
+	/**
+	 * Sets the radius of the circle in pixels.
+	 * 
+	 * @param radius
+	 *            the radius of the circle in pixels
+	 */
+	public void setRadius(int radius) {
+		SvgDom.setAttributeNS(getElement(), "r", radius);
 	}
 
 	@Override
