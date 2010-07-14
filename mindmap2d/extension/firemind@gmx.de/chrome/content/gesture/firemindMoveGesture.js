@@ -20,6 +20,7 @@ Firemind.touchAPI.MoveGesture = {
 	execute : function(currentTouch, touchList){
 		if(Firemind.touchAPI.MoveGesture.isRunning){
 			if(this.touchOne.id == currentTouch.id && touchList[this.touchOne.id] != undefined && Firemind.touchAPI.GestureAdapter.isTouchMoving(this.touchOne, currentTouch)){
+				currentTouch.target = this.touchOne.target;
 				Firemind.touchAPI.EventDispatcher.onGestureEvent("move", currentTouch);
 			}
 		}
