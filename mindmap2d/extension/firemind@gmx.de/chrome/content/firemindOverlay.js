@@ -19,6 +19,8 @@ Firemind.overlay = {
 
 	tryRegisterEvents : function(event){
 		
+		Firemind.touchAPI.TouchSupport.unregister();
+		
 		if (event.originalTarget instanceof HTMLDocument) {
 			var win = event.originalTarget.defaultView;
 			

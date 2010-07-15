@@ -1,5 +1,6 @@
 package de.fuberlin.mindmap2d.client.gui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*; 
 import com.google.gwt.core.client.GWT;
@@ -7,13 +8,13 @@ import de.fuberlin.mindmap2d.client.gui.BubbleView;
 import de.fuberlin.mindmap2d.client.model.Bubble;
 
 public class NewBubbleDialog extends BubbleDialog {
-	
+
 	BubbleView neighbour;
-	
+
 	public NewBubbleDialog(BubbleView bubble) {
 		this.neighbour = bubble;
 		setText("New Bubble");
-    }
+	}
 
 	@Override
 	public void onClick(ClickEvent event) {  

@@ -3,33 +3,15 @@ package de.fuberlin.mindmap2d.client.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.ContextMenuEvent;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.user.client.DOM;
-
 import de.fuberlin.mindmap2d.client.model.*;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
 import de.fuberlin.mindmap2d.client.svg.Group;
-import de.fuberlin.mindmap2d.client.svg.Line;
-import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.VectorObject.TransfromValue;
-import de.fuberlin.mindmap2d.client.svg.Shape;
-import de.fuberlin.mindmap2d.client.svg.shape.*;
-
-import de.fuberlin.mindmap2d.client.touch.events.MoveGestureEvent;
-import de.fuberlin.mindmap2d.client.touch.events.MoveGestureHandler;
 
 import com.google.gwt.user.client.Random;
-import com.google.gwt.core.client.GWT;
 
 public class GraphView implements GraphChangeListener {
-	
-	
+
 	private Graph model;
 	protected DrawingArea drawingArea;
 	protected Group canvas;
@@ -37,7 +19,7 @@ public class GraphView implements GraphChangeListener {
 	private List<BubbleView> bubbles = new ArrayList<BubbleView>();
 
 	private List<EdgeView> edges = new ArrayList<EdgeView>();
-	
+
 	public GraphView() {
 		this.canvas = new Group();
 		this.canvas.setStyleName("graph");
@@ -52,8 +34,8 @@ public class GraphView implements GraphChangeListener {
 		model.createEdge(oldBubble.model, newBubble);
 		return(newBubble);
 	}
-	
-	public void addThisTo(DrawingArea canvas){
+
+	public void addThisTo(DrawingArea canvas) {
 		this.canvas.setTranslation(canvas.getWidth() / 2,
 				canvas.getHeight() / 2);
 		canvas.add(this.canvas);
@@ -87,8 +69,8 @@ public class GraphView implements GraphChangeListener {
 			edges.add(ev);
 			ev.addToThis(canvas);
 		}
-		//TODO: hässlich
-		for(BubbleView bv:bubbles)
+		// TODO: hässlich
+		for (BubbleView bv : bubbles)
 			bv.toFront();
 	}
 
@@ -127,7 +109,7 @@ public class GraphView implements GraphChangeListener {
 		return null;
 	}
 
-	public void move(int dx, int dy){
+	public void move(int dx, int dy) {
 		TransfromValue value = canvas.getTranslation();
 		canvas.setTranslation(value.x + dx, value.y + dy);
 	}

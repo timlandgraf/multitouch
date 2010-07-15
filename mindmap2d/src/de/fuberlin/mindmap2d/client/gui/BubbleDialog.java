@@ -1,7 +1,7 @@
 package de.fuberlin.mindmap2d.client.gui;
 
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.user.client.ui.*; 
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -51,9 +51,9 @@ public abstract class BubbleDialog extends DialogBox implements ClickHandler {
 		Button btn_ok = new Button("Ok");
 		btn_ok.addClickHandler(this);
 		panel.add(btn_ok);
-		
+
 		setWidget(panel);
-		
+
 		// timer since GWT will lose it again if we set it in-line here
 		DeferredCommand.addCommand(new Command(){
 			public void execute(){
@@ -73,5 +73,5 @@ public abstract class BubbleDialog extends DialogBox implements ClickHandler {
      
 	@Override
 	public abstract void onClick(ClickEvent event);
-	
+
 }

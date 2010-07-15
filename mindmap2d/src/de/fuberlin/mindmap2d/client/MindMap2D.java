@@ -13,9 +13,9 @@ import de.fuberlin.mindmap2d.client.touch.TouchService;
 public class MindMap2D implements EntryPoint {
 	UserInterface ui;
 
-	//disables the Same-Origin-Policy
-	//Da wir unsern kram nicht signieren muss beim firefox inner config 
-	//signed.applets.codebase_principal_support=true gesetzt sein.
+	// disables the Same-Origin-Policy
+	// Da wir unsern kram nicht signieren muss beim firefox inner config
+	// signed.applets.codebase_principal_support=true gesetzt sein.
 	private native void disableSOP() /*-{
 		if (navigator.userAgent.indexOf("Firefox") != -1) {
 			try {
@@ -26,22 +26,17 @@ public class MindMap2D implements EntryPoint {
 			}
 		}
 	}-*/;
-	
-	private void myCallback() {
-		Window.alert("callback");
-	}
-	
+
 	public void onModuleLoad() {
-		
+
 		ui = UserInterface.getUI();
 
-		//disableSOP();
+		// disableSOP();
 		Graph model = new Graph();
-		
-		
+
 		new Repulsion(model);
 		ui.setGraphModel(model);
-		
+
 		Window.addResizeHandler(new ResizeHandler() {
 
 			@Override
@@ -50,8 +45,7 @@ public class MindMap2D implements EntryPoint {
 			}
 		});
 
-		
-		//TODO: remove - just inserts demo-data
+		// TODO: remove - just inserts demo-data
 		Bubble b1 = model.createBubble("Start", 0, -100);
 		b1.setShape(BubbleShape.CIRCLE);
 		Bubble b2 = model.createBubble("Test\nnochmal", -100, 0);

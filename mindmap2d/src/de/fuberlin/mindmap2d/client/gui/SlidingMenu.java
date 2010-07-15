@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.user.client.ui.HTML;
 
 import de.fuberlin.mindmap2d.client.svg.Animatable;
 import de.fuberlin.mindmap2d.client.svg.Animate;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
+import de.fuberlin.mindmap2d.client.svg.ForeignObject;
 import de.fuberlin.mindmap2d.client.svg.Group;
 import de.fuberlin.mindmap2d.client.svg.shape.Circle;
 import de.fuberlin.mindmap2d.client.svg.shape.Rectangle;
@@ -32,7 +34,6 @@ public class SlidingMenu {
 		}
 
 		abstract public void onClick();
-		
 		
 		@Override
 		public void onContextMenu(ContextMenuEvent event) {
@@ -92,6 +93,7 @@ public class SlidingMenu {
 		border.setFillOpacity(0.5);
 		border.setStrokeOpacity(0.0);
 		// reversed order
+		buttons.add(foreignObjectButton());
 		buttons.add(button(""));
 		buttons.add(button(""));
 		buttons.add(buttonMenu());
@@ -104,7 +106,46 @@ public class SlidingMenu {
 	public void addThisTo(DrawingArea canvas) {
 		canvas.add(group);
 	}
+	private SlidingMenuButton foreignObjectButton(){
+		return new SlidingMenuButton(x, y, r, this) {
+			ForeignObject htmlText;
+			
+			{
+				htmlText = new ForeignObject(x - 30, y - 20, 60, 40);
+				HTML html = new HTML("Das hier ist jetzt mak richtig viel Text zum Testen :(");
+				html.setStyleName("");
+				htmlText.add(html);
+				group.add(htmlText);
+				group.setOpacity(0);
+			}
+			
+			@Override
+			public void onClick() {
+				menu.switchState();
+			}
 
+			@Override
+			protected void setPosition(int x, int y) {
+				htmlText.setX(x-30);
+				htmlText.setY(y-20);
+				super.setPosition(x, y);
+			}
+
+			@Override
+			public void setPropertyDouble(String property, double value) {
+				
+				if(property == "x")
+					htmlText.setPropertyDouble(property, value - 30);
+				else if (property == "y")
+					htmlText.setPropertyDouble(property, value - 20);
+				else 
+					htmlText.setPropertyDouble(property, value);
+				
+				super.setPropertyDouble(property, value);
+			}
+		};
+	}
+	
 	private SlidingMenuButton button(final String input) {
 		return new SlidingMenuButton(x, y, r, this) {
 			Text text;

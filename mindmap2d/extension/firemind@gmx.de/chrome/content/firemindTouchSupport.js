@@ -15,6 +15,7 @@ Firemind.touchAPI.TouchSupport = {
 	_nid : -1,
 	_touchSupport : null,
 	_baseWindow : null,
+	_rv : false,
 
 	_getBaseWindow : function(_window){
 		return _window.QueryInterface(Ci.nsIInterfaceRequestor)
@@ -102,11 +103,11 @@ Firemind.touchAPI.TouchSupport = {
 				// top level nsIBaseWindow
 				this._baseWindow = this._getBaseWindow(_window);
 				
-				var rv = this._touchSupport.registerWindow(
+				this._rv = this._touchSupport.registerWindow(
 					Firemind.touchAPI.TouchSupport._baseWindow, type, _callback
 				);
 				
-				return rv;
+				return this._rv;
 				
 			}
 		} catch(e){
@@ -118,19 +119,16 @@ Firemind.touchAPI.TouchSupport = {
 
 	unregister : function(){
 		try {
+		
 			var rv = false;
-			
-			if(this._baseWindow){
+
+			if(this._touchSupport != null && this._baseWindow && this._rv == true){
 				rv = this._touchSupport.unregisterWindow(
 					Firemind.touchAPI.TouchSupport._baseWindow
 				);
 			}
 			
-			if(!rv){
-				alert("ERROR: Can't unregister current base window!");
-			}
-			
-			this.touchSupport = null;
+			this._touchSupport = null;
 			
 			return rv;
 		} catch(e){

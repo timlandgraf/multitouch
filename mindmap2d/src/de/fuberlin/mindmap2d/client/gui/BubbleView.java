@@ -79,7 +79,7 @@ public class BubbleView extends InteractiveElement implements
 		return model;
 	}
 
-	public TransfromValue getRealPosition(){
+	public TransfromValue getRealPosition() {
 		TransfromValue trans = graphView.canvas.getTranslation();
 		trans.x += this.x;
 		trans.y += this.y;
@@ -99,16 +99,16 @@ public class BubbleView extends InteractiveElement implements
 	@Override
 	public void onDoubleClick(DoubleClickEvent event) {
 		NewBubbleDialog d = new NewBubbleDialog(this);
-		d.center(); //show
+		d.center(); // show
 	}
-	
+
 	@Override
-	public void onMouseDown(MouseDownEvent event){
-		if(event.getNativeButton() == NativeEvent.BUTTON_RIGHT){
+	public void onMouseDown(MouseDownEvent event) {
+		if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT) {
 			UserInterface.getUI().openContextMenu(this);
 			event.stopPropagation();
 			return;
-		}else{
+		} else {
 			DOM.setCapture(group.getElement());
 		}
 		super.onMouseDown(event);
@@ -117,18 +117,18 @@ public class BubbleView extends InteractiveElement implements
 	@Override
 	public void onMouseMove(MouseMoveEvent event) {
 		super.onMouseMove(event);
-		
+
 		int id = SvgDom.suspendRedraw(graphView.drawingArea.getSVGElement());
-		
+
 		if (state == State.MOVING) {
 			TransfromValue value = graphView.canvas.getTranslation();
 			int x = event.getClientX() - (int) value.x;
 			int y = event.getClientY() - (int) value.y;
 			model.setPosition(x, y);
 		}
-		SvgDom.unsuspendRedraw(graphView.drawingArea.getSVGElement(),id);
+		SvgDom.unsuspendRedraw(graphView.drawingArea.getSVGElement(), id);
 	}
-	
+
 	@Override
 	public void onMouseUp(MouseUpEvent event) {
 		super.onMouseUp(event);
@@ -138,7 +138,7 @@ public class BubbleView extends InteractiveElement implements
 	public void remove() {
 		super.remove();
 	}
-	
+
 	protected void removeEdge(EdgeView e) {
 		edgeList.remove(e);
 	}
@@ -252,12 +252,12 @@ public class BubbleView extends InteractiveElement implements
 	@Override
 	public void onMoveTouch(MoveGestureEvent event) {
 		int id = SvgDom.suspendRedraw(graphView.drawingArea.getSVGElement());
-		
+
 		TransfromValue value = graphView.canvas.getTranslation();
 		int x = event.getClientX() - (int) value.x;
 		int y = event.getClientY() - (int) value.y;
 		model.setPosition(x, y);
-			
-		SvgDom.unsuspendRedraw(graphView.drawingArea.getSVGElement(),id);
+
+		SvgDom.unsuspendRedraw(graphView.drawingArea.getSVGElement(), id);
 	}
 }

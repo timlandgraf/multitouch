@@ -84,20 +84,22 @@ public abstract class TouchEvent<H extends EventHandler> extends GwtEvent<H> {
 	 *            the element relative to which event coordinates will be
 	 *            measured
 	 */
-	public static void fireNativeTouchEvent(NativeTouchEvent NativeTouchEvent,
+	public static void fireNativeTouchEvent(NativeTouchEvent nativeTouchEvent,
 			HasHandlers handlerSource, Element relativeElem) {
-		assert (NativeTouchEvent != null) : "NativeTouchEvent must not be null";
+		assert (nativeTouchEvent != null) : "NativeTouchEvent must not be null";
 
+		String type = nativeTouchEvent.getType();
+		
 		if (registered != null) {
 			final TouchEvent.Type<?> typeKey = registered
-					.unsafeGet(NativeTouchEvent.getType());
+					.unsafeGet(type);
 			if (typeKey != null) {
 				// Store and restore native event just in case we are in
 				// recursive
 				// loop.
 				NativeTouchEvent currentNative = typeKey.flyweight.nativeTouchEvent;
 				Element currentRelativeElem = typeKey.flyweight.relativeElem;
-				typeKey.flyweight.setNativeTouchEvent(NativeTouchEvent);
+				typeKey.flyweight.setNativeTouchEvent(nativeTouchEvent);
 				typeKey.flyweight.setRelativeElement(relativeElem);
 
 				//handlerSource.fireEvent(typeKey.flyweight);

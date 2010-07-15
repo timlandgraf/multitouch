@@ -7,7 +7,7 @@ Firemind.touchAPI.HoldTapGesture = {
 	touchOne : null,
 	touchTwo : null,
 	
-	releaseThreshold : 500,
+	releaseThreshold : 200,
 	cancelId : -1,
 	
 	onBegin : function(touchOne){

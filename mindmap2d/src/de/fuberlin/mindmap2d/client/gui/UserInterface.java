@@ -23,14 +23,13 @@ import de.fuberlin.mindmap2d.client.svg.VectorObject.TransfromValue;
 import de.fuberlin.mindmap2d.client.svg.shape.Rectangle;
 import de.fuberlin.mindmap2d.client.svg.shape.Text;
 import de.fuberlin.mindmap2d.client.touch.TouchService;
-import de.fuberlin.mindmap2d.client.touch.events.HoldAndTapGestureEvent;
-import de.fuberlin.mindmap2d.client.touch.events.HoldAndTapGestureHandler;
 import de.fuberlin.mindmap2d.client.touch.events.TapGestureEvent;
 import de.fuberlin.mindmap2d.client.touch.events.TapGestureHandler;
 
 public class UserInterface {
 	public class Background extends Rectangle implements MouseDownHandler,
-			MouseUpHandler, MouseMoveHandler, ContextMenuHandler, TapGestureHandler {
+			MouseUpHandler, MouseMoveHandler, ContextMenuHandler,
+			TapGestureHandler {
 
 		private GraphView graph = null;
 		private State state = State.NORMAL;
@@ -70,7 +69,7 @@ public class UserInterface {
 				closeContextMenu();
 				setState(State.MOUSEDOWN);
 			}
-			
+
 			event.stopPropagation();
 		}
 
@@ -110,7 +109,7 @@ public class UserInterface {
 
 		@Override
 		public void onTap(TapGestureEvent event) {
-			Window.alert("Background tapped! YEAH!!");
+			Window.alert("Background tapped! YEAH!! " + event.getClientX());
 		}
 	}
 
@@ -119,11 +118,13 @@ public class UserInterface {
 	}
 
 	private static UserInterface ui;
+
 	public static UserInterface getUI() {
 		if (ui == null)
 			ui = new UserInterface();
 		return ui;
 	}
+
 	private DrawingArea canvas;
 	Background background;
 	Text headline;
@@ -136,8 +137,8 @@ public class UserInterface {
 	private UserInterface() {
 		setCanvas(new DrawingArea(Window.getClientWidth(), Window
 				.getClientHeight() - 5));
-		RootPanel.get().add(getCanvas());		
-		
+		RootPanel.get().add(getCanvas());
+
 		TouchService.initTouchService();
 
 		initBackground();
@@ -202,9 +203,8 @@ public class UserInterface {
 	void setCanvas(DrawingArea canvas) {
 		this.canvas = canvas;
 	}
-	
 
-	public void setGraphModel(Graph g){
+	public void setGraphModel(Graph g) {
 		graph.setModel(g);
 	};
 

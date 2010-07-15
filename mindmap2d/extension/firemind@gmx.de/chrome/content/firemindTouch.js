@@ -14,6 +14,9 @@ Firemind.touchAPI.Touch = function(clientX, clientY, screenX, screenY, id, time)
 	// The screens y - coordinate where the touch was executed.
 	this.screenY = screenY;
 	
+	// Target of the touch event
+	this.target = Firemind.content.document.elementFromPoint(clientX, clientY);
+	
 	// The width of the touch contact area.
 	this.cxContact = Firemind.prefs().getIntPref("firemind.touch.contactx");
 	

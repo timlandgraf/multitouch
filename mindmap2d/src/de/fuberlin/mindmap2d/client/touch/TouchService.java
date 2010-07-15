@@ -1,31 +1,32 @@
 package de.fuberlin.mindmap2d.client.touch;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.user.client.ui.Widget;
 
 public class TouchService {
-	
+
 	@SuppressWarnings("unused")
 	private static JavaScriptObject dispatchTouchEvent;
-	
-	public static void fireEvent(HasHandlers handlerSource, TouchEvent<?> event){
-		assert(handlerSource instanceof Widget) : "Can't fire touch event on anything else as widget";
-		Widget handler = (Widget)handlerSource;
-		
+
+	public static void fireEvent(HasHandlers handlerSource, TouchEvent<?> event) {
+		assert (handlerSource instanceof Widget) : "Can't fire touch event on anything else as widget";
+		Widget handler = (Widget) handlerSource;
+
 		event.allowBubbling();
-		
-		do{
+
+		do {
 			handler.fireEvent(event);
 			handler = handler.getParent();
-		}while(handler != null && event.shouldBeBubbled());
+		} while (handler != null && event.shouldBeBubbled());
 	}
-	
-	//TODO: Refactor
+
+	// TODO: Refactor
 	public static native void initTouchService() /*-{
 		@de.fuberlin.mindmap2d.client.touch.TouchService::dispatchTouchEvent = $entry(function(event) {
 			var listener, curElem = event.target;
+
+			//alert(event.type);
 
 			while (curElem && !(listener = curElem.__listener)) {
 				curElem = curElem.parentNode;
@@ -53,6 +54,5 @@ public class TouchService {
 		$wnd.addEventListener('pushin', @de.fuberlin.mindmap2d.client.touch.TouchService::dispatchTouchEvent, true);
 		$wnd.addEventListener('pullout', @de.fuberlin.mindmap2d.client.touch.TouchService::dispatchTouchEvent, true);
 	}-*/;
-	
-	
+
 }
