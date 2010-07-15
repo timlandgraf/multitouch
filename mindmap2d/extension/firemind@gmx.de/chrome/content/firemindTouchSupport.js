@@ -119,20 +119,18 @@ Firemind.touchAPI.TouchSupport = {
 
 	unregister : function(){
 		try {
+		
+			var rv = false;
 
-			if(this._baseWindow && this._rv == true){
-				this._rv = this._touchSupport.unregisterWindow(
+			if(this._touchSupport != null && this._baseWindow && this._rv == true){
+				rv = this._touchSupport.unregisterWindow(
 					Firemind.touchAPI.TouchSupport._baseWindow
 				);
 			}
 			
-			if(!this._rv){
-				alert("ERROR: Can't unregister current base window!");
-			}
+			this._touchSupport = null;
 			
-			this.touchSupport = null;
-			
-			return this._rv;
+			return rv;
 		} catch(e){
 			Firemind.reportError(e);
 		}

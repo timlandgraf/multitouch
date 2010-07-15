@@ -4,7 +4,7 @@
 <window windowtype="firemind-main-window"
 		title="Firemind"
 		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-		width="800" height="600"
+		width="800" height="600" onunload="Firemind.touchAPI.TouchSupport.unregister();"
 >
 
 	<script src="firemindGlobals.js" />
