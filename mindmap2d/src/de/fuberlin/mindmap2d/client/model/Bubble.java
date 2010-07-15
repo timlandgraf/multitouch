@@ -29,6 +29,9 @@ public class Bubble{
 		listeners = new ArrayList<BubbleListener>();
 		this.font_size = Configurator.bubbleDefaultFontSize;
 		this.uuid = de.fuberlin.mindmap2d.client.helper.UUID.uuid(); 
+		
+		ServerStoringProxy.storeBubble(this); 
+		
 	}
 	
 	public void addListener(BubbleListener l){
