@@ -14,47 +14,47 @@ public class NativeTouchEvent extends JavaScriptObject {
 	protected NativeTouchEvent() {
 	}
 
-	private native float eventGetAngle(NativeTouchEvent evt) /*-{
+	private final native float eventGetAngle(NativeTouchEvent evt) /*-{
 		return evt.angle || 0;
 	}-*/;
 
-	private native int eventGetClientX(NativeTouchEvent evt) /*-{
+	private final native int eventGetClientX(NativeTouchEvent evt) /*-{
 		return evt.clientX || 0;
 	}-*/;
 
-	private native int eventGetClientY(NativeTouchEvent evt) /*-{
+	private final native int eventGetClientY(NativeTouchEvent evt) /*-{
 		return evt.clientY || 0;
 	}-*/;
 
-	private native EventTarget eventGetCurrentTarget(NativeTouchEvent event) /*-{
+	private final native EventTarget eventGetCurrentTarget(NativeTouchEvent event) /*-{
 		return event.currentTarget;
 	}-*/;
 
-	private native int eventGetId(NativeTouchEvent evt) /*-{
+	private final native int eventGetId(NativeTouchEvent evt) /*-{
 		return evt.id || 0;
 	}-*/;
 
-	private native int eventGetRadius(NativeTouchEvent evt) /*-{
+	private final native int eventGetRadius(NativeTouchEvent evt) /*-{
 		return evt.radius || 0;
 	}-*/;
 
-	private native EventTarget eventGetRelatedTarget(NativeTouchEvent evt) /*-{
+	private final native EventTarget eventGetRelatedTarget(NativeTouchEvent evt) /*-{
 		return evt.relatedTarget;
 	}-*/;
 
-	private native int eventGetScreenX(NativeTouchEvent evt) /*-{
+	private final native int eventGetScreenX(NativeTouchEvent evt) /*-{
 		return evt.screenX || 0;
 	}-*/;
 
-	private native int eventGetScreenY(NativeTouchEvent evt) /*-{
+	private final native int eventGetScreenY(NativeTouchEvent evt) /*-{
 		return evt.screenY || 0;
 	}-*/;
 
-	private native EventTarget eventGetTarget(NativeTouchEvent evt) /*-{
+	private final native EventTarget eventGetTarget(NativeTouchEvent evt) /*-{
 		return evt.target;
 	}-*/;
 
-	private native int eventGetTime(NativeTouchEvent evt) /*-{
+	private final native int eventGetTime(NativeTouchEvent evt) /*-{
 		return evt.time || 0;
 	}-*/;
 
@@ -62,15 +62,15 @@ public class NativeTouchEvent extends JavaScriptObject {
 		return evt.type;
 	}-*/;
 
-	private native void eventPreventDefault(NativeTouchEvent evt) /*-{
+	private final native void eventPreventDefault(NativeTouchEvent evt) /*-{
 		evt.preventDefault();
 	}-*/;
 
-	private native void eventStopPropagation(NativeTouchEvent evt) /*-{
+	private final native void eventStopPropagation(NativeTouchEvent evt) /*-{
 		evt.stopPropagation();
 	}-*/;
 
-	private native String eventToString(NativeTouchEvent evt) /*-{
+	private final native String eventToString(NativeTouchEvent evt) /*-{
 		return evt.toString();
 	}-*/;
 

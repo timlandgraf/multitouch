@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
-import com.google.gwt.user.client.ui.RootPanel;
 
 import de.fuberlin.mindmap2d.client.gui.BubbleView;
 import de.fuberlin.mindmap2d.client.gui.UserInterface.Background;
