@@ -1,6 +1,8 @@
 package de.fuberlin.mindmap2d.client;
 
 import de.fuberlin.mindmap2d.client.model.*;
+import com.google.gwt.core.client.GWT;
+
 
 public class Repulsion implements GraphChangeListener, BubbleListener{
 	private Graph model;
@@ -31,8 +33,54 @@ public class Repulsion implements GraphChangeListener, BubbleListener{
 		b.removeListener(this);
 	}
 	
-	
 	private void do_repulsion(Bubble b){
+		if(b.position_fixed)
+			return;
+		b.position_fixed = true;
+		for(Bubble b2: model.getBubbles()){
+			if(!b2.position_fixed)
+				process(b, b2);
+		}
+		b.position_fixed = false;
+	}
+	
+	private void process(Bubble b1, Bubble b2){
+		int b1_left_edge = b1.getX()-b1.bounding_width/2;
+		int b2_left_edge = b2.getX()-b2.bounding_width/2;
+		
+		int b1_right_edge = b1.getX()+b1.bounding_width/2;
+		int b2_right_edge = b2.getX()+b2.bounding_width/2;
+		
+		int b1_top_edge = b1.getY()-b1.bounding_height/2;
+		int b2_top_edge = b2.getY()-b2.bounding_height/2;
+		
+		int b1_bottom_edge = b1.getY()+b1.bounding_height/2;
+		int b2_bottom_edge = b2.getY()+b2.bounding_height/2;
+		
+		boolean overlaps_x = !( b1_right_edge < b2_left_edge || b2_right_edge < b1_left_edge );
+		boolean overlaps_y = !( b1_top_edge > b2_bottom_edge || b2_top_edge > b1_bottom_edge );
+		
+		if(overlaps_x){
+			if(Math.abs(b2_bottom_edge-b1_top_edge) < 5){
+				b2.setPosition(b2.getX(), b2.getY() - 5);
+			}else if(Math.abs(b1_bottom_edge-b2_top_edge) < 5){
+				b2.setPosition(b2.getX(), b2.getY() + 5);
+			}
+		}
+		
+		if(overlaps_y){
+			if(Math.abs(b2_left_edge-b1_right_edge) < 5){
+				b2.setPosition(b2.getX()+5, b2.getY());
+			}else if(Math.abs(b1_left_edge-b2_right_edge) < 5){
+				b2.setPosition(b2.getX()-5, b2.getY());
+			}
+		}
+	}
+	
+	private void do_repulsion_old(Bubble b){
+		GWT.log(""+b.bounding_height);
+		GWT.log(""+b.bounding_width);
+		
 		//GWT.log("Doing repulsion: "+b);
 		if(b.position_fixed)
 			return;
