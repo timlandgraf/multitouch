@@ -5,7 +5,9 @@
 
   <!-- Configure path to GWT SDK -->
   
-  <property name="gwt.sdk" location="/home/daniel/Desktop/gwt-2.0.3" />
+ <!-- <property name="gwt.sdk" location="/home/daniel/Desktop/gwt-2.0.3" /> -->
+ <property file="personal_props.xml"/>
+
   
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
