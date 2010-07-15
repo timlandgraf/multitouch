@@ -13,6 +13,9 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.user.client.DOM;
 
 import de.fuberlin.mindmap2d.client.model.*;
+import de.fuberlin.mindmap2d.client.svg.DrawingArea;
+import de.fuberlin.mindmap2d.client.svg.Group;
+import de.fuberlin.mindmap2d.client.svg.Line;
 import de.fuberlin.mindmap2d.client.svg.SvgDom;
 import de.fuberlin.mindmap2d.client.svg.VectorObject.TransfromValue;
 import de.fuberlin.mindmap2d.client.svg.Shape;
@@ -21,44 +24,36 @@ import de.fuberlin.mindmap2d.client.svg.shape.*;
 import de.fuberlin.mindmap2d.client.touch.events.MoveGestureEvent;
 import de.fuberlin.mindmap2d.client.touch.events.MoveGestureHandler;
 
+import com.google.gwt.user.client.Random;
 import com.google.gwt.core.client.GWT;
 
-public class BubbleView extends InteractiveElement implements BubbleListener,
-		DoubleClickHandler, MoveGestureHandler {
+
+
+public class BubbleView extends InteractiveElement implements
+		BubbleListener, DoubleClickHandler, MoveGestureHandler {
 
 	public int x, y;
 
 	private GraphView graphView;
 	protected Bubble model;
 	private Shape shape;
-	private Text text;
+	private List<Text> textList;
 	private List<EdgeView> edgeList;
-
+	private int bounding_width, bounding_height;
+	
 	public BubbleView(Bubble model, GraphView graphView) {
 		this.model = model;
 		this.graphView = graphView;
 		edgeList = new ArrayList<EdgeView>();
 		model.addListener(this);
-
-		if (model.getShape() == BubbleShape.CIRCLE)
-			shape = new Circle(0, 0, 50);
-		else if (model.getShape() == BubbleShape.RECTANGLE)
-			shape = new Rectangle(0, 0, 70, 45);
-		else
-			throw (new RuntimeException("Shape not supported" + shape));
-
-		shape.setStrokeColor(Configurator.bubbleStrokeColor);
-		shape.setStrokeWidth(3);
-		group.add(shape);
-		text = new Text(0, 0, "");
-		text.setFillColor("black");
-		text.setStrokeWidth(0);
-		text.setTextAnchorMiddle();
-		group.add(text);
+		
+		
 		group.addDoubleClickHandler(this);
 		group.addMoveGestureHandler(this);
-
-		// update(); - now gets called by InteractivElement.addThisTo(..)
+		
+		textList = new ArrayList<Text>();
+		
+		//update(); - now gets called by InteractivElement.addThisTo(..)
 	}
 
 	public void addEdge(EdgeView e) {
@@ -71,7 +66,12 @@ public class BubbleView extends InteractiveElement implements BubbleListener,
 		update();
 	}
 
-	public GraphView getGraph() {
+	@Override
+	public void bubbleMoved(Bubble b) {
+		setPosition(model.getX(), model.getY());
+	}
+	
+	public GraphView getGraph(){
 		return graphView;
 	}
 
@@ -87,7 +87,7 @@ public class BubbleView extends InteractiveElement implements BubbleListener,
 	}
 
 	public String getText() {
-		return text.getText();
+		return model.getText();
 	}
 
 	@Override
@@ -146,19 +146,22 @@ public class BubbleView extends InteractiveElement implements BubbleListener,
 	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
-		if (shape instanceof Circle) {
+		if(shape instanceof Circle || shape instanceof Ellipse){
 			shape.setX(x);
 			shape.setY(y);
-		} else if (shape instanceof Rectangle) {
-			Rectangle r = (Rectangle) shape;
-			shape.setX(x - r.getWidth() / 2);
-			shape.setY(y - r.getHeight() / 2);
-		} else
-			throw (new RuntimeException("Unsupported shape"));
-
-		text.setX(x);
-		text.setY(y + 5);
-
+		}else if(shape instanceof Rectangle){
+			Rectangle r = (Rectangle)shape;
+			shape.setX(x-r.getWidth()/2);
+			shape.setY(y-r.getHeight()/2);
+		}else
+			throw(new RuntimeException("Unsupported shape"));
+			
+		for(int i=0; i<textList.size(); i++){
+			Text t = textList.get(i);
+			t.setX(x);
+			t.setY((int)(y - bounding_height/2 + (i+1)*model.getFontSize()));
+		}
+		
 		for (EdgeView e : edgeList)
 			e.update();
 	}
@@ -188,9 +191,57 @@ public class BubbleView extends InteractiveElement implements BubbleListener,
 	}
 
 	public void update() {
+		//taking care of the text
+		//needs to be done first to determine bounding-rect
+		for(Text t: textList)
+			group.remove(t);
+		textList.clear();
+		
+		int max_text_width = 0;
+		String[] lines = model.getText().split("\n");
+		for(String line: lines){
+			Text t = new Text(0, 0, line);
+			textList.add(t);
+			t.setFillColor("black");
+			t.setStrokeWidth(0);
+			t.setFontSize(model.getFontSize());
+			t.setTextAnchorMiddle();
+			group.add(t);
+			max_text_width = Math.max(max_text_width, t.getTextLength());
+		}
+		
+		
+		//taking care of the shape
+		if(shape != null)
+			group.remove(shape);
+					 
+		bounding_width = (int)(max_text_width+0.5*model.getFontSize());
+		bounding_height = (int)((lines.length+0.5)*model.getFontSize());
+		
+		if(model.getShape() == BubbleShape.CIRCLE){
+			int r = (int)Math.sqrt(bounding_width*bounding_width/4 + bounding_height*bounding_height/4); 
+			shape = new Circle(0, 0, r);
+			
+		}else if(model.getShape() == BubbleShape.ELLIPSE){
+			float sqrt2 = 1.4142135f; // sqrt(2)
+			int w = (int)(sqrt2*bounding_width/2 + 0.25*model.getFontSize());
+			int h = (int)(sqrt2*bounding_height/2 + 0.25*model.getFontSize());
+			shape = new Ellipse(0, 0, w, h);
+			
+		}else if(model.getShape() == BubbleShape.RECTANGLE){
+			shape = new Rectangle(0, 0, bounding_width, bounding_height);
+		}else
+			throw(new RuntimeException("Shape not supported"+shape));
+		
+		shape.setFillColor(Configurator.bubbleNormalFillColor);
+		shape.setStrokeColor(Configurator.bubbleStrokeColor);
+		shape.setStrokeWidth(1+ (int)model.getFontSize()/10);
+		group.add(shape);
+		
+		for(Text t: textList)
+			group.pop(t);
+		
 		setPosition(model.getX(), model.getY());
-		text.setText(model.getText());
-		GWT.log("text-legnth: " + text.getTextLength());
 	}
 
 	@Override

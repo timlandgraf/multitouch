@@ -9,4 +9,5 @@ public class Configurator {
 	public static String bubbleNormalFillColor = "#788E10";
 	public static String bubbleHighlightedColor = "#A0B550";
 	public static String edgeColor = "#020318";
+	public static int bubbleDefaultFontSize = 20;
 }

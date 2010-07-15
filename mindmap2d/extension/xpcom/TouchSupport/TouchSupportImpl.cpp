@@ -6,6 +6,9 @@
 
 HWND getWindowHWND(nsIBaseWindow *window) 
 {
+
+	if(!window) return NULL;
+
 	nativeWindow nWindow;
 	nsresult rv = window->GetParentNativeWindow(&nWindow);
 	if (NS_FAILED(rv)){ 
@@ -93,7 +96,7 @@ NS_IMETHODIMP TouchSupport::RegisterWindow(nsIBaseWindow *window, PRInt32 type, 
 NS_IMETHODIMP TouchSupport::UnregisterWindow(nsIBaseWindow *window, PRBool *_retval)
 {
 	try {
-		if(this->type == IS_TOUCH_WINDOW){ // touch
+		if(this->type == IS_TOUCH_WINDOW && window){ // touch
 			HWND hWnd = getWindowHWND(window);
 
 			if (hWnd != NULL){

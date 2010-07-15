@@ -24,16 +24,15 @@ public class GraphView implements GraphChangeListener {
 		this.canvas = new Group();
 		this.canvas.setStyleName("graph");
 	}
-
-	public void addBubbleTo(BubbleView oldBubble, String text) {
+	
+	public Bubble addBubbleTo(BubbleView oldBubble,String text){
 		// new Bubble gets positioned randomly in the proximity of oldBubble
-		double angle = Random.nextDouble() * 2 * Math.PI;
-		int x = (int) Math
-				.round(oldBubble.model.getX() + 110 * Math.sin(angle));
-		int y = (int) Math
-				.round(oldBubble.model.getY() + 110 * Math.cos(angle));
+		double angle = Random.nextDouble()*2*Math.PI;
+		int x = (int)Math.round( oldBubble.model.getX()+110*Math.sin(angle) );
+		int y = (int)Math.round( oldBubble.model.getY()+110*Math.cos(angle) );
 		Bubble newBubble = model.createBubble(text, x, y);
 		model.createEdge(oldBubble.model, newBubble);
+		return(newBubble);
 	}
 
 	public void addThisTo(DrawingArea canvas) {

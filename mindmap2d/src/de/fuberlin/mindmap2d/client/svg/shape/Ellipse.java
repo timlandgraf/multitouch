@@ -37,7 +37,9 @@ public class Ellipse extends Shape {
 
 	@Override
 	protected Element createElement() {
-		return SvgDom.createSVGElementNS("path");
+		//Bug??? (ole)
+		//return SvgDom.createSVGElementNS("path");
+		return SvgDom.createSVGElementNS("ellipse");
 	}
 	
 	/**

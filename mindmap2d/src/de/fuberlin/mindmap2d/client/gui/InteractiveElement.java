@@ -32,6 +32,7 @@ public abstract class InteractiveElement implements MouseDownHandler,
 	public void addThisTo(VectorObjectContainer parent) {
 		this.parent = parent;
 		parent.add(group);
+		update();
 		setState(State.NORMAL);
 
 		// TODO: evtl nur bei group registrieren
@@ -45,7 +46,7 @@ public abstract class InteractiveElement implements MouseDownHandler,
 		
 		group.addContextMenuHandler(this);
 		
-		update();
+		
 	}
 
 	@Override

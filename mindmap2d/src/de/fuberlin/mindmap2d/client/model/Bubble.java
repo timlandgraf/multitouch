@@ -1,7 +1,8 @@
 package de.fuberlin.mindmap2d.client.model;
 
 import java.util.*;
-
+import de.fuberlin.mindmap2d.client.gui.Configurator;
+import de.fuberlin.mindmap2d.client.helper.*; 
 
 public class Bubble{
 	
@@ -10,7 +11,9 @@ public class Bubble{
 	private Graph graph;
 	protected List<Edge> edges;
 	private List<BubbleListener> listeners;
-	private BubbleShape shape; 
+	private BubbleShape shape;
+	private int font_size;
+	private String uuid; 
 	
 	public boolean position_fixed = false; //used by repulsion
 	//==========================================================================
@@ -21,13 +24,33 @@ public class Bubble{
 		this.graph = g;
 		//this.shape = BubbleShape.CIRCLE;
 		this.shape = BubbleShape.RECTANGLE;
+		//this.shape = BubbleShape.ELLIPSE;
 		edges = new ArrayList<Edge>();
 		listeners = new ArrayList<BubbleListener>();
+		this.font_size = Configurator.bubbleDefaultFontSize;
+		this.uuid = de.fuberlin.mindmap2d.client.helper.UUID.uuid(); 
 	}
 	
 	public void addListener(BubbleListener l){
 		if(!listeners.contains(l))
 			listeners.add(l);
+	}
+	
+	
+	public void setFontSize(int size){
+		this.font_size = size;
+		for(BubbleListener bl:listeners)
+			bl.bubbleChanged(this);
+	}
+	
+	public int getFontSize(){
+		return(font_size);
+	}
+	
+	public void setShape(BubbleShape shape){
+		this.shape = shape;
+		for(BubbleListener bl:listeners)
+			bl.bubbleChanged(this);
 	}
 	
 	public BubbleShape getShape(){
@@ -50,11 +73,6 @@ public class Bubble{
 		return(y);
 	}
 	
-	private void propagateChange(){
-		for(BubbleListener bl:listeners)
-			bl.bubbleChanged(this);
-	}
-	
 	public void remove(){
 		graph.unregisterBubble(this);
 	}
@@ -66,13 +84,14 @@ public class Bubble{
 	public void setPosition(int x, int y){
 		this.x = x;
 		this.y = y;
-		
-		propagateChange();
+		for(BubbleListener bl:listeners)
+			bl.bubbleMoved(this);
 	}
 	
 	public void setText(String t){
 		text = t;
-		propagateChange();
+		for(BubbleListener bl:listeners)
+			bl.bubbleChanged(this);
 	}
 	
 }
