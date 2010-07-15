@@ -32,6 +32,15 @@
     <url-pattern>/get_suggestions/*</url-pattern>
 </servlet-mapping>
 
+ 
+<servlet-mapping>
+    <servlet-name>proxy</servlet-name>
+    <url-pattern>/bubbles/*</url-pattern>
+</servlet-mapping>
+
+
+
+
 <!--
 <servlet-mapping>
     <servlet-name>shell</servlet-name>
