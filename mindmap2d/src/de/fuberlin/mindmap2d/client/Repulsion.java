@@ -77,6 +77,8 @@ public class Repulsion implements GraphChangeListener, BubbleListener{
 		}
 	}
 	
+	/*
+	//This is old code, which is based on circles.
 	private void do_repulsion_old(Bubble b){
 		GWT.log(""+b.bounding_height);
 		GWT.log(""+b.bounding_width);
@@ -109,7 +111,7 @@ public class Repulsion implements GraphChangeListener, BubbleListener{
 		}
 		b.position_fixed = false;
 	}
-	
+	*/
 	
 	//not interessted in those events
 	public void edgeAdded(Edge edge){}
