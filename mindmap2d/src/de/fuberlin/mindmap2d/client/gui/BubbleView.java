@@ -222,18 +222,23 @@ public class BubbleView extends InteractiveElement implements
 		bounding_width = (int)(max_text_width+0.5*model.getFontSize());
 		bounding_height = (int)((lines.length+0.5)*model.getFontSize());
 		
+		
 		if(model.getShape() == BubbleShape.CIRCLE){
 			int r = (int)Math.sqrt(bounding_width*bounding_width/4 + bounding_height*bounding_height/4); 
 			shape = new Circle(0, 0, r);
-			
+			model.bounding_width = 2*r;
+			model.bounding_height = 2*r;
 		}else if(model.getShape() == BubbleShape.ELLIPSE){
 			float sqrt2 = 1.4142135f; // sqrt(2)
 			int w = (int)(sqrt2*bounding_width/2 + 0.25*model.getFontSize());
 			int h = (int)(sqrt2*bounding_height/2 + 0.25*model.getFontSize());
 			shape = new Ellipse(0, 0, w, h);
-			
+			model.bounding_width = 2*w;
+			model.bounding_height = 2*h;
 		}else if(model.getShape() == BubbleShape.RECTANGLE){
 			shape = new Rectangle(0, 0, bounding_width, bounding_height);
+			model.bounding_width = bounding_width;
+			model.bounding_height = bounding_height;
 		}else
 			throw(new RuntimeException("Shape not supported"+shape));
 		

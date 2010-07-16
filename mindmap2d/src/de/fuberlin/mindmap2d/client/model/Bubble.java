@@ -16,6 +16,9 @@ public class Bubble{
 	private String uuid; 
 	
 	public boolean position_fixed = false; //used by repulsion
+	public int bounding_width; //used by repulsion
+	public int bounding_height; //used by repulsion
+	
 	//==========================================================================
 	protected Bubble(Graph g, String text, int x, int y){
 		this.x = x;
