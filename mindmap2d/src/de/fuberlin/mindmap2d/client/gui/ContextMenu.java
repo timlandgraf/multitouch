@@ -181,7 +181,7 @@ public class ContextMenu {
 			}
 		});
 		
-		buttons.add(new TextContextMenuButton(bubbleRadius, this, "suggest") {
+		buttons.add(new TextContextMenuButton(bubbleRadius, this, "suggest" + bubble.getUUID()) {
 			
 			@Override
 			public void onClick() {

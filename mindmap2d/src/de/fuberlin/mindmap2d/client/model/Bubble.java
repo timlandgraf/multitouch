@@ -28,6 +28,8 @@ public class Bubble{
 		edges = new ArrayList<Edge>();
 		listeners = new ArrayList<BubbleListener>();
 		this.font_size = Configurator.bubbleDefaultFontSize;
+	
+		
 		this.uuid = de.fuberlin.mindmap2d.client.helper.UUID.uuid(); 
 		
 		ServerStoringProxy.storeBubble(this); 
@@ -95,6 +97,11 @@ public class Bubble{
 		text = t;
 		for(BubbleListener bl:listeners)
 			bl.bubbleChanged(this);
+	}
+	
+	public String getUUID()
+	{
+		return this.uuid; 
 	}
 	
 }

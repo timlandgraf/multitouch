@@ -15,15 +15,15 @@
   
     <init-param>
     	<param-name>proxyHost</param-name>
-<!--   	<param-value>localhost</param-value> -->
-	   	<param-value>blooming-water-51.heroku.com</param-value>
+<!--   	<param-value>blooming-water-51.heroku.com</param-value> -->
+	   	<param-value>localhost</param-value>
 
     </init-param>
     
     <init-param>
     	<param-name>proxyPort</param-name>
-<!--  	<param-value>3000</param-value> -->
-	  	<param-value>80</param-value>
+<!--  	<param-value>80</param-value> -->
+	  	<param-value>3000</param-value>
     </init-param>->
 </servlet>
  

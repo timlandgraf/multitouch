@@ -90,6 +90,10 @@ public class BubbleView extends InteractiveElement implements
 		return model.getText();
 	}
 
+	public String getUUID() {
+		return model.getUUID();
+	}
+
 	@Override
 	public void onContextMenu(ContextMenuEvent event) {
 		event.preventDefault();
