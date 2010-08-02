@@ -13,7 +13,7 @@ import de.fuberlin.mindmap2d.client.gui.BubbleView;
 
 public class ServerStoringProxy {
 	
-	
+
 	public static void storeBubble(Bubble bubble){
 
 		String url = "/bubbles/create";
@@ -24,7 +24,11 @@ public class ServerStoringProxy {
 			builder.setHeader("Content-Type", "application/json"); 
 			//builder.setHeader("Accept", "application/json"); 
 			Request request = builder.sendRequest(
-					"{\"bubble\":{\"uuid\":\"" + bubble.getUUID() + "\", \"x\":4, \"y\":6, \"text\":\"" + bubble.getText() + "\"}}"
+					"{\"bubble\":{\"uuid\":\"" + bubble.getUUID() 
+					+ "\", \"x\":4, \"y\":6, \"text\":\"" + bubble.getText() 
+					+ "\", \"shape\": \"" + bubble.getShape().toString() 
+					+ "\", \"font_size\": " + bubble.getFontSize() 
+					+ "}}"
 					, new RequestCallback() {
 					public void onError(Request request, Throwable exception) {
 //						signalServerError(exception.toString());
@@ -50,6 +54,50 @@ public class ServerStoringProxy {
 //			signalServerError(e.toString());
 		}
 	}
+	
+
+	public static void updateBubble(Bubble bubble){
+
+		String url = "/bubbles/" + bubble.getUUID();
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.PUT, URL.encode(url));
+		//builder.setRequestData(requestData)
+		GWT.log("url: "+builder.getUrl());
+		try {
+			builder.setHeader("Content-Type", "application/json"); 
+			//builder.setHeader("Accept", "application/json"); 
+			Request request = builder.sendRequest(
+					"{\"bubble\":{\"uuid\":\"" + bubble.getUUID() 
+					+ "\", \"x\":4, \"y\":6, \"text\":\"" + bubble.getText() 
+					+ "\", \"shape\": \"" + bubble.getShape().toString() 
+					+ "\", \"font_size\": " + bubble.getFontSize() 
+					+ "}}"
+					, new RequestCallback() {
+					public void onError(Request request, Throwable exception) {
+//						signalServerError(exception.toString());
+					}
+
+					public void onResponseReceived(Request request, Response response) {
+						if (200 == response.getStatusCode()) {
+							GWT.log("got 200");
+							 
+							
+						} else {
+//							signalServerError(response.getStatusText());
+							
+							GWT.log("got error:"+response.getStatusCode());
+							GWT.log("status text:"+response.getStatusText());
+							GWT.log("text:"+response.getText());
+							GWT.log("header:"+response.getHeadersAsString()); 
+							// Handle the error.  Can get the status text from response.getStatusText()
+						}
+					}       
+			});
+		} catch (RequestException e) {
+//			signalServerError(e.toString());
+		}
+	}
+	
+	
 	
 	
 //	

@@ -37,7 +37,7 @@ public class SuggestionsDialog extends DialogBox implements ChangeHandler {
 
 	private void askServer(String txt) {
 		txt = txt.replace(" ", "_");
-		String url = "/get_suggestions/" + txt + ".json";
+		String url = "/get_suggestions.json?noun=" + txt;
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL
 				.encode(url));
 		GWT.log("url: " + builder.getUrl());

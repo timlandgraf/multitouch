@@ -49,6 +49,8 @@ public class Bubble{
 		this.font_size = size;
 		for(BubbleListener bl:listeners)
 			bl.bubbleChanged(this);
+		
+		ServerStoringProxy.updateBubble(this); 
 	}
 	
 	public int getFontSize(){
@@ -59,6 +61,8 @@ public class Bubble{
 		this.shape = shape;
 		for(BubbleListener bl:listeners)
 			bl.bubbleChanged(this);
+		
+		ServerStoringProxy.updateBubble(this); 
 	}
 	
 	public BubbleShape getShape(){
@@ -100,6 +104,8 @@ public class Bubble{
 		text = t;
 		for(BubbleListener bl:listeners)
 			bl.bubbleChanged(this);
+		
+		ServerStoringProxy.updateBubble(this);
 	}
 	
 	public String getUUID()
