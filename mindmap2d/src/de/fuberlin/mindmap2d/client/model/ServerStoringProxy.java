@@ -24,7 +24,10 @@ public class ServerStoringProxy {
 			builder.setHeader("Content-Type", "application/json"); 
 			//builder.setHeader("Accept", "application/json"); 
 			Request request = builder.sendRequest(
-					"{\"bubble\":{\"x\":4, \"y\":6, \"text\":\"" + bubble.getText() + "\"}}"
+					"{\"bubble\":{\"x\":" + bubble.getX() + ", \"y\":" + 
+					bubble.getY() + ", \"text\":\"" + bubble.getText() 
+					+ "\", \"shape\":\"" + bubble.getShape() 
+					+ "\"}}"
 					, new RequestCallback() {
 					public void onError(Request request, Throwable exception) {
 //						signalServerError(exception.toString());

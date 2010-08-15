@@ -7,6 +7,8 @@ import com.google.gwt.core.client.GWT;
 import de.fuberlin.mindmap2d.client.gui.BubbleView;
 import de.fuberlin.mindmap2d.client.model.Bubble;
 
+import de.fuberlin.mindmap2d.client.model.ServerStoringProxy;
+
 public class NewBubbleDialog extends BubbleDialog {
 
 	BubbleView neighbour;
@@ -23,5 +25,7 @@ public class NewBubbleDialog extends BubbleDialog {
 		b.setShape(getShape());
 		
 		this.hide();
+		ServerStoringProxy.storeBubble(b); 
+		GWT.log(b.getUuid()); 
 	}
 }
