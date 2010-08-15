@@ -27,7 +27,9 @@ public class ServerStoringProxy {
 					"{\"bubble\":{\"x\":" + bubble.getX() + ", \"y\":" + 
 					bubble.getY() + ", \"text\":\"" + bubble.getText() 
 					+ "\", \"shape\":\"" + bubble.getShape() 
-					+ "\"}}"
+					+ "\", \"font_size\":" + 
+					bubble.getFontSize()  
+					+"}}"
 					, new RequestCallback() {
 					public void onError(Request request, Throwable exception) {
 //						signalServerError(exception.toString());
