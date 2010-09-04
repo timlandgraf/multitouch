@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ContextMenuEvent;
 
 import de.fuberlin.mindmap2d.client.gui.BubbleView;
 import de.fuberlin.mindmap2d.client.gui.UserInterface.Background;
+import de.fuberlin.mindmap2d.client.model.ServerStoringProxy;
 import de.fuberlin.mindmap2d.client.svg.Animatable;
 import de.fuberlin.mindmap2d.client.svg.DrawingArea;
 import de.fuberlin.mindmap2d.client.svg.Group;
@@ -195,6 +196,7 @@ public class ContextMenu {
 			@Override
 			public void onClick() {
 				bubble.getModel().remove();
+				ServerStoringProxy.removeBubble(bubble.getModel()); 
 			}
 		});
 		
